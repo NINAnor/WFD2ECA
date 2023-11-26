@@ -30,13 +30,15 @@ source("Dbehandl.R")
 ```
 
 ## Nødvendig informasjon om vannforekomster
+
 Før vannforskrift-parametere kan analyseres og forberedes for naturindeksen, må informasjon om vannforekomster og vannlokaliteter komme på plass. 
 Skal flere vannforskrift-parametere "flyttes over" til naturindeks, trenger man bare å gjøre dette trinnet én gang. 
 Det forutsetter at man har lastet ned oppdaterte versjon av disse filene.
 Eksempelkoden er basert på datafilene som ble lasta ned i juli 2023.
 
 ### Vannforekomster
-Fila over vannforekomster må lastes ned som en excel-fil (csv) fra vann-nett:
+
+Fila over vannforekomster må lastes ned som en excel-fil (csv) fra [vann-nett](https://vann-nett.no/portal/):
 
 `https://vann-nett.no/portal/ > Rapporter > Vanntyper`
 
@@ -56,7 +58,7 @@ Man trenger ikke å laste ned alle tre. Det holder med den vannkategorien som er
 Benytta vannkategorier må også spesifiseres ved innlesing (se under).
 
 I tillegg trenger man en tabell som forklarer kolonnenavne i fila fra vann-nett.
-Denne fila er nødvendig for å lese inn vannforekomstdataene, og den ligger i dette arkivet under navnet "**NavnVN.csv**".
+Denne fila er nødvendig for å lese inn vannforekomstdataene, og den ligger i dette arkivet under navnet "[**NavnVN.csv**](NavnVN.csv)".
 Hvis vann-nett endrer kolonnenavnene i sin nedlastingsløsning, må denne fila oppdateres tilsvarende.
 
 Filene leses inn i R på følgende måte:
@@ -70,7 +72,8 @@ I så fall hadde innlesinga blitt avbrutt med beskjeden "FEIL" og en forklaring.
 
 
 ### NVEs innsjødatabase
-Fila over Norges innsjøer må lastes ned som en formfil fra NVE:
+
+Fila over Norges innsjøer må lastes ned som en formfil fra [NVE](http://nedlasting.nve.no/gis/):
 
 `http://nedlasting.nve.no/gis/ > Innsjø > Innsjø`
 
@@ -84,7 +87,7 @@ I menyen må man foreta de følgende valg:
 Datasettet man da får, heter "Innsjo_Innsjo".
 
 I tillegg trenger man en tabell som forklarer kolonnenavne i fila fra NVE.
-Denne fila er nødvendig for å lese inn innsjødataene, og den ligger i dette arkivet under navnet "**navnNVEl.csv**".
+Denne fila er nødvendig for å lese inn innsjødataene, og den ligger i dette arkivet under navnet "[**navnNVEl.csv**](navnNVEl.csv)".
 Hvis NVE endrer kolonnenavnene i sin nedlastingsløsning, må denne fila oppdateres tilsvarende.
 
 Filnavnet oppgis som parameter når dataene leses inn i R:
@@ -98,17 +101,18 @@ I så fall hadde innlesinga blitt avbrutt med beskjeden "FEIL" og en forklaring.
 
 
 ### Vannlokaliteter
-Fila over vannlokaliteter må lastes ned som en excel-fil (xlsx) fra vannmiljø-databasen:
 
+Fila over vannlokaliteter må lastes ned som en excel-fil (xlsx) fra [vannmiljø](https://vannmiljo.miljodirektoratet.no/)-databasen:
 
 `https://vannmiljo.miljodirektoratet.no/ > Jeg vil > Søke > Søk i vannlokaliteter`
 
 I fanen "Søk i vannlokaliteter" må man
 
-- velge riktig Vannkategori",
+- velge riktig "Vannkategori",
 - trykke "Søk",
 - trykke "Eksporter",
-- velge eksporttype "Excel".
+- velge eksporttype "Excel",
+- trykke "Eksporter til epost".
 
 Filer for de like vannkategoriene må lastes ned hver for seg. 
 For at filene kan leses inn, må de få følgende navn:
@@ -121,7 +125,7 @@ Man trenger ikke å laste ned alle tre. Det holder med den vannkategorien som er
 Benytta vannkategorier må også spesifiseres ved innlesing (se under).
 
 I tillegg trenger man en tabell som forklarer kolonnenavne i fila fra vannmiljø.
-Denne fila er nødvendig for å lese inn vannforekomstdataene, og den ligger i dette arkivet under navnet "**NavnVL.csv**".
+Denne fila er nødvendig for å lese inn vannforekomstdataene, og den ligger i dette arkivet under navnet "[**NavnVL.csv**](NavnVL.csv)".
 Hvis vannmiljø endrer kolonnenavnene i sin nedlastingsløsning, må denne fila oppdateres tilsvarende.
 
 Filene leses inn i R på følgende måte:
@@ -135,6 +139,7 @@ I så fall hadde innlesinga blitt avbrutt med beskjeden "FEIL" og en forklaring.
 
 
 ### Kobling av informasjon
+
 Til slutt kan informasjonen om innsjøvannforekomster (fra vann-nett) utvides med informasjon fra innsjødatabasen (fra NVE).
 Samtidig testes det for en rekke mulige feilkilder.
 Dette trinnet er bare nødvendig om de(n) aktuelle vannforskrift-parameteren (-parameterne) er relevant for innsjøer.
@@ -148,6 +153,7 @@ Under antagelse av at innsjødatabasen er mer pålitelig enn vannforekomsttypifi
 
 
 ### Ytterligere datafiler
+
 Viktig informasjon om vannforskrift-parametere og -indekser er samla i et excel-regneark, som må leses inn.
 ```{r}
 Parametere <- as.data.frame(read_xlsx("VM-param.xlsx", na = "NA",
@@ -175,12 +181,25 @@ Det tas forbehold om at enkelte målinger kan bli tilordna feil kommune, i tilfe
 
 ## Målinger fra vannmiljø-databasen
 
-Foreløpig må det gjøres på følgende måte:
+Målingene fra [vannmiljø](https://vannmiljo.miljodirektoratet.no/)-databasen må også lastes ned manuelt som excel-fil (xlsx).
+Det enkleste er å laste ned én parameter av gangen, og å oppkalle fila etter parameteren.
+Det gjøres slik:
+
+`https://vannmiljo.miljodirektoratet.no/ > Jeg vil > Søke > Søk i vannregistreringer og miljøgifter`
+
+I fanen "Søk i registreringer" må man
+
+- velge riktig "Parameter",
+- eventuelt avgrense med andre kriterier (f.eks. "Prøvedato")
+- trykke "Søk",
+- trykke "Eksport",
+- velge eksporttype "Redigeringsformat",
+- trykke "Eksporter til epost".
+
+I dette eksempelet er målingene for ASPT lasta ned og lagra i fila "ASPT.xlsx".
+Den leses inn slik:
 ```{r}
-load("VF.rdata")
-DATA <- lesMaalinger(Vannmilj_ferskvann)
-rm(Vannmilj_ferskvann)
-gc()
+DATA <- lesMaalinger("ASPT.xlsx")
 ```
 
 
@@ -206,12 +225,12 @@ Simuleringa kan ta spesielt mye tid, avhengig av antall iterasjoner.
 For illustrasjonen her er det valgt 1000 iterasjoner.
 For bruk i naturindeks bør man velge en større verdi (f.eks. 100000).
 
-Funksjonen som gjennomfører analysen, heter `fraVFtilNI` ("fra vannforkrift til naturindeks").
+Funksjonen som gjennomfører analysen, heter `[fraVFtilNI](Dbehandl.R)` ("fra vannforkrift til naturindeks").
 Den har mange flere parametere enn de som vises under, som tillater ulike justeringer som er [forklart her](forklar.md).
 De første fire parametrene må alltid oppgis.
 Resten trenger man bare å oppgi om man ønsker å endre på standardinnstillingene (som også er [forklart her](forklar.md)).
 
-```{r}
+```{r, eval=FALSE, echo=TRUE}
 utmating <- fraVFtilNI(
                        DATA, 
                        vannforekomster = V,
@@ -223,7 +242,26 @@ utmating <- fraVFtilNI(
                        adminAar = 2010,
                        ikke.inkluder = list(typ="tur", vrd=2),
                        ignorerVariabel = "reg",
-                       iterasjoner = 1000
+                       iterasjoner = 1000,
+                      )
+```
+```{r, eval=TRUE, echo=FALSE}
+# For ikke å rote til visninga i markdown-fila, tilføyes bredde = 96 og tell = FALSE.
+# Alt ennet er identisk.
+utmating <- fraVFtilNI(
+                       DATA, 
+                       vannforekomster = V,
+                       vannlokaliteter = VL,
+                       parameter = "ASPT",
+                       vannkategori = "R",
+                       NI.aar = c(1990, 2000, 2010, 2014, 2019, 2024),
+                       rapportenhet = c("kommune", "fylke", "landsdel", "norge"),
+                       adminAar = 2010,
+                       ikke.inkluder = list(typ="tur", vrd=2),
+                       ignorerVariabel = "reg",
+                       iterasjoner = 1000,
+                       bredde = 96,
+                       tell = FALSE
                       )
 ```
 
@@ -247,8 +285,8 @@ De fylkesvise gjennomsnittsresultatene kan vises på kart:
 library(raster)
 load("norge.map")
 plot(Norge.fylker, asp = 2.1)
-text(6, 70, "ASPT", cex = 2.4, font = 1.8)
-text(6, 69, "fylkesvis", cex = 1)
+text(6, 70, "ASPT", cex = 2.4, font = 1.6)
+text(6, 69, "fylkesvis", cex = 0.96)
 for (i in dimnames(utmating$fylke)$fylke) {
   plot(Norge.fylker[which(Norge.fylker@data$NAME_1 == fylke(i)), ],
        col=farge(min(1, utmating$fylke[i, "2019", 1])), add = T)
@@ -260,30 +298,16 @@ for (i in 1:5) {
   rect(24, 59+(i-1)*1.6, 26, 59+i*1.6, col = NA, border = T, lwd = 2.4)
 }
 text(rep(24, 6), 59+0:5*1.6, c("0,0", "0,2", "0,4", "0,6", "0,8", "1,0"), 
-     pos = 2, cex = 1.2)
-text(rep(26, 5), 59.8+0:4*1.6, c("SD", "D", "M", "G", "SG"), pos = 4, cex = 1.5)
+     pos = 2, cex = 0.96)
+text(rep(26, 5), 59.8+0:4*1.6, c("SD", "D", "M", "G", "SG"), pos = 4, cex = 1.2)
 ```
 
 
 Det samme gjelder de kommunevise resultatene:
 ```{r}
-Norge.kommuner@data$NAME_2 <- N <- as.character(Norge.kommuner@data$NAME_2)
-Norge.kommuner@data$NAME_2[which(N == "Bø (No)")]    <- "Bø i Nordland"
-Norge.kommuner@data$NAME_2[which(N == "Bø (Te)")]    <- "Bø i Telemark"
-Norge.kommuner@data$NAME_2[which(N == "Herøy (MR)")] <- "Herøy i Møre og Romsdal"
-Norge.kommuner@data$NAME_2[which(N == "Herøy (No)")] <- "Herøy i Nordland"
-Norge.kommuner@data$NAME_2[which(N == "Nes (Ak)")]   <- "Nes i Akershus"
-Norge.kommuner@data$NAME_2[which(N == "Nes (Bu)")]   <- "Nes i Buskerud"
-Norge.kommuner@data$NAME_2[which(N == "Os (Ho)")]    <- "Os i Hordaland"
-Norge.kommuner@data$NAME_2[which(N == "Os (He)")]    <- "Os i Hedmark"
-Norge.kommuner@data$NAME_2[which(N == "Sande (MR)")] <- "Sande i Møre og Romsdal"
-Norge.kommuner@data$NAME_2[which(N == "Sande (Vf)")] <- "Sande i Vestfold"
-Norge.kommuner@data$NAME_2[which(N == "Våler (He)")] <- "Våler i Hedmark"
-Norge.kommuner@data$NAME_2[which(N == "Våler (Øf)")] <- "Våler i Østfold"
-
 plot(Norge.kontur, asp = 2.1, col = grey(0.84))
-text(6, 70, "ASPT", cex = 2.4, font = 1.8)
-text(6, 69, "kommunevis", cex = 1)
+text(6, 70, "ASPT", cex = 2.4, font = 1.6)
+text(6, 69, "kommunevis", cex = 0.96)
 for (i in dimnames(utmating$kommune)$kommune) {
   for (kmn in kommunehistorikk[which(kommunehistorikk[, "2008"] == i), "1992"]) {
     plot(Norge.kommuner[which(Norge.kommuner@data$NAME_2 == kmn),], 
@@ -298,8 +322,8 @@ for (i in 1:5) {
   rect(24, 59+(i-1)*1.6, 26, 59+i*1.6, col = NA, border = T, lwd = 2.4)
 }
 text(rep(24, 6), 59+0:5*1.6, c("0,0", "0,2", "0,4", "0,6", "0,8", "1,0"), 
-     pos = 2, cex = 1.2)
-text(rep(26, 5), 59.8+0:4*1.6, c("SD", "D", "M", "G", "SG"), pos = 4, cex = 1.5)
+     pos = 2, cex = 0.96)
+text(rep(26, 5), 59.8+0:4*1.6, c("SD", "D", "M", "G", "SG"), pos = 4, cex = 1.2)
 ```
 
 
