@@ -7,7 +7,7 @@ Prosjektet har utvikla kode for å laste opp data som har blitt innsamla i ramme
 ## Oversikt
 Se [eksempelkjøringen](hele.md) for en illustrasjon av dataflyten og de involverte funksjonene.
 
-Nærmere forklaringer av funksjonenes parametere [skal snart] gis [her](forklar.md).
+Nærmere forklaringer av funksjonenes parametere gis [her](forklar.md).
 
 ## Kontakt
 Denne sida vedlikeholdes av [Hanno Sandvik](mailto:hanno.sandvik@nina.no).
