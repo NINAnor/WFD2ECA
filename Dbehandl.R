@@ -15,8 +15,8 @@ fraVFtilNI <- function(
     rapportperiode = 10,
     vedMaalefeil = "dato", # c("måling", "dato", "oppdragstager")
     maksSkjevhet = 3,
-    bare.inkluder = NULL,
-    ikke.inkluder = NULL,
+    bareInkluder = NULL,
+    ikkeInkluder = NULL,
     maalingPer = 25,
     maalingTot = 100,
     ignorerVariabel = NULL,
@@ -25,10 +25,11 @@ fraVFtilNI <- function(
     antallvekt = 0.5,
     tidsvekt = 1,
     arealvekt = 2,
-    vis = TRUE,
     DeltaAIC = 2,
     minsteAndel = 0.05,
     iterasjoner = 100000
+    vis = TRUE,
+    tell = TRUE
 ) {
   
   ### Oversikt over parametere
@@ -50,8 +51,8 @@ fraVFtilNI <- function(
   #   - "dato" (alle målinger utført av samme oppdragstager på samme dato ekskluderes)
   #   - "oppdragstager" (aller målinger utført av samme oppdragstager ekskluderes)
   # maksSkjevhet: aktiviteter med høyere absolutt skjevhetsskår blir ekskludert
-  # bare.inkluder: typologifaktorer (hvis oppgitt, blir bare disse hensyntatt)
-  # ikke.inkluder: typologifaktorer som skal utelates fra modelleringa
+  # bareInkluder: typologifaktorer (hvis oppgitt, blir bare disse hensyntatt)
+  # ikkeInkluder: typologifaktorer som skal utelates fra modelleringa
   #   [f.eks. vil list(typ="tur", vrd=2) ekskludere brepåvirka elver]
   # maalingPer: minste antall målinger per rapporteringsperiode
   # maalingTot: minste antall målinger totalt
@@ -65,10 +66,10 @@ fraVFtilNI <- function(
   #   - 1 (vekting med innsjøvannforekomstenes idealiserte diameter)
   #   - 2 (vekting med innsjøvannforekomstenes areal)
   #   - 3 (vekting med innsjøvannforekomstenes idealiserte volum)
-  # vis: ¤¤¤
   # DeltaAIC: hvor mye lavere AIC skal en mer kompleks modell ha for å bli valgt
   # minsteAndel: hvor lav må andelen av vannforekomster med data minst være
   # iterasjoner: antall iterasjoner som skal brukes i simuleringa
+  # vis: skal beskjeder om modelltilpasninga vises 
   
 #  DATA <- DATA
 #  vannforekomster <- V
@@ -84,8 +85,8 @@ fraVFtilNI <- function(
 #  rapportperiode <- 10
 #  vedMaalefeil <- "dato" # c("maaling", "dato", "oppdragstager")
 #  maksSkjevhet <- 3
-#  bare.inkluder <- NULL
-#  ikke.inkluder <- NULL
+#  bareInkluder <- NULL
+#  ikkeInkluder <- NULL
 #  maalingPer <- 25
 #  maalingTot <- 100
 #  ignorerVariabel <- c("reg", "dyp")
@@ -94,11 +95,11 @@ fraVFtilNI <- function(
 #  antallvekt <- 0.5
 #  tidsvekt <- 1
 #  arealvekt <- 2
-#  vis <- TRUE
 #  DeltaAIC <- 2
 #  minsteAndel <- 0.05  
 #  nsim <- 1000
-
+#  vis <- TRUE
+#  tell <- TRUE
   
   OK <- TRUE
   
@@ -543,17 +544,17 @@ fraVFtilNI <- function(
             linjer.under = 1)
     }
     rader <- nrow(maaling)
-    if (!is.null(bare.inkluder)) { #### dette er ikke utvikla!!! ¤¤¤
+    if (!is.null(bareInkluder)) { #### dette er ikke utvikla!!! ¤¤¤
       ta.med <- numeric(0)
-      if (is.list(bare.inkluder)) {
-        for (i in 1:length(bare.inkluder$typ)) {
-          ok <- which(maaling[, bare.inkluder$typ[i]] == bare.inkluder$vrd[i])
+      if (is.list(bareInkluder)) {
+        for (i in 1:length(bareInkluder$typ)) {
+          ok <- which(maaling[, bareInkluder$typ[i]] == bareInkluder$vrd[i])
           if (length(ok)) {
             ta.med <- c(ta.med, ok)
           }
         }
       } else {
-        ta.med <- ok <- which(maaling$typ %in% bare.inkluder)
+        ta.med <- ok <- which(maaling$typ %in% bareInkluder)
       }
       feil <- nrow(maaling) - length(ta.med)
       if (feil %!=% 0) {
@@ -566,10 +567,10 @@ fraVFtilNI <- function(
       }
       rm(ta.med, ok, feil)
     }
-    if (!is.null(ikke.inkluder)) {
+    if (!is.null(ikkeInkluder)) {
       fjerna <- 0
-      for (i in 1:length(ikke.inkluder$typ)) {
-        feil <- which(maaling[, ikke.inkluder$typ[i]] == ikke.inkluder$vrd[i])
+      for (i in 1:length(ikkeInkluder$typ)) {
+        feil <- which(maaling[, ikkeInkluder$typ[i]] == ikkeInkluder$vrd[i])
         if (length(feil)) {
           fjerna <- fjerna + length(feil)
           maaling <- maaling[-feil, ]
@@ -1245,25 +1246,25 @@ fraVFtilNI <- function(
              ifelse(vannkategori %inneholder% "C", "kyst",   NA))
     txt <- paste(na.omit(txt), collapse="- og ")
     skriv("Det fins ", length(utvalg), " typifiserte ", txt, "vannforekomster.")
-    if (!is.null(bare.inkluder)) {
+    if (!is.null(bareInkluder)) {
       ta.med <- numeric(0)
-      if (is.list(bare.inkluder)) {
-        for (i in 1:length(bare.inkluder$typ)) {
-          ok <- which(Vf[,bare.inkluder$typ[i]] == bare.inkluder$vrd[i])
+      if (is.list(bareInkluder)) {
+        for (i in 1:length(bareInkluder$typ)) {
+          ok <- which(Vf[,bareInkluder$typ[i]] == bareInkluder$vrd[i])
           if (length(ok)) {
             ta.med <- c(ta.med, ok)
           }
         }
       } else {
-        ta.med <- ok <- which(Vf$type %in% bare.inkluder)
+        ta.med <- ok <- which(Vf$type %in% bareInkluder)
       }
     }
     forskj <- length(utvalg) - length(utvalg %A% ta.med)
     utvalg <- utvalg %A% ta.med
     fjern <- numeric(0)
-    if (!is.null(ikke.inkluder)) {
-      for (i in length(ikke.inkluder$typ)) {
-        feil <- which(Vf[,ikke.inkluder$typ[i]] == ikke.inkluder$vrd[i])
+    if (!is.null(ikkeInkluder)) {
+      for (i in length(ikkeInkluder$typ)) {
+        feil <- which(Vf[,ikkeInkluder$typ[i]] == ikkeInkluder$vrd[i])
         if (length(feil)) {
           fjern <- c(fjern, feil)
         }
