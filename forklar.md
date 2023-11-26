@@ -1,4 +1,4 @@
-**R**-funksjonen som står for selve dataflyten, heter `fraVFtilNI` («fra vannforskrift til naturindeks»). I dette avsnittet forklares dens funksjonsparametere. Etter parameterens navn (i `fastbreddeskrift`) følger variabeltypen (i **halvfeit skrift** i parentes). De relevante variabeltypene skiller mellom skalarer (nøyaktig én verdi) og vektorer (en eller flere verdier) av tekststrenger («tekst»), tall («numerisk») og sannhetsverdier (`TRUE` eller `FALSE`) samt lister.
+**R**-funksjonen som står for selve dataflyten, heter `fraVFtilNI` («fra vannforskrift til naturindeks»). I dette avsnittet forklares dens funksjonsparametere. Etter parameterens navn (med `grå bakgrunn`) følger variabeltypen (i **halvfeit skrift** i parentes). De relevante variabeltypene skiller mellom skalarer (nøyaktig én verdi) og vektorer (en eller flere verdier) av tekststrenger («tekst»), tall («numerisk») og sannhetsverdier (`TRUE` eller `FALSE`) samt lister.
 
 De første fem parameterne _må alltid angis_. De øvrige er frivillige, som vil si at det brukes en standardverdi om ikke noe annet angitt.
 
