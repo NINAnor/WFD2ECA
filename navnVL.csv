@@ -1,0 +1,18 @@
+VL;nytt
+Vannlokalitet ID;lokid
+Vannlokalitetskode;lokkod
+Vannlokalitet;loknam
+Betegnelse;n1
+Beskrivelse;n2
+Objekttype;n3
+Midlertidig;n4
+Dato opprettet;n5
+Innsjonr;sjønr
+Vannforekomst ID;id
+Vannkategori;kat
+UTM33 Ost (X);X
+UTM33 Nord (Y);Y
+Knytt til påvirkning;n6
+Lokalitetsnr/AnleggsID;n7
+Referansestasjon;n8
+Produksjonsområde;n9
