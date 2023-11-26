@@ -10,5 +10,5 @@ Se [eksempelkjøringen](hele.md) for en illustrasjon av dataflyten og de involve
 Nærmere forklaringer av funksjonenes parametere [skal snart] gis [her](forklar.md).
 
 ## Kontakt
-Denne siden vedlikeholdes av [Hanno Sandvik](mailto:hanno.sandvik@nina.no).
+Denne sida vedlikeholdes av [Hanno Sandvik](mailto:hanno.sandvik@nina.no).
 
