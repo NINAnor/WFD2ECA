@@ -13,7 +13,7 @@ fraVFtilNI <- function(
     kommHist = kommunehistorikk,
     fylkHist = fylkeshistorikk,
     rapportperiode = 10,
-    vedMaalefeil = "dato", # c("måling", "dato", "oppdragstager")
+    vedMaalefeil = "dato",
     maksSkjevhet = 3,
     bareInkluder = NULL,
     ikkeInkluder = NULL,
@@ -27,7 +27,8 @@ fraVFtilNI <- function(
     arealvekt = 2,
     DeltaAIC = 2,
     minsteAndel = 0.05,
-    iterasjoner = 100000
+    iterasjoner = 100000,
+    bredde = NULL,
     vis = TRUE,
     tell = TRUE
 ) {
@@ -69,37 +70,8 @@ fraVFtilNI <- function(
   # DeltaAIC: hvor mye lavere AIC skal en mer kompleks modell ha for å bli valgt
   # minsteAndel: hvor lav må andelen av vannforekomster med data minst være
   # iterasjoner: antall iterasjoner som skal brukes i simuleringa
+  # bredde: bredden til beskjeder i antall tegn
   # vis: skal beskjeder om modelltilpasninga vises 
-  
-#  DATA <- DATA
-#  vannforekomster <- V
-#  vannlokaliteter <- VL
-#  parameter <- "ASPT"
-#  vannkategori <- "R" # c("L", "R", "C")
-#  filKlasser <- NULL
-#  NI.aar <- c(1990, 2000, 2010, 2014, 2019, 2024)
-#  rapportenhet <- c("kommune", "fylke", "landsdel", "norge")
-#  adminAar <- 2010
-#  kommHist <- kommunehistorikk
-#  fylkHist <- fylkeshistorikk
-#  rapportperiode <- 10
-#  vedMaalefeil <- "dato" # c("maaling", "dato", "oppdragstager")
-#  maksSkjevhet <- 3
-#  bareInkluder <- NULL
-#  ikkeInkluder <- NULL
-#  maalingPer <- 25
-#  maalingTot <- 100
-#  ignorerVariabel <- c("reg", "dyp")
-#  fastVariabel <- NULL
-#  aktivitetsvekt <- 5
-#  antallvekt <- 0.5
-#  tidsvekt <- 1
-#  arealvekt <- 2
-#  DeltaAIC <- 2
-#  minsteAndel <- 0.05  
-#  nsim <- 1000
-#  vis <- TRUE
-#  tell <- TRUE
   
   OK <- TRUE
   
@@ -494,10 +466,16 @@ fraVFtilNI <- function(
       } else {
         uten.kode <- c(uten.kode, i)
       }
-      cat("Ferdig med " %+% floor(100*(which(er.med == i) / length(er.med))) %+%
-            " % av målingene.\r")
+      if (tell) {
+        cat("Ferdig med " %+% floor(100*(which(er.med == i) / length(er.med))) %+%
+              " % av målingene.\r")
+      }
     }
-    cat("\n\n")
+    if (tell) {
+      cat("\n\n")
+    } else {
+      cat("Ferdig med 100 % av målingene.\n\n")
+    }
     maaling <- maaling[-1,]
     maaling$per <- as.factor(maaling$per)
     
@@ -1580,9 +1558,15 @@ fraVFtilNI <- function(
               colnames(pred)[2] <- "SD"
               simdata[, j, i - s] <- pred[,1] + pred[,2] * slumptall
             }
-            cat("Ferdig med " %+% floor(100*i/nsim) %+% " % av simuleringene.\r")
+            if (tell) {
+              cat("Ferdig med " %+% floor(100*i/nsim) %+% " % av simuleringene.\r")
+            }
           }
-          cat("\n")
+          if (tell) {
+            cat("\n")
+          } else {
+            cat("Ferdig med 100% av simuleringene.\n")
+          }
           rm(slumptall)
           gc(verbose = FALSE)
           
@@ -1632,10 +1616,17 @@ fraVFtilNI <- function(
                   } else {
                     UT$kommune[k, , 1:SIM + s + 1] <- NA
                   }
-                  cat("Ferdig med "%+% which(KOM==k) %+% " av " %+% 
-                      length(KOM) %+% " kommuner.\r")
+                  if (tell) {
+                    cat("Ferdig med " %+% which(KOM==k) %+% " av " %+% 
+                        length(KOM) %+% " kommuner.\r")
+                  }
                 }
-                cat("\n")
+                if (tell) {
+                  cat("\n")
+                } else {
+                  cat("Ferdig med " %+% length(KOM) %+% " av " %+% 
+                        length(KOM) %+% " kommuner.\n")
+                }
               }
             }
             if ("landsdeler" %begynner% e) {

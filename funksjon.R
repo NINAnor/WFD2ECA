@@ -48,9 +48,12 @@
 ln <- function(x) log(x)
 
 # Pen utmating av tekst
-skriv <- function(..., pre = "", linjer.over = 0, linjer.under = 0)
+skriv <- function(..., pre = "", linjer.over = 0, linjer.under = 0,
+                  Bredde = bredde)
   cat(rep("\n", linjer.over),
       paste(strwrap(paste(c(...), collapse = ""),
+                    width = if (is.null(Bredde))
+                      0.84 * getOption("width") else Bredde,
                     initial = pre,
                     exdent = nchar(pre)),
             collapse = "\n"), 

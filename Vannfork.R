@@ -632,7 +632,6 @@ lesMaalinger <- function(filnavn,
   
   # Kolonner som datarammen V trenger for å fungere:
   nyeKolonner <- c(
-    "regid",
     "lokid",
     "aktid",
     "oppdrg",
@@ -659,7 +658,9 @@ lesMaalinger <- function(filnavn,
   )
   
   OK <- TRUE
-  DATA <- filnavn
+#  DATA <- filnavn
+  
+  DATA <- as.data.frame(read_xlsx("ASPT.xlsx", col_types = "text"))
   
   # Innlesing av "tolkningstabellen": 
   # Hvilke kolonner i vannmiljø-tabellen svarer til hvilke kolonner i DATA
@@ -673,7 +674,7 @@ lesMaalinger <- function(filnavn,
     colnames(DATA) <- navnVM$nytt
     if (all(nyeKolonner %in% navnVM$nytt)) {
       DATA <- DATA[, nyeKolonner]
-      DATA$verdi <- as.numeric(gsub(",", ".", DATA$verdi))
+      DATA$verdi <- as.numeric(erstatt(DATA$verdi, ",", "."))
       DATA$antverdi <- as.numeric(DATA$antverdi)
       DATA$antverdi[which(is.na(DATA$antverdi))] <- 1
     } else {
