@@ -91,8 +91,19 @@ Denne fila er nødvendig for å lese inn innsjødataene, og den ligger i dette a
 Hvis NVE endrer kolonnenavnene i sin nedlastingsløsning, må denne fila oppdateres tilsvarende.
 
 Filnavnet oppgis som parameter når dataene leses inn i R:
-```{r}
+```{r, eval=FALSE, echo=TRUE}
 nve <- lesInnsjodatabasen("Innsjo_Innsjo.dbf")
+```
+```{r, eval=TRUE, echo=FALSE}
+# Eksporten fra innsjødatabasen var for stor til å legge ut på GitHub.
+# Derfor må det her kjøres en annen versjon, som rett og slett laster inn datarammen som ble innlest tidligere:
+load("nve.RData")
+# Så gjengis beskjedene som ble generert under denne tidligere innlesinga:
+cat("\nOBS: For 3 innsjøer var høyden over havet angitt å være negativ. Disse ble satt til <NA>.\n")
+cat("\nOBS: For 4 innsjøer var det norske arealet angitt å være negativ. Disse ble satt til <NA>.\n")
+cat("\nOBS: For 1 innsjøer var tilsigsfeltet angitt å være negativ. Disse ble satt til <NA>.\n")
+cat("\nOBS: For 589 innsjøer var deres tilsigsfelt angitt å være mindre enn deres areal. For disse ble tilsigsfeltet satt")
+cat("\n     til arealet.\n")
 ```
 
 Utmatinga forteller om mindre avvik fra det man kunne forvente.
