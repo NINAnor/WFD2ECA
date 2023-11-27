@@ -658,9 +658,7 @@ lesMaalinger <- function(filnavn,
   )
   
   OK <- TRUE
-#  DATA <- filnavn
-  
-  DATA <- as.data.frame(read_xlsx("ASPT.xlsx", col_types = "text"))
+  DATA <- as.data.frame(read_xlsx(filnavn, col_types = "text"))
   
   # Innlesing av "tolkningstabellen": 
   # Hvilke kolonner i vannmiljø-tabellen svarer til hvilke kolonner i DATA
