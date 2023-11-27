@@ -75,7 +75,7 @@ Benytta vannkategorier må også spesifiseres ved innlesing (se under).
 I tillegg trenger man en tabell som forklarer kolonnenavne i fila fra
 vann-nett. Denne fila er nødvendig for å lese inn vannforekomstdataene,
 og den ligger i dette arkivet under navnet
-“[**NavnVN.csv**](NavnVN.csv)”. Hvis vann-nett endrer kolonnenavnene i
+“[**navnVN.csv**](navnVN.csv)”. Hvis vann-nett endrer kolonnenavnene i
 sin nedlastingsløsning, må denne fila oppdateres tilsvarende.
 
 Filene leses inn i R på følgende måte:
@@ -217,7 +217,7 @@ Benytta vannkategorier må også spesifiseres ved innlesing (se under).
 I tillegg trenger man en tabell som forklarer kolonnenavne i fila fra
 vannmiljø. Denne fila er nødvendig for å lese inn vannforekomstdataene,
 og den ligger i dette arkivet under navnet
-“[**NavnVL.csv**](NavnVL.csv)”. Hvis vannmiljø endrer kolonnenavnene i
+“[**navnVL.csv**](navnVL.csv)”. Hvis vannmiljø endrer kolonnenavnene i
 sin nedlastingsløsning, må denne fila oppdateres tilsvarende.
 
 Filene leses inn i R på følgende måte:
