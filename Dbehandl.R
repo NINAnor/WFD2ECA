@@ -703,7 +703,7 @@ fraVFtilNI <- function(
     maaling$vkt <- maaling$ant^antallvekt * tidsvekt^maaling$rar *
       as.vector(aktivitetsvekt^(-abs(Aktiviteter[maaling$akt, "skaar"])))
     
-    # Fjern typologifaktorer som ikke er definer for vannkategorien
+    # Fjern typologifaktorer som ikke er definert for vannkategorien
     if (vannkategori == "R") {
       ignorerVariabel <- unique(c(ignorerVariabel, "dyp"))
     }
@@ -725,8 +725,16 @@ fraVFtilNI <- function(
       }
     }
     
+    if (vannkategori == "L") {
+      formel. <- "per * rar + akt + reg + son + stø + alk + hum + tur + dyp"
+    }
+    if (vannkategori == "R") {
+      formel. <- "per * rar + akt + reg + son + stø + alk + hum + tur"
+    }
+    if (vannkategori == "C") {
+      formel. <- "per * rar + akt + reg + kys + sal + tid + eks + mix + opp + str"
+    }
     
-    formel. <- "per * rar + akt + reg + son + stø + alk + hum + tur + dyp"
     if (!is.null(ignorerVariabel)) {
       for (i in tolower(ignorerVariabel)) {
         if (formel. %inneholder% i &&
@@ -750,26 +758,50 @@ fraVFtilNI <- function(
       paste(sort(c(unlist(strsplit(x, "[+]")), unlist(strsplit(y, "[+]")))), collapse="+")
     RF1 <- list(
       akt = sort(unique(maaling$akt)),
-      tur = c("1", "2", "3")
+      tur = c("1", "2", "3"),
+      tid = c("1", "2")
     )
     RF2 <- RF2.sik <- list(
       son = c("L", "M", "H"),
       stø = c("1", "2", "3", "4", "5"),
       alk = c("5", "6", "7", "1", "8", "2", "3", "4"),
       hum = c("4", "1", "2", "3"),
-      dyp = c("1", "2", "3")
+      dyp = c("1", "2", "3"),
+      kys = c("1", "7", "2", "3", "4", "5", "6", "8"),
+      sal = c("1", "2", "3", "6", "4", "7", "5"),
+      eks = c("1", "2", "3"),
+      mix = c("1", "2", "3"),
+      opp = c("1", "2", "3"),
+      str = c("1", "2", "3")
     )
-    VN1 <- c(akt = "Aktivitet", tur = "Turbiditet")
-    VN2 <- c(son = "Sone", stø = "Størrelse", alk = "Alkalitet", hum = "Humøsitet", dyp = "Dybde")
+    VN1 <- c(akt = "Aktivitet", tur = "Turbiditet", tid = "Tidevann")
+    VN2 <- c(son = "Sone",
+             stø = "Størrelse", 
+             alk = "Alkalitet", 
+             hum = "Humøsitet", 
+             dyp = "Dybde",
+             kys = "Kysttype",
+             sal = "Salinitet",
+             eks = "Eksponering",
+             mix = "Miksing",
+             opp = "Oppholdstid",
+             str = "Strøm")
     TV2 <- list(
       son = 1:3,
       stø = 1:5,
       alk = c(-0.8, -0.4, -0.2, -0.1, 0, 0.3, 0.9, 1.5),
       hum = c(0.75, 1.25, 1.75, 2.25),
-      dyp = 1:3
+      dyp = 1:3,
+      kys = 1:8,
+      sal = c(-0.6, 0.2, 1, 1.1, 1.4, 1.5, 1.6),
+      eks = 1:3,
+      mix = 1:3,
+      opp = 1:3,
+      str = 1:3
     )
-    RF1a <- list(akt=c(), tur=c())
-    RF2a <- list(son=c(), stø=c(), alk=c(), hum=c(), dyp=c())
+    RF1a <- list(akt=c(), tur=c(), tid=c())
+    RF2a <- list(son=c(), stø=c(), alk=c(), hum=c(), dyp=c(), 
+                 kys=c(), sal=c(), eks=c(), mix=c(), opp=c(), str=c())
     maaling.sik <- maaling
     #if (any(maaling$hum == "0"))
     # {maaling$hum[which(maaling$hum == "0")] <- "2"} # her settes turbide vannforkomster = humøs!
@@ -789,7 +821,7 @@ fraVFtilNI <- function(
       REKKEF <- RF1
       VNAVN  <- VN1
       formel <- formel. <- formel.. <- erstatt(formel., ".", "")
-      vliste <- c("akt", "tur") %A% unlist(strsplit(formel., " [+] "))
+      vliste <- names(VN1) %A% unlist(strsplit(formel., " [+] "))
       for (vrb in vliste) {
         endra <- F
         vrb. <- vrbSIK <- maaling[,vrb]
@@ -846,7 +878,7 @@ fraVFtilNI <- function(
       REKKEF <- RF2
       TALLV  <- TV2
       VNAVN  <- VN2
-      vliste <- c("son", "stø", "alk", "hum") %A% unlist(strsplit(formel., " [+] "))
+      vliste <- names(VN2) %A% unlist(strsplit(formel., " [+] "))
       for (vrb in vliste) {
         endra <- F
         vrb. <- vrbSIK <- maaling[,vrb]
@@ -908,7 +940,7 @@ fraVFtilNI <- function(
       REKKEF <- RF1
       VNAVN  <- VN1
       formel <- formel. <- formel.. <- erstatt(formel., ".", "")
-      vliste <- c("akt", "tur") %A% unlist(strsplit(formel., " [+] "))
+      vliste <- names(VN1) %A% unlist(strsplit(formel., " [+] "))
       if (!is.null(fastVariabel)) {
         for (i in tolower(fastVariabel)) {
           if (i %in% vliste) {
@@ -1031,7 +1063,7 @@ fraVFtilNI <- function(
       REKKEF <- RF2
       TALLV  <- TV2
       VNAVN  <- VN2
-      vliste <- c("son","stø","alk","hum","dyp") %A% unlist(strsplit(formel., " [+] "))
+      vliste <- names(VN2) %A% unlist(strsplit(formel., " [+] "))
       if (!is.null(fastVariabel)) {
         for (i in tolower(fastVariabel)) {
           if (i %in% vliste) {

@@ -117,6 +117,43 @@ farge <- function(eqr, na.farge=0.84) {
   rgb(r,g,b)
 }
 
+# Kombiner to utmatinger
+# (Må kun brukes for ulike vannkategorier innenfor samme parameter!)
+kombiner <- function(ut1, ut2) {
+  ok <- TRUE
+  UT <- ut1
+  if (names(ut1) %=% names(ut2)) {
+    for (i in names(ut1)) {
+      if (dimnames(ut1[[i]])[1:2] %=% dimnames(ut2[[i]])[1:2]) {
+        ny <- array(0, dim = dim(ut1[[i]]) + c(0, 0, dim(ut2[[i]])[3] - 1))
+        dimnames(ny) <- list(dimnames(ut1[[i]])[[1]],
+                             dimnames(ut1[[i]])[[2]],
+                             c("pred", 2:(dim(ny)[3]) - 1))
+        ny[, , 2:dim(ut1[[i]])[3]] <- ut1[[i]][, , 2:dim(ut1[[i]])[3]]
+        ny[, , dim(ut1[[i]])[3] - 1 +
+               2:dim(ut2[[i]])[3]] <- ut2[[i]][, , 2:dim(ut2[[i]])[3]]
+        for (j in 1:dim(ny)[1]) {
+          for (k in 1:dim(ny)[2]) {
+            ny[j, k, 1] <- median(ny[j, k, -1])
+          }
+        }
+        UT[[i]] <- ny
+      } else {
+        ok <- FALSE
+      }
+    }
+  } else {
+    ok <- FALSE
+  }
+  if (ok) {
+    return(UT)
+  } else {
+    skriv("De to utmatingene var ikke kompatible og kunne ikke kombineres!",
+          pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
+    return(NULL)
+  }
+}
+
 
 
 # Variabler/konstanter som trengs
