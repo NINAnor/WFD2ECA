@@ -1,3 +1,5 @@
+# Dataflyt vannforskrift–naturindeks: eksempel
+
 -   <a href="#forberedelser" id="toc-forberedelser">Forberedelser</a>
 -   <a href="#nødvendig-informasjon-om-vannforekomster"
     id="toc-nødvendig-informasjon-om-vannforekomster">Nødvendig informasjon
@@ -73,7 +75,7 @@ Benytta vannkategorier må også spesifiseres ved innlesing (se under).
 I tillegg trenger man en tabell som forklarer kolonnenavne i fila fra
 vann-nett. Denne fila er nødvendig for å lese inn vannforekomstdataene,
 og den ligger i dette arkivet under navnet
-“[**NavnVN.csv**](NavnVN.csv)”. Hvis vann-nett endrer kolonnenavnene i
+“[**navnVN.csv**](navnVN.csv)”. Hvis vann-nett endrer kolonnenavnene i
 sin nedlastingsløsning, må denne fila oppdateres tilsvarende.
 
 Filene leses inn i R på følgende måte:
@@ -215,7 +217,7 @@ Benytta vannkategorier må også spesifiseres ved innlesing (se under).
 I tillegg trenger man en tabell som forklarer kolonnenavne i fila fra
 vannmiljø. Denne fila er nødvendig for å lese inn vannforekomstdataene,
 og den ligger i dette arkivet under navnet
-“[**NavnVL.csv**](NavnVL.csv)”. Hvis vannmiljø endrer kolonnenavnene i
+“[**navnVL.csv**](navnVL.csv)”. Hvis vannmiljø endrer kolonnenavnene i
 sin nedlastingsløsning, må denne fila oppdateres tilsvarende.
 
 Filene leses inn i R på følgende måte:
@@ -347,7 +349,7 @@ Simuleringa kan ta spesielt mye tid, avhengig av antall iterasjoner. For
 illustrasjonen her er det valgt 1000 iterasjoner. For bruk i naturindeks
 bør man velge en større verdi (f.eks. 100000).
 
-Funksjonen som gjennomfører analysen, heter `[fraVFtilNI](Dbehandl.R)`
+Funksjonen som gjennomfører analysen, heter [`fraVFtilNI`](Dbehandl.R)
 (“fra vannforkrift til naturindeks”). Den har mange flere parametere enn
 de som vises under, som tillater ulike justeringer som er [forklart
 her](forklar.md). De første fire parametrene må alltid oppgis. Resten
