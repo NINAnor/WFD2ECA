@@ -96,8 +96,32 @@ mEQR <- function(x, klassegrenser) {
   return(x * 0.2)
 }
 
+# Oversette fylkesnumre til fylkesnavn
+fylke <- function(i) fylkeshistorikk$navn[which(fylkeshistorikk$nr == i)]
+
+# Definere en fargepalett tilpassa vannforskriften
+farge <- function(eqr, na.farge=0.84) {
+  r <- ifelse(is.na(eqr), na.farge,
+              ifelse(eqr < 0.1, eqr * 5 + 0.5,
+                     ifelse(eqr < 0.5, 1,
+                            ifelse(eqr < 0.7, sqrt(3.5 - eqr * 5),
+                                   ifelse(eqr < 0.9, 0, eqr * 5 - 4.5)))))
+  g <- ifelse(is.na(eqr), na.farge,
+              ifelse(eqr < 0.1, 0,
+                     ifelse(eqr < 0.5, eqr * 2.5 - 0.25,
+                            ifelse(eqr < 0.8, 1,
+                                   ifelse(eqr < 0.9, 9 - eqr * 10, 0)))))
+  b <- ifelse(is.na(eqr), na.farge,
+              ifelse(eqr < 0.7, 0,
+                     ifelse(eqr < 0.8, eqr * 10 - 7, 1)))
+  rgb(r,g,b)
+}
+
+
 
 # Variabler/konstanter som trengs
+
+bredde <- NULL
 
 Typologi <- c( # inneholder navnene på typologifaktorene
   "kategori",
@@ -135,24 +159,4 @@ Vanntyper <- list( # angir mulige verdier for alle typologifaktorer
   str = 1:3
 )
 
-
-fylke <- function(i) fylkeshistorikk$navn[which(fylkeshistorikk$nr == i)]
-
-
-farge <- function(eqr, na.farge=0.84) {
-  r <- ifelse(is.na(eqr), na.farge,
-              ifelse(eqr < 0.1, eqr * 5 + 0.5,
-                     ifelse(eqr < 0.5, 1,
-                            ifelse(eqr < 0.7, sqrt(3.5 - eqr * 5),
-                                   ifelse(eqr < 0.9, 0, eqr * 5 - 4.5)))))
-  g <- ifelse(is.na(eqr), na.farge,
-              ifelse(eqr < 0.1, 0,
-                     ifelse(eqr < 0.5, eqr * 2.5 - 0.25,
-                            ifelse(eqr < 0.8, 1,
-                                   ifelse(eqr < 0.9, 9 - eqr * 10, 0)))))
-  b <- ifelse(is.na(eqr), na.farge,
-              ifelse(eqr < 0.7, 0,
-                     ifelse(eqr < 0.8, eqr * 10 - 7, 1)))
-  rgb(r,g,b)
-}
 
