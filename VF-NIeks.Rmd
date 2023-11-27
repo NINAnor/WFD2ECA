@@ -240,7 +240,7 @@ utmating <- fraVFtilNI(
                        NI.aar = c(1990, 2000, 2010, 2014, 2019, 2024),
                        rapportenhet = c("kommune", "fylke", "landsdel", "norge"),
                        adminAar = 2010,
-                       ikke.inkluder = list(typ="tur", vrd=2),
+                       ikkeInkluder = list(typ="tur", vrd=2),
                        ignorerVariabel = "reg",
                        iterasjoner = 1000,
                       )
@@ -257,7 +257,7 @@ utmating <- fraVFtilNI(
                        NI.aar = c(1990, 2000, 2010, 2014, 2019, 2024),
                        rapportenhet = c("kommune", "fylke", "landsdel", "norge"),
                        adminAar = 2010,
-                       ikke.inkluder = list(typ="tur", vrd=2),
+                       ikkeInkluder = list(typ="tur", vrd=2),
                        ignorerVariabel = "reg",
                        iterasjoner = 1000,
                        bredde = 96,
