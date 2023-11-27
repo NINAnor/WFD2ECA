@@ -349,7 +349,7 @@ Simuleringa kan ta spesielt mye tid, avhengig av antall iterasjoner. For
 illustrasjonen her er det valgt 1000 iterasjoner. For bruk i naturindeks
 bør man velge en større verdi (f.eks. 100000).
 
-Funksjonen som gjennomfører analysen, heter `[fraVFtilNI](Dbehandl.R)`
+Funksjonen som gjennomfører analysen, heter [`fraVFtilNI`](Dbehandl.R)
 (“fra vannforkrift til naturindeks”). Den har mange flere parametere enn
 de som vises under, som tillater ulike justeringer som er [forklart
 her](forklar.md). De første fire parametrene må alltid oppgis. Resten
