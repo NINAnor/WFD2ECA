@@ -708,9 +708,18 @@ fraVFtilNI <- function(
       ignorerVariabel <- unique(c(ignorerVariabel, "dyp"))
     }
     
+    if (vannkategori == "L") {
+      Variabler <- c("akt", "reg", "son", "stø", "alk", "hum", "tur", "dyp")
+    }
+    if (vannkategori == "R") {
+      Variabler <- c("akt", "reg", "son", "stø", "alk", "hum", "tur")
+    }
+    if (vannkategori == "C") {
+      Variabler <- c("akt", "reg", "kys", "sal", "tid", "eks", "mix", "opp", "str")
+    }
+
     # Fjern typologifaktorer som ikke er oppgitt
-    for (typ in c("reg", "son", "stø", "alk", "hum", "tur", "dyp") %-%
-                ignorerVariabel) {
+    for (typ in Variabler %-% "akt" %-% ignorerVariabel) {
       w <- which(is.na(maaling[, typ]))
       if (length(w)) {
         if (length(w) > nrow(maaling) / 0.25) {
@@ -725,14 +734,9 @@ fraVFtilNI <- function(
       }
     }
     
-    if (vannkategori == "L") {
-      formel. <- "per * rar + akt + reg + son + stø + alk + hum + tur + dyp"
-    }
-    if (vannkategori == "R") {
-      formel. <- "per * rar + akt + reg + son + stø + alk + hum + tur"
-    }
-    if (vannkategori == "C") {
-      formel. <- "per * rar + akt + reg + kys + sal + tid + eks + mix + opp + str"
+    formel. <- "per * rar"
+    if (length(Variabler)) {
+      formel. <- formel. %+% " + " %+% paste(Variabler, collapse = " + ")
     }
     
     if (!is.null(ignorerVariabel)) {
