@@ -10,8 +10,8 @@ fraVFtilNI <- function(
     NI.aar = c(1990, 2000, 2010, 2014, 2019, 2024),
     rapportenhet = c("kommune", "fylke", "landsdel", "norge"),
     adminAar = 2010,
-    kommHist = kommunehistorikk,
-    fylkHist = fylkeshistorikk,
+    kommHist = "knr.xlsx",
+    fylkHist = "fnr.xlsx",
     rapportperiode = 10,
     vedMaalefeil = "dato",
     maksSkjevhet = 3,
@@ -26,7 +26,6 @@ fraVFtilNI <- function(
     tidsvekt = 1,
     arealvekt = 2,
     DeltaAIC = 2,
-    minsteAndel = 0.05,
     iterasjoner = 100000,
     bredde = NULL,
     vis = TRUE,
@@ -55,8 +54,8 @@ fraVFtilNI <- function(
   # bareInkluder: typologifaktorer (hvis oppgitt, blir bare disse hensyntatt)
   # ikkeInkluder: typologifaktorer som skal utelates fra modelleringa
   #   [f.eks. vil list(typ="tur", vrd=2) ekskludere brepåvirka elver]
-  # maalingPer: minste antall målinger per rapporteringsperiode
-  # maalingTot: minste antall målinger totalt
+  # maalingPer: minste antall vannforekomster med målinger per rapporteringsperiode
+  # maalingTot: minste antall vannforekomster med målinger totalt
   # ignorerVariabel: typologifaktorer som ikke skal  inngå i modelltilpasninga
   # fastVariabel: typologifaktorer som ikke skal droppes fra modelltilpasninga
   # aktivitetsvekt: tallverdi som blir brukt for vekting av overvåkingsaktiviteter
@@ -68,7 +67,6 @@ fraVFtilNI <- function(
   #   - 2 (vekting med innsjøvannforekomstenes areal)
   #   - 3 (vekting med innsjøvannforekomstenes idealiserte volum)
   # DeltaAIC: hvor mye lavere AIC skal en mer kompleks modell ha for å bli valgt
-  # minsteAndel: hvor lav må andelen av vannforekomster med data minst være
   # iterasjoner: antall iterasjoner som skal brukes i simuleringa
   # bredde: bredden til beskjeder i antall tegn
   # vis: skal beskjeder om modelltilpasninga vises 
@@ -78,7 +76,7 @@ fraVFtilNI <- function(
   #########################################################################
   skriv("Innledende tester", pre = "   ", linjer.over  = 1)
   skriv("=================", pre = "   ", linjer.under = 1)
-  
+
   # Sjekke om nødvendige funksjonsparametere er oppgitt
   if (missing(DATA)) {
     OK <- FALSE
@@ -209,12 +207,43 @@ fraVFtilNI <- function(
     #########################################################################
     skriv("Lasting av administrative enheter", pre = "   ", linjer.over  = 1)
     skriv("=================================", pre = "   ", linjer.under = 1)
-    
-    fylkeshistorikk  <- fylkHist
-    kommunehistorikk <- kommHist
+
+    kommunehistorikk <- try(as.data.frame(read_xlsx(kommHist, col_types = "text")))
+    if (inherits(kommunehistorikk, "try-error")) {
+      OK <- FALSE
+      skriv("Dette skjedde en feil under innlesing av fila \"", kommHist,
+            ". Sjekk om fila fins, og at det er oppgitt korrekt navn på den.",
+            pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
+    }
+    fylkeshistorikk <- try(as.data.frame(read_xlsx(fylkHist, col_types = "text")))
+    if (inherits(fylkeshistorikk, "try-error")) {
+      OK <- FALSE
+      skriv("Dette skjedde en feil under innlesing av fila \"", fylkHist,
+            ". Sjekk om fila fins, og at det er oppgitt korrekt navn på den.",
+            pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
+    }
+  }
+  
+  if (OK) {
+    kommunehistorikk$Nummer[which(nchar(kommunehistorikk$Nummer) == 3)] <-
+      "0" %+% kommunehistorikk$Nummer[which(nchar(kommunehistorikk$Nummer) == 3)]
     relevanteRader   <- 4:(ncol(kommunehistorikk) - 1)
     rownames(kommunehistorikk) <- kommunehistorikk$Nummer
+    rownames(fylkeshistorikk)  <-  fylkeshistorikk$nr
+    fylke <- function(i) fylkeshistorikk[as.character(i), "navn"]
     
+    for (i in 2:ncol(kommunehistorikk)) {
+      kommunehistorikk[, i] <- erstatt(kommunehistorikk[, i], "&ae", "æ")
+      kommunehistorikk[, i] <- erstatt(kommunehistorikk[, i], "&Ae", "Æ")
+      kommunehistorikk[, i] <- erstatt(kommunehistorikk[, i], "&oe", "ø")
+      kommunehistorikk[, i] <- erstatt(kommunehistorikk[, i], "&Oe", "Ø")
+      kommunehistorikk[, i] <- erstatt(kommunehistorikk[, i], "&ao", "å")
+      kommunehistorikk[, i] <- erstatt(kommunehistorikk[, i], "&Ao", "Å")
+      kommunehistorikk[, i] <- erstatt(kommunehistorikk[, i], "&aa", "á")
+      kommunehistorikk[, i] <- erstatt(kommunehistorikk[, i], "&ng", "ŋ")
+      kommunehistorikk[, i] <- erstatt(kommunehistorikk[, i], "&sj", "š")
+    }
+
     rapportenhet <- tolower(unique(rapportenhet))
     if (length(rapportenhet)) {
       for (i in 1:length(rapportenhet)) {
@@ -250,13 +279,12 @@ fraVFtilNI <- function(
                V = c(11:14, 46)               %+% "00",
                M = c(15:17, 50)               %+% "00",
                N = c(18:20, 54:56)            %+% "00")
-    rownames(fylkeshistorikk) <- fylkeshistorikk$nr
     Vk <- Vf$knr
     Vn <- Vf$kommune
     Fn <- ""
     for (k in 1:nrow(kommunehistorikk)) {
       knr <- kommunehistorikk$Nummer[k]
-      w <- unique(unlist(kommunehistorikk[k, relevanteRader]))
+      w <- unique(unlist(kommunehistorikk[k, relevanteRader])) %-% "."
       for (kk in w) {
         knr <- c(knr, kommunehistorikk$Nummer[which(kommunehistorikk == kk, arr.ind = TRUE)[, 1]])
       }
@@ -417,6 +445,7 @@ fraVFtilNI <- function(
                           aar=0, per=0, rar=0, akt="",
                           typ="", kat="", reg="", son="", 
                           stø="", alk="", hum="", tur="", dyp="",
+                          kys="", sal="", tid="", eks="", mix="", opp="", str="",
                           kom="", fyl="", ant=1, vkt=1, vrd=0,
                           stringsAsFactors = FALSE)
     uten.kode <- uten.id <- numeric()
@@ -452,8 +481,8 @@ fraVFtilNI <- function(
           maaling$fyl[L]   <- Vf$fylk[vfk]
           maaling$vrd[L]   <- DATA$verdi[i]
           maaling$ant[L]   <- DATA$antve[i]
-          for (j in colnames(maaling)[13:21]) {
-            maaling[L,j]   <- Vf[vfk, j]  
+          for (j in colnames(maaling)[13:28]) { # typologifaktorene!
+            maaling[L,j]   <- Vf[vfk, j]
           }
           # ¤ utsatt!
           #if (is.na(maaling$gbr[L])) {
@@ -581,31 +610,31 @@ fraVFtilNI <- function(
     }
     fjernAar <- c()
     for (i in NI.aar) {
-      w <- which(maaling$per == i)
-      if (length(w) < maalingPer) {
-        if (length(w) > 0) {
+      w <- length(unique(maaling$vfo[which(maaling$per == i)]))
+      if (w < maalingPer) {
+        if (w > 0) {
           maaling <- maaling[-which(maaling$per == i),]
         }
         fjernAar <- c(fjernAar, i)
-        skriv("For rapportåret ", i, " foreligger bare ", length(w), 
-              " målinger. Det er dessverre for få, og denne rapportperioden må",
-              " derfor utgå.", pre = "OBS: ", linjer.under = 1)
+        skriv("For rapportåret ", i, " foreligger bare målinger fra ", w, 
+              " vannforekomster. Det er dessverre for få, og denne rapportperioden",
+              " må derfor utgå.", pre = "OBS: ", linjer.under = 1)
       }
     }
     rappAar <- rappAar %-% fjernAar
     NI.aar  <- NI.aar  %-% fjernAar # ¤¤¤ hvis det bare er ett år, funker ikke modelleringa!!! ¤¤¤¤¤
-    if (nrow(maaling) < maalingTot) {
+    if (length(unique(maaling$vfo)) < maalingTot) {
       OK <- FALSE
-      skriv("De foreliggende ", nrow(maaling), " målingene er dessverre " %+%
-              "altfor få til å tilpasse noen modell!",
+      skriv("De foreliggende målingene fra ", length(unique(maaling$vfo)),
+            " vannforekomster er dessverre for få til å tilpasse noen modell!",
             pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
     } else {
       skriv("Dataene som inngår i modelltilpasninga inneholder dermed")
       skriv(nrow(maaling), " målinger fra", pre = "- ")
       skriv(length(unique(maaling$lok)), " vannlokaliteter i", pre = "- ")
       skriv(length(unique(maaling$vfo)), " vannforekomster i", pre = "- ")
-      skriv(length(unique(unlist(strsplit(maaling$fyl, ","))) %A%
-                     (c("0" %+% 1:9, 10:99) %+% "00")), " fylker", pre = "- ")
+      skriv(length(unique(fylke(unlist(strsplit(maaling$fyl, ","))) %A% FYL)), 
+                   " fylker", pre = "- ")
       skriv("mellom ", min(maaling$aar), " og ", max(maaling$aar), ".", 
             pre = "- ", linjer.under = 1)
     }
@@ -616,7 +645,7 @@ fraVFtilNI <- function(
     ##################################################################
     skriv("Skalering til mEQR-verdier", pre = "   ", linjer.over  = 1)
     skriv("==========================", pre = "   ", linjer.under = 1)
-    
+
     #maaling. <- maaling
     
     oppsummer <- function(x) {
@@ -672,7 +701,7 @@ fraVFtilNI <- function(
       maaling$vrd[which(maaling$vrd >= 0.8)] <- 0.9
     }
     
-    skriv("Oppsummering av variabelverdier etter skalering:", linjer.under = 1)
+    skriv("Oppsummering av variabelverdier etter skalering:", linjer.over = 1)
     print(oppsummer(maaling$vrd))
   }
   
@@ -681,9 +710,9 @@ fraVFtilNI <- function(
   if (OK) {
     
     ######################################################################
-    skriv("Modelltilpasning til målingene", pre = "   ", linjer.over  = 1)
+    skriv("Modelltilpasning til målingene", pre = "   ", linjer.over  = 2)
     skriv("==============================", pre = "   ", linjer.under = 1)
-    
+
     rownames(Aktiviteter) <- Aktiviteter$id
     w <- which(!(toupper(maaling$akt) %in% toupper(Aktiviteter$id)))
     if (aktivitetsvekt > 1 & length(w) > 0) {
@@ -703,11 +732,6 @@ fraVFtilNI <- function(
     maaling$vkt <- maaling$ant^antallvekt * tidsvekt^maaling$rar *
       as.vector(aktivitetsvekt^(-abs(Aktiviteter[maaling$akt, "skaar"])))
     
-    # Fjern typologifaktorer som ikke er definert for vannkategorien
-    if (vannkategori == "R") {
-      ignorerVariabel <- unique(c(ignorerVariabel, "dyp"))
-    }
-    
     if (vannkategori == "L") {
       Variabler <- c("akt", "reg", "son", "stø", "alk", "hum", "tur", "dyp")
     }
@@ -717,19 +741,22 @@ fraVFtilNI <- function(
     if (vannkategori == "C") {
       Variabler <- c("akt", "reg", "kys", "sal", "tid", "eks", "mix", "opp", "str")
     }
+    Variabler <- Variabler %-% tolower(ignorerVariabel)
 
     # Fjern typologifaktorer som ikke er oppgitt
-    for (typ in Variabler %-% "akt" %-% ignorerVariabel) {
+    for (typ in Variabler %-% "akt") {
       w <- which(is.na(maaling[, typ]))
       if (length(w)) {
-        if (length(w) > nrow(maaling) / 0.25) {
-          ignorerVariabel <- c(ignorerVariabel, typ)
-          skriv("Typologifaktoren \"", typ, "\" var oppgitt så få ganger at ",
-                "den ignoreres!", pre = "OBS: ", linjer.under = 1)
+        if (length(w) > nrow(maaling) * 0.1) {
+          Variabler <- Variabler %-% typ
+          skriv("Typologifaktoren \"", Vanntyper[typ], "\" mangla såpass ofte (", 
+                length(w), " ganger) at den ignoreres!", 
+                pre = "OBS: ", linjer.under = 1)
         } else {
           maaling <- maaling[-w, ]
           skriv(length(w), " målinger ble ekskludert fordi typologifaktoren \"",
-                typ, "\" ikke var kjent for dem!", pre = "OBS: ", linjer.under = 1)
+                Vanntyper[typ], "\" ikke var kjent for dem!", 
+                pre = "OBS: ", linjer.under = 1)
         }
       }
     }
@@ -739,20 +766,6 @@ fraVFtilNI <- function(
       formel. <- formel. %+% " + " %+% paste(Variabler, collapse = " + ")
     }
     
-    if (!is.null(ignorerVariabel)) {
-      for (i in tolower(ignorerVariabel)) {
-        if (formel. %inneholder% i &&
-            i %in% c("akt","reg","son","stø","alk","hum","tur","dyp")) {
-          formel. <- erstatt(formel., i, "")
-        }
-      }
-      while (formel. %inneholder% "+  +") {
-        formel. <- erstatt(formel., "+  +", "+")
-      }
-      while (substr(formel., nchar(formel.) - 2, nchar(formel.)) == " + ") {
-        formel. <- substr(formel., 1, nchar(formel.) - 3)
-      }
-    }
     if (any(maaling$dyp %in% 4:6)) {
       maaling$dyp[which(as.numeric(maaling$dyp) > 3)] <-
         as.character(as.numeric(maaling$dyp[which(as.numeric(maaling$dyp) > 3)]) - 3)
@@ -766,6 +779,11 @@ fraVFtilNI <- function(
       tid = c("1", "2")
     )
     RF2 <- RF2.sik <- list(
+      reg = if (vannkategori %=% "C") {
+            c("S", "N", "M", "H", "G", "B")
+          } else {
+            c("S", "W", "E", "M", "N", "F")
+          },
       son = c("L", "M", "H"),
       stø = c("1", "2", "3", "4", "5"),
       alk = c("5", "6", "7", "1", "8", "2", "3", "4"),
@@ -779,18 +797,22 @@ fraVFtilNI <- function(
       str = c("1", "2", "3")
     )
     VN1 <- c(akt = "Aktivitet", tur = "Turbiditet", tid = "Tidevann")
-    VN2 <- c(son = "Sone",
-             stø = "Størrelse", 
-             alk = "Alkalitet", 
-             hum = "Humøsitet", 
-             dyp = "Dybde",
-             kys = "Kysttype",
-             sal = "Salinitet",
-             eks = "Eksponering",
-             mix = "Miksing",
-             opp = "Oppholdstid",
-             str = "Strøm")
+    VN2 <- c(
+      reg = "Region",
+      son = "Sone",
+      stø = "Størrelse", 
+      alk = "Alkalitet", 
+      hum = "Humøsitet", 
+      dyp = "Dybde",
+      kys = "Kysttype",
+      sal = "Salinitet",
+      eks = "Eksponering",
+      mix = "Miksing",
+      opp = "Oppholdstid",
+      str = "Strøm"
+    )
     TV2 <- list(
+      reg = 1:6,
       son = 1:3,
       stø = 1:5,
       alk = c(-0.8, -0.4, -0.2, -0.1, 0, 0.3, 0.9, 1.5),
@@ -804,7 +826,7 @@ fraVFtilNI <- function(
       str = 1:3
     )
     RF1a <- list(akt=c(), tur=c(), tid=c())
-    RF2a <- list(son=c(), stø=c(), alk=c(), hum=c(), dyp=c(), 
+    RF2a <- list(reg=c(), son=c(), stø=c(), alk=c(), hum=c(), dyp=c(), 
                  kys=c(), sal=c(), eks=c(), mix=c(), opp=c(), str=c())
     maaling.sik <- maaling
     #if (any(maaling$hum == "0"))
@@ -814,9 +836,8 @@ fraVFtilNI <- function(
     }
     runde <- 0
     RF12 <- list(NULL, NULL)
-    
-    
-    while (RF12 %!=% list(RF1, RF2)) {
+
+    while (RF12 %!=% list(RF1, RF2)) { ####################### Modelltilpasning
       runde <- runde + 1
       RF12 <- list(RF1, RF2)
       skriv("Modelltilpasning, runde ", runde, ":", linjer.over=1, linjer.under=1)
@@ -1253,7 +1274,7 @@ fraVFtilNI <- function(
     #################################################################################
     skriv("Ekstrapolering til ikke-målte vannforekomster",pre = "   ",linjer.over =1)
     skriv("=============================================",pre = "   ",linjer.under=1)
-    
+
     utvalg <- ta.med <- which(Vf$kat == vannkategori)
     txt <- c(ifelse(vannkategori %inneholder% "L", "innsjø", NA),
              ifelse(vannkategori %inneholder% "R", "elve",   NA),
@@ -1401,22 +1422,13 @@ fraVFtilNI <- function(
     }
     
     andel <- felles / length(utvalg)
-    tekst <- "% av de relevante vannforekomstene (" %+% felles %+% " av " %+%
+    tekst <- " % av de relevante vannforekomstene (" %+% felles %+% " av " %+%
       length(utvalg) %+% ")."
-    prefiks <- ""
-    lo <- 0
-    if (andel < minsteAndel) {
-      OK <- FALSE
-      tekst <- tekst %+% " Dette er dessverre for lite til å ekstrapolere!"
-      prefiks <- "FEIL: "
-      lo <- 1
-    }
     if (andel < 0.01) {
-      skriv("Det foreligger målinger for under 1 ", tekst, 
-            pre = prefiks, linjer.over = lo, linjer.under = 1)
+      skriv("Det foreligger målinger for under 1 ", tekst, linjer.under = 1)
     } else {
       skriv("Det foreligger altså målinger for ", round(andel * 100), tekst,
-            pre = prefiks, linjer.over = lo, linjer.under = 1)
+            linjer.under = 1)
     }
   }
   
@@ -1506,7 +1518,7 @@ fraVFtilNI <- function(
     ##################################################
     skriv("Simulering", pre = "   ", linjer.over  = 1)
     skriv("==========", pre = "   ", linjer.under = 1)
-    
+
     nsim <- iterasjoner
     UT <- list()
     for (e in tolower(rapportenhet)) {
@@ -1718,6 +1730,27 @@ fraVFtilNI <- function(
   }
   
   if (OK) {
+    attr(UT, "parameter")     <- parameter
+    attr(UT, "vannkategori")  <- vannkategori
+    attr(UT, "tidspunkt")     <- Sys.time()
+    attr(UT, "innstillinger") <- list(
+      adminAar        =        adminAar,
+      rapportperiode  =  rapportperiode,
+      vedMaalefeil    =    vedMaalefeil,
+      maksSkjevhet    =    maksSkjevhet,
+      bareInkluder    =    bareInkluder,
+      ikkeInkluder    =    ikkeInkluder,
+      maalingPer      =      maalingPer,
+      maalingTot      =      maalingTot,
+      ignorerVariabel = ignorerVariabel,
+      fastVariabel    =    fastVariabel,
+      aktivitetsvekt  =  aktivitetsvekt,
+      antallvekt      =      antallvekt,
+      tidsvekt        =        tidsvekt,
+      arealvekt       =       arealvekt,
+      DeltaAIC        =        DeltaAIC,
+      iterasjoner     =     iterasjoner
+    )
     skriv("Sånn. Da har vi omsider kommet i mål.", linjer.over = 1 , linjer.under = 1)
     return(UT)
   } else {

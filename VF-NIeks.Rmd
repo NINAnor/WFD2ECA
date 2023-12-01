@@ -95,7 +95,7 @@ Filnavnet oppgis som parameter når dataene leses inn i R:
 nve <- lesInnsjodatabasen("Innsjo_Innsjo.dbf")
 ```
 ```{r, eval=TRUE, echo=FALSE}
-# Eksporten fra innsjødatabasen var for stor til å legge ut på GitHub.
+# Eksporten fra innsjødatabasen var for stor til å legges ut på GitHub.
 # Derfor må det her kjøres en annen versjon, som rett og slett laster inn datarammen som ble innlest tidligere:
 load("nve.RData")
 # Så gjengis beskjedene som ble generert under denne tidligere innlesinga:
@@ -181,12 +181,8 @@ Aktiviteter <- as.data.frame(read_xlsx("VM-aktiv.xlsx", na = "NA",
 head(Aktiviteter)
 ```
 
-Til slutt må det lastes inn en liste over kommuner og fylker.
-Informasjonen må være lagret i to excel-regneark som heter "**knr.xlsx**" og "**fnr.xlsx**".
-```{r}
-source("AdminEnh.R")
-```
-
+Til slutt trengs det en liste over kommune- og fylkesnummer og -navn.
+Denne informasjonen leses inn automatisk, gitt at den er lagra i to excel-regneark som heter "**knr.xlsx**" og "**fnr.xlsx**".
 Det tas forbehold om at enkelte målinger kan bli tilordna feil kommune, i tilfeller der målinger ble tatt i en sammenslått kommune og tilbakedateres til et tidspunkt før sammenslåinga.
 
 
@@ -238,7 +234,7 @@ For bruk i naturindeks bør man velge en større verdi (f.eks. 100000).
 
 Funksjonen som gjennomfører analysen, heter [`fraVFtilNI`](Dbehandl.R) ("fra vannforkrift til naturindeks").
 Den har mange flere parametere enn de som vises under, som tillater ulike justeringer som er [forklart her](forklar.md).
-De første fire parametrene må alltid oppgis.
+De første fem parametrene må alltid oppgis.
 Resten trenger man bare å oppgi om man ønsker å endre på standardinnstillingene (som også er [forklart her](forklar.md)).
 
 ```{r, eval=FALSE, echo=TRUE}
@@ -258,7 +254,7 @@ utmating <- fraVFtilNI(
 ```
 ```{r, eval=TRUE, echo=FALSE}
 # For ikke å rote til visninga i markdown-fila, tilføyes bredde = 96 og tell = FALSE.
-# Alt ennet er identisk.
+# Dette medfører en rent layoutmessig forskjell. Alt ennet er identisk.
 utmating <- fraVFtilNI(
                        DATA, 
                        vannforekomster = V,
@@ -282,7 +278,7 @@ utmating <- fraVFtilNI(
 Her kommer noen eksempler på visualiseringer av resultatene.
 For det første kan man plotte den simulerte sannsynlighetsfordelinga som et histogram, f.eks. slik:
 ```{r}
-hist(utmating$fylke["1900", 6, ], 
+hist(utmating$fylke["1900", "2019", ], 
      breaks=36, 
      main="ASPT i Troms i 2019", 
      xlab="nEQR-verdi", 
@@ -295,6 +291,7 @@ De fylkesvise gjennomsnittsresultatene kan vises på kart:
 ```{r}
 library(raster)
 load("norge.map")
+source("adminenh.R")
 plot(Norge.fylker, asp = 2.1)
 text(6, 70, "ASPT", cex = 2.4, font = 1.6)
 text(6, 69, "fylkesvis", cex = 0.96)

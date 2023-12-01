@@ -1,6 +1,8 @@
 
 # Hjelpefunksjoner
 
+
+
 # Tester om argumentene er like - ikke følsom for avrundingsfeil!
 "%=%" <- function(arg1, arg2) { 
   attributes(arg1) <- NULL
@@ -8,8 +10,12 @@
   return(identical(all.equal(arg1, arg2), TRUE))
 }
 
+
+
 # Tester om argumentene er ulike - ikke følsom for avrundingsfeil!
 "%!=%" <- function(arg1, arg2) !(arg1 %=% arg2)
+
+
 
 # Tester om elementene i argumentene er like - ikke følsom for avrundingsfeil 
 "%==%" <- function(arg1, arg2) {
@@ -20,32 +26,50 @@
   }
 }
 
+
+
 # Limer sammen tekstvariabler
 "%+%" <- function(string1, string2) paste0(string1, string2)
 
+
+
 # Fjerner et element fra en vektor
 "%-%" <- function(arg1, arg2) arg1[which(!(arg1 %in% na.omit(arg2)))]
+
+
 
 # Beregner snittmengden av to vektorer
 "%A%" <- function(set1, set2)
   if (is.null(set1)) logical(0) else as.vector(na.omit(set1[set1 %in% set2]))
 
+
+
 # Sjekker om en variabel inneholder en angitt søketekst
 "%inneholder%" <- function(vector, search) grepl(search, vector, fixed = TRUE)
+
+
 
 # Sjekker om verdier ligger innenfor et intervall
 "%mellom%" <- function(a, b) (a > b[1]         | a %==% b[1]) &
   (a < b[length(b)] | a %==% b[length(b)])
 
+
+
 # Sjekker om verdier ligger utenfor et intervall
 "%utafor%" <- function(a, b) !(a > b[1]         | a %==% b[1]) |
   !(a < b[length(b)] | a %==% b[length(b)])
 
+
+
 # Sjekker om begynnelsen av ordet er lik
 "%begynner%" <- function(a, b) substr(a, 1, nchar(b)) %=% b
 
+
+
 # Naturlig logaritme skal forkortes som "ln"!
 ln <- function(x) log(x)
+
+
 
 # Pen utmating av tekst
 skriv <- function(..., pre = "", linjer.over = 0, linjer.under = 0,
@@ -60,8 +84,12 @@ skriv <- function(..., pre = "", linjer.over = 0, linjer.under = 0,
       rep("\n", linjer.under + 1), 
       sep="")
 
+
+
 # Erstatte tegn i en tekststreng
 erstatt <- function(i, hva, med) gsub(hva, med, i, fixed = TRUE)
+
+
 
 # Oversette vannmiljøs parameterID til parameternavn
 parameterNavn <- function(id) {
@@ -71,11 +99,15 @@ parameterNavn <- function(id) {
   return(navn)
 }
 
+
+
 # Sjekker intervallet for tillatte verdier for vannmiljø-parametere
 tillatteVerdier <- function(id) {
   rownames(Parametere) <- Parametere$id
   as.numeric(unlist(Parametere[toupper(id), 3:4]))
 }
+
+
 
 # Beregne mEQR-verdier ("modifiserte EQR-verdier")
 mEQR <- function(x, klassegrenser) {
@@ -96,8 +128,7 @@ mEQR <- function(x, klassegrenser) {
   return(x * 0.2)
 }
 
-# Oversette fylkesnumre til fylkesnavn
-fylke <- function(i) fylkeshistorikk$navn[which(fylkeshistorikk$nr == i)]
+
 
 # Definere en fargepalett tilpassa vannforskriften
 farge <- function(eqr, na.farge=0.84) {
@@ -116,6 +147,8 @@ farge <- function(eqr, na.farge=0.84) {
                      ifelse(eqr < 0.8, eqr * 10 - 7, 1)))
   rgb(r,g,b)
 }
+
+
 
 # Kombiner to utmatinger
 # (Må kun brukes for ulike vannkategorier innenfor samme parameter!)
@@ -158,25 +191,28 @@ kombiner <- function(ut1, ut2) {
 
 # Variabler/konstanter som trengs
 
+
 bredde <- NULL
 
+
 Typologi <- c( # inneholder navnene på typologifaktorene
-  "kategori",
-  "økoregion",
-  "klimaregion",
-  "størrelse",
-  "alkalitet",
-  "humusinnhold",
-  "turbiditet",
-  "dybde",
-  "kysttype",
-  "salinitet",
-  "tidevann",
-  "bølgeeksponering",
-  "miksing",
-  "oppholdstid",
-  "strøm"
+  kat = "kategori",
+  reg = "økoregion",
+  son = "klimaregion",
+  stø = "størrelse",
+  alk = "alkalitet",
+  hum = "humusinnhold",
+  tur = "turbiditet",
+  dyp = "dybde",
+  kys = "kysttype",
+  sal = "salinitet",
+  tid = "tidevann",
+  bøl = "bølgeeksponering",
+  mix = "miksing",
+  opp = "oppholdstid",
+  str = "strøm"
 )
+
 
 Vanntyper <- list( # angir mulige verdier for alle typologifaktorer
   kat = c("C", "L", "R"),

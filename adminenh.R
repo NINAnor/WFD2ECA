@@ -20,6 +20,10 @@ for (i in 2:ncol(kommunehistorikk)) {
 kommunehistorikk$Nummer[which(nchar(kommunehistorikk$Nummer) == 3)] <-
   "0" %+% kommunehistorikk$Nummer[which(nchar(kommunehistorikk$Nummer) == 3)]
 
+rownames(kommunehistorikk) <- kommunehistorikk$Nummer
+rownames(fylkeshistorikk)  <-  fylkeshistorikk$nr
+fylke <- function(i) fylkeshistorikk[as.character(i), "navn"]
+
 
 
 
