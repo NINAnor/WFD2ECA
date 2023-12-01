@@ -1,5 +1,3 @@
-# Dataflyt vannforskrift–naturindeks: eksempel
-
 -   <a href="#forberedelser" id="toc-forberedelser">Forberedelser</a>
 -   <a href="#nødvendig-informasjon-om-vannforekomster"
     id="toc-nødvendig-informasjon-om-vannforekomster">Nødvendig informasjon
@@ -176,13 +174,18 @@ Filnavnet oppgis som parameter når dataene leses inn i R:
 
     ## 
     ## OBS: For 3 innsjøer var høyden over havet angitt å være negativ. Disse ble satt til <NA>.
+
     ## 
     ## OBS: For 4 innsjøer var det norske arealet angitt å være negativ. Disse ble satt til <NA>.
+
     ## 
     ## OBS: For 1 innsjøer var tilsigsfeltet angitt å være negativ. Disse ble satt til <NA>.
+
     ## 
-    ## OBS: For 589 innsjøer var deres tilsigsfelt angitt å være mindre enn deres areal. For disse ble tilsigsfeltet satt til
-    ##      arealet.
+    ## OBS: For 589 innsjøer var deres tilsigsfelt angitt å være mindre enn deres areal. For disse ble tilsigsfeltet satt
+
+    ## 
+    ##      til arealet.
 
 Utmatinga forteller om mindre avvik fra det man kunne forvente. Men
 ingen av dem var kritisk for den videre analysen. I så fall hadde
@@ -289,14 +292,11 @@ excel-regneark:
     ## 5 BAPO  Basisovervåking - påvirka områder    -1
     ## 6 BARE Basisovervåking - referanseforhold     3
 
-Til slutt må det lastes inn en liste over kommuner og fylker.
-Informasjonen må være lagret i to excel-regneark som heter
-“**knr.xlsx**” og “**fnr.xlsx**”.
-
-    source("AdminEnh.R")
-
-Det tas forbehold om at enkelte målinger kan bli tilordna feil kommune,
-i tilfeller der målinger ble tatt i en sammenslått kommune og
+Til slutt trengs det en liste over kommune- og fylkesnummer og -navn.
+Denne informasjonen leses inn automatisk, gitt at den er lagra i to
+excel-regneark som heter “**knr.xlsx**” og “**fnr.xlsx**”. Det tas
+forbehold om at enkelte målinger kan bli tilordna feil kommune, i
+tilfeller der målinger ble tatt i en sammenslått kommune og
 tilbakedateres til et tidspunkt før sammenslåinga.
 
 ## Målinger fra vannmiljø-databasen
@@ -352,7 +352,7 @@ bør man velge en større verdi (f.eks. 100000).
 Funksjonen som gjennomfører analysen, heter [`fraVFtilNI`](Dbehandl.R)
 (“fra vannforkrift til naturindeks”). Den har mange flere parametere enn
 de som vises under, som tillater ulike justeringer som er [forklart
-her](forklar.md). De første fire parametrene må alltid oppgis. Resten
+her](forklar.md). De første fem parametrene må alltid oppgis. Resten
 trenger man bare å oppgi om man ønsker å endre på standardinnstillingene
 (som også er [forklart her](forklar.md)).
 
@@ -405,12 +405,18 @@ trenger man bare å oppgi om man ønsker å endre på standardinnstillingene
     ## 
     ## OBS: 22 målinger ble ekskludert fordi de ble foretatt i en vanntype som parameteren ikke kan brukes i.
     ## 
+    ## OBS: For rapportåret 1990 foreligger bare målinger fra 7 vannforekomster. Det er dessverre for få, og denne rapportperioden
+    ##      må derfor utgå.
+    ## 
+    ## OBS: For rapportåret 2000 foreligger bare målinger fra 15 vannforekomster. Det er dessverre for få, og denne rapportperioden
+    ##      må derfor utgå.
+    ## 
     ## Dataene som inngår i modelltilpasninga inneholder dermed
-    ## - 15149 målinger fra
+    ## - 15021 målinger fra
     ## - 4813 vannlokaliteter i
     ## - 2900 vannforekomster i
     ## - 19 fylker
-    ## - mellom 1984 og 2023.
+    ## - mellom 2000 og 2023.
     ## 
     ## 
     ##    Skalering til mEQR-verdier
@@ -418,11 +424,12 @@ trenger man bare å oppgi om man ønsker å endre på standardinnstillingene
     ## 
     ## Oppsummering av variabelverdier før skalering:
     ##  minimum ned. kv.   median gj.snitt øvr. kv. maksimum 
-    ##    0.000    5.545    6.143    5.988    6.600    9.250 
-    ## Oppsummering av variabelverdier etter skalering:
+    ##    0.000    5.556    6.150    5.998    6.600    9.250 
     ## 
+    ## Oppsummering av variabelverdier etter skalering:
     ##  minimum ned. kv.   median gj.snitt øvr. kv. maksimum 
-    ##   0.0000   0.4864   0.6357   0.6223   0.7500   1.1516 
+    ##   0.0000   0.4889   0.6375   0.6241   0.7500   1.1516 
+    ## 
     ## 
     ##    Modelltilpasning til målingene
     ##    ==============================
@@ -439,9 +446,9 @@ trenger man bare å oppgi om man ønsker å endre på standardinnstillingene
     ## * Aktivitet: KALK og OEKF har blitt slått sammen.
     ## * Aktivitet: GRUV og VASS har blitt slått sammen.
     ## * Aktivitet: BIOM og RELV har blitt slått sammen.
-    ## * Aktivitet: GRUV+VASS og KALL har blitt slått sammen.
     ## * Aktivitet: AREA og FORS har blitt slått sammen.
     ## * Aktivitet: DEPO+TILT og KAVE har blitt slått sammen.
+    ## * Aktivitet: GRUV+VASS og KALL har blitt slått sammen.
     ## * Aktivitet: BAPO+BARE og KALK+OEKF har blitt slått sammen.
     ## * Aktivitet: GRUV+KALL+VASS og JRBN har blitt slått sammen.
     ## * Aktivitet: DRIK+KART+KOMM og INDU har blitt slått sammen.
@@ -471,48 +478,44 @@ trenger man bare å oppgi om man ønsker å endre på standardinnstillingene
     ## 
     ## Weighted Residuals:
     ##      Min       1Q   Median       3Q      Max 
-    ## -1.07497 -0.03467 -0.00306  0.02795  1.06369 
+    ## -1.07491 -0.03448 -0.00296  0.02803  1.06385 
     ## 
     ## Coefficients:
     ##                              Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)                  0.340721   0.422050   0.807   0.4195    
-    ## per2000                      0.520116   0.423857   1.227   0.2198    
-    ## per2010                      0.750875   0.421415   1.782   0.0748 .  
-    ## per2014                      0.437619   0.421578   1.038   0.2993    
-    ## per2019                      0.535027   0.421367   1.270   0.2042    
-    ## per2024                      0.414380   0.421416   0.983   0.3255    
-    ## rar                         -0.095175   0.109686  -0.868   0.3856    
-    ## aktANNE+GRUV+JRBN+KALL+VASS -0.138313   0.015113  -9.152  < 2e-16 ***
-    ## aktAREA+FORS                -0.260693   0.017643 -14.776  < 2e-16 ***
-    ## aktBAPO+BARE+KALK+OEKF      -0.214242   0.017083 -12.541  < 2e-16 ***
-    ## aktBIOM+ELVE+RELV           -0.068053   0.015666  -4.344 1.41e-05 ***
-    ## aktDEPO+KAVE+PROB+TILT      -0.120223   0.015838  -7.591 3.37e-14 ***
-    ## aktDRIK+INDU+KART+KOMM      -0.304626   0.016914 -18.010  < 2e-16 ***
-    ## aktLANG                      0.067530   0.017018   3.968 7.28e-05 ***
-    ## sonL                         0.008867   0.010105   0.878   0.3802    
-    ## sonM                         0.065829   0.010233   6.433 1.29e-10 ***
-    ## stø2+3                       0.024977   0.003828   6.525 7.03e-11 ***
-    ## stø4+5                      -0.002545   0.006709  -0.379   0.7045    
-    ## alk2                        -0.036184   0.005473  -6.611 3.94e-11 ***
-    ## alk3                        -0.082331   0.006080 -13.541  < 2e-16 ***
-    ## alk4                        -0.259091   0.008783 -29.501  < 2e-16 ***
-    ## alk5+6+7                     0.030197   0.007065   4.274 1.93e-05 ***
-    ## hum1                         0.011271   0.015952   0.707   0.4799    
-    ## hum2                        -0.024818   0.015439  -1.607   0.1080    
-    ## hum3                        -0.189862   0.020991  -9.045  < 2e-16 ***
-    ## hum4                        -0.023652   0.018861  -1.254   0.2098    
-    ## tur3                        -0.151728   0.012335 -12.301  < 2e-16 ***
-    ## per2000:rar                  0.086281   0.111963   0.771   0.4409    
-    ## per2010:rar                  0.109437   0.109708   0.998   0.3185    
-    ## per2014:rar                  0.067978   0.109787   0.619   0.5358    
-    ## per2019:rar                  0.113002   0.109713   1.030   0.3030    
-    ## per2024:rar                  0.080597   0.109713   0.735   0.4626    
+    ## (Intercept)                  1.092171   0.026182  41.714  < 2e-16 ***
+    ## per2014                     -0.313417   0.016799 -18.657  < 2e-16 ***
+    ## per2019                     -0.215850   0.010566 -20.430  < 2e-16 ***
+    ## per2024                     -0.336506   0.012082 -27.853  < 2e-16 ***
+    ## rar                          0.014214   0.002218   6.410 1.50e-10 ***
+    ## aktANNE+GRUV+JRBN+KALL+VASS -0.138499   0.015142  -9.147  < 2e-16 ***
+    ## aktAREA+FORS                -0.259310   0.017703 -14.647  < 2e-16 ***
+    ## aktBAPO+BARE+KALK+OEKF      -0.214226   0.017115 -12.517  < 2e-16 ***
+    ## aktBIOM+ELVE+RELV           -0.068021   0.015696  -4.334 1.48e-05 ***
+    ## aktDEPO+KAVE+PROB+TILT      -0.120066   0.015868  -7.566 4.06e-14 ***
+    ## aktDRIK+INDU+KART+KOMM      -0.304540   0.016945 -17.972  < 2e-16 ***
+    ## aktLANG                      0.067808   0.017050   3.977 7.01e-05 ***
+    ## sonL                         0.008552   0.010129   0.844    0.399    
+    ## sonM                         0.065392   0.010260   6.374 1.90e-10 ***
+    ## stø2+3                       0.024763   0.003838   6.452 1.13e-10 ***
+    ## stø4+5                      -0.002654   0.006722  -0.395    0.693    
+    ## alk2                        -0.036015   0.005485  -6.567 5.32e-11 ***
+    ## alk3                        -0.082393   0.006092 -13.525  < 2e-16 ***
+    ## alk4                        -0.258683   0.008802 -29.390  < 2e-16 ***
+    ## alk5+6+7                     0.030251   0.007082   4.272 1.95e-05 ***
+    ## hum1                         0.011156   0.015982   0.698    0.485    
+    ## hum2                        -0.025128   0.015468  -1.624    0.104    
+    ## hum3                        -0.189850   0.021030  -9.028  < 2e-16 ***
+    ## hum4                        -0.023303   0.018900  -1.233    0.218    
+    ## tur3                        -0.151687   0.012359 -12.273  < 2e-16 ***
+    ## per2014:rar                 -0.041483   0.005222  -7.944 2.10e-15 ***
+    ## per2019:rar                  0.003632   0.003325   1.092    0.275    
+    ## per2024:rar                 -0.028780   0.003326  -8.654  < 2e-16 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 0.127 on 15117 degrees of freedom
-    ## Multiple R-squared:  0.348,  Adjusted R-squared:  0.3467 
-    ## F-statistic: 260.3 on 31 and 15117 DF,  p-value: < 2.2e-16
+    ## Residual standard error: 0.1272 on 14993 degrees of freedom
+    ## Multiple R-squared:  0.3488, Adjusted R-squared:  0.3476 
+    ## F-statistic: 297.4 on 27 and 14993 DF,  p-value: < 2.2e-16
     ## 
     ## 
     ##    Ekstrapolering til ikke-målte vannforekomster
@@ -520,7 +523,7 @@ trenger man bare å oppgi om man ønsker å endre på standardinnstillingene
     ## 
     ## Det fins 23343 typifiserte elvevannforekomster.
     ## Av disse har 23095 vannforekomster en vanntype som parameteren ASPT er definert for.
-    ## Det foreligger altså målinger for 13% av de relevante vannforekomstene (2900 av 23095).
+    ## Det foreligger altså målinger for 13 % av de relevante vannforekomstene (2900 av 23095).
     ## 
     ## 
     ##    Simulering
@@ -538,7 +541,7 @@ Her kommer noen eksempler på visualiseringer av resultatene. For det
 første kan man plotte den simulerte sannsynlighetsfordelinga som et
 histogram, f.eks. slik:
 
-    hist(utmating$fylke["1900", 6, ], 
+    hist(utmating$fylke["1900", "2019", ], 
          breaks=36, 
          main="ASPT i Troms i 2019", 
          xlab="nEQR-verdi", 
@@ -551,6 +554,7 @@ De fylkesvise gjennomsnittsresultatene kan vises på kart:
 
     library(raster)
     load("norge.map")
+    source("adminenh.R")
     plot(Norge.fylker, asp = 2.1)
     text(6, 70, "ASPT", cex = 2.4, font = 1.6)
     text(6, 69, "fylkesvis", cex = 0.96)
