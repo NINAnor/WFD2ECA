@@ -86,7 +86,7 @@ hentKlassegrenser <- function(filKlasser) {
                         if (is.na(bokst[b])) {
                           hvilke <- hvilke %&% Vanntyper[[b]]
                         } else {
-                          if (bokst[i] %=% ".") {
+                          if (bokst[b] %=% ".") {
                             hvilke <- hvilke %&% Vanntyper[[b]]
                           } else {
                             hvilke <- hvilke %+% bokst[b]
@@ -100,7 +100,7 @@ hentKlassegrenser <- function(filKlasser) {
                           if (is.na(bokst[b])) {
                             hvilke <- hvilke %&% Vanntyper[[c(1:2, 9:15)[b]]]
                           } else {
-                            if (bokst[i] %=% ".") {
+                            if (bokst[b] %=% ".") {
                               hvilke <- hvilke %&% Vanntyper[[c(1:2, 9:15)[b]]]
                             } else {
                               hvilke <- hvilke %+% bokst[b]
