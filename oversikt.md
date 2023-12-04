@@ -2,7 +2,7 @@
 
 ### Hjelpefunksjoner
 
-Diverse hjelpefunksjoner er definert i fila "[funksjon.R](funksjon.R)".
+Diverse hjelpefunksjoner er definert i fila "[Funksjon.R](Funksjon.R)".
 Disse er ikke nærmere forklart her.
 
 
