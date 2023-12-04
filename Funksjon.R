@@ -73,9 +73,10 @@ ln <- function(x) log(x)
 
 # Pen utmating av tekst
 skriv <- function(..., pre = "", linjer.over = 0, linjer.under = 0,
-                  Bredde = bredde)
+                  Bredde = bredde, ut = FALSE) {
+  txt <- paste(c(...), collapse = "")
   cat(rep("\n", linjer.over),
-      paste(strwrap(paste(c(...), collapse = ""),
+      paste(strwrap(txt,
                     width = if (is.null(Bredde))
                       0.84 * getOption("width") else Bredde,
                     initial = pre,
@@ -83,6 +84,8 @@ skriv <- function(..., pre = "", linjer.over = 0, linjer.under = 0,
             collapse = "\n"), 
       rep("\n", linjer.under + 1), 
       sep="")
+  if (ut) return(txt)
+}
 
 
 
@@ -130,6 +133,23 @@ mEQR <- function(x, klassegrenser) {
 
 
 
+# Omregning av Raddum-II- til Raddum-I-verdier
+Raddum1_2 <- function(DATA) {
+  w <- which(DATA$parid == "RADDUM2")
+  if (length(w)) {
+    DATA$parid[w] <- "RADDUM1"
+    skriv(length(w), " Raddum-II-målinger har blitt regna om til Raddum-I.",
+          linjer.under = 1)
+  }
+  w <- which(DATA$parid == "RADDUM2" & DATA$verdi > 0.5)
+  if (length(w)) {
+    DATA$verdi[w] <- 1
+  }
+  return(DATA)
+}
+
+
+
 # Definere en fargepalett tilpassa vannforskriften
 farge <- function(eqr, na.farge=0.84) {
   r <- ifelse(is.na(eqr), na.farge,
@@ -155,7 +175,11 @@ farge <- function(eqr, na.farge=0.84) {
 kombiner <- function(ut1, ut2) {
   ok <- TRUE
   UT <- ut1
-  if (names(ut1) %=% names(ut2)) {
+  if (names(ut1) %=% names(ut2) &
+      !is.null(attr(ut1, "parameter")) &
+      attr(ut1, "parameter") %=% attr(ut2, "parameter") &
+      !is.null(attr(ut1, "vannkategori")) &
+      !is.null(attr(ut2, "vannkategori"))) {
     for (i in names(ut1)) {
       if (dimnames(ut1[[i]])[1:2] %=% dimnames(ut2[[i]])[1:2]) {
         ny <- array(0, dim = dim(ut1[[i]]) + c(0, 0, dim(ut2[[i]])[3] - 1))
@@ -174,6 +198,12 @@ kombiner <- function(ut1, ut2) {
       } else {
         ok <- FALSE
       }
+    }
+    if (ok) {
+      attr(UT, "parameter")    <- attr(ut1, "parameter")
+      attr(UT, "vannkategori") <- attr(ut1, "vannkategori") %+% "," %+%
+                                  attr(ut2, "vannkategori")
+      attr(UT, "tidspunkt")    <- Sys.time()      
     }
   } else {
     ok <- FALSE

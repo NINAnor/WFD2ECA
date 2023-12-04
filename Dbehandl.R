@@ -70,8 +70,10 @@ fraVFtilNI <- function(
   # iterasjoner: antall iterasjoner som skal brukes i simuleringa
   # bredde: bredden til beskjeder i antall tegn
   # vis: skal beskjeder om modelltilpasninga vises 
+  # tell: skal prosenttellingen av fremgangen vises
   
   OK <- TRUE
+  u  <- c()
   
   #########################################################################
   skriv("Innledende tester", pre = "   ", linjer.over  = 1)
@@ -139,6 +141,7 @@ fraVFtilNI <- function(
     if (!(vedMaalefeil %in% c("måling", "dato", "oppdragstager"))) {
       vedMaalefeil <- "dato"
     }
+    txt <- 
     skriv("Variabelen \"vedMaalefeil\" ble satt til \"", vedMaalefeil, ".",
           pre = "OBS: ", linjer.under = 1)
   }
@@ -341,37 +344,40 @@ fraVFtilNI <- function(
       rappAar[which(aar < i)] <- i
     }
     relaar <- aar - rappAar
-    skriv("Det foreligger ", length(which(DATA$parid == parameter)), 
-          " målinger av parameteren ", parameter, 
-          " [", parameterNavn(parameter), "].", linjer.under = 1)
+    u <- c(u, skriv("Det foreligger ", length(which(DATA$parid == parameter)), 
+                    " målinger av parameteren ", parameter, " [", 
+                    parameterNavn(parameter), "].", linjer.under = 1, ut = TRUE))
     feil <- F
     ikke.med <- which(DATA$parid == parameter & aar < startaar)
     if (length(ikke.med)) {
-      skriv(length(ikke.med), ifelse(length(ikke.med) == 1,
-                                     " måling ble ekskludert fordi den",
-                                     " målinger ble ekskludert fordi de"),
-            " ble tatt før " %+% startaar %+% ".", pre = "OBS: ", linjer.under = 1)
+      u <- c(u, skriv(length(ikke.med), ifelse(length(ikke.med) == 1,
+                                               " måling ble ekskludert fordi den",
+                                               " målinger ble ekskludert fordi de"),
+                      " ble tatt før " %+% startaar %+% ".", 
+                      pre = "OBS: ", linjer.under = 1, ut = TRUE))
       feil <- T
     }
     ikke.med <- which(DATA$parid == parameter & aar > sluttaar)
     if (length(ikke.med)) {
-      skriv(length(ikke.med), ifelse(length(ikke.med) == 1,
-                                     " måling ble ekskludert fordi den",
-                                     " målinger ble ekskludert fordi de"),
-            " ble tatt etter " %+% sluttaar %+% ".", pre = "OBS: ", linjer.under = 1)
+      u <- c(u, skriv(length(ikke.med), ifelse(length(ikke.med) == 1,
+                                               " måling ble ekskludert fordi den",
+                                               " målinger ble ekskludert fordi de"),
+                      " ble tatt etter " %+% sluttaar %+% ".", 
+                      pre = "OBS: ", linjer.under = 1, ut = TRUE))
       feil <- T
     }
     ikke.med <- which(DATA$parid == parameter & is.na(aar))
     if (length(ikke.med)) {
-      skriv(length(ikke.med), ifelse(length(ikke.med) == 1,
-                                     " måling ble ekskludert fordi den",
-                                     " målinger ble ekskludert fordi de"),
-            " ble foretatt på et ukjent tidspunkt.", pre = "OBS: ", linjer.under = 1)
+      u <- c(u, skriv(length(ikke.med), ifelse(length(ikke.med) == 1,
+                                               " måling ble ekskludert fordi den",
+                                               " målinger ble ekskludert fordi de"),
+                      " ble foretatt på et ukjent tidspunkt.", 
+                      pre = "OBS: ", linjer.under = 1, ut = TRUE))
       feil <- T
     }
     if (!feil) {
-      skriv("Alle målinger ble tatt mellom ", min(aar[er.med]), " og ",
-            max(aar[er.med]), ".", linjer.under = 1)
+      u <- c(u, skriv("Alle målinger ble tatt mellom ", min(aar[er.med]), " og ",
+                      max(aar[er.med]), ".", linjer.under = 1, ut = TRUE))
     }
     feil1 <- er.med %A% which(DATA$verdi %utafor% tillatteVerdier(parameter))
     if (length(feil1)) {
@@ -380,33 +386,40 @@ fraVFtilNI <- function(
       if (vedMaalefeil %=% "måling") {
         feil3 <- unique(feil3)
         er.med <- er.med %-% feil3
-        skriv(length(feil1), ifelse(length(feil1) == 1, " måling", " målinger"),
-              " ligger utafor parameterens definisjonsområde! (Verdiene er mellom ",
-              feil2[1], " og ", feil2[2], ".) D", 
-              ifelse(length(feil1) == 1, "enne", "isse"), " ble ekskludert.", 
-              pre = "OBS: ", linjer.under = 1)
+        u <- c(u, skriv(length(feil1), ifelse(length(feil1) == 1, 
+                                              " måling", " målinger"),
+                        " ligger utafor parameterens definisjonsområde! ",
+                        "(Verdiene er mellom ", feil2[1], " og ", feil2[2], 
+                        ".) D", ifelse(length(feil1) == 1, "enne", "isse"), 
+                        " ble ekskludert.", 
+                        pre = "OBS: ", linjer.under = 1, ut = TRUE))
       }
       if (vedMaalefeil %=% "dato") {
-        for (i  in (unique(DATA$oppdrt[feil1]) %-% "")) {
-          for (j in unique(DATA$tidpkt[feil1])) {
-            feil3 <- c(feil3, which(DATA$oppdrt == i & DATA$tidpkt == j &
-                                    DATA$parid == parameter))
+        for (i  in (unique(DATA$oppdrt[feil1]) %-%  "")) {
+          for (j in unique(as.Date(DATA$tidpkt[feil1]))) {
+            feil3 <- c(feil3, which(DATA$oppdrt == i & 
+                                    DATA$parid  == parameter &
+                                    as.Date(DATA$tidpkt) == j))
           }
         }
         feil3 <- unique(feil3)
         er.med <- er.med %-% feil3
-        skriv(length(feil1), ifelse(length(feil1) == 1, " måling", " målinger"),
-              " ligger utafor parameterens definisjonsområde! (Verdiene er mellom ",
-              feil2[1], " og ", feil2[2], ".) I tillegg til d", 
-              ifelse(length(feil1) == 1, "enne", "isse " %+% length(feil1)), 
-              " ble ytterligere ", (length(feil3) - length(feil1)),
-              ifelse((length(feil3) - length(feil1)) == 1," måling", " målinger"), 
-              " ekskludert, fordi de hadde samme oppdragstaker (",
-              paste(unique(DATA$oppdrt[feil1]), collapse=", "), 
-              ") og prøvetakingsdato (", 
-              paste(unique(format(as.Date(DATA$tidpkt[feil1]), "%d.%m.%Y")), 
-                    collapse=", "), ").", 
-              pre = "OBS: ", linjer.under = 1)
+        u <- c(u, skriv(length(feil1), ifelse(length(feil1) == 1, 
+                                              " måling", " målinger"),
+                        " ligger utafor parameterens definisjonsområde! ",
+                        "(Verdiene er mellom ", feil2[1], " og ", feil2[2], 
+                        ".) I tillegg til d", ifelse(length(feil1) == 1, 
+                                          "enne", "isse " %+% length(feil1)), 
+                        " ble ytterligere ", (length(feil3) - length(feil1)),
+                        ifelse((length(feil3) - length(feil1)) == 1,
+                               " måling", " målinger"), 
+                        " ekskludert, fordi de hadde samme oppdragstaker (",
+                        paste(unique(DATA$oppdrt[feil1]), collapse=", "), 
+                        ") og prøvetakingsdato (", 
+                        paste(unique(format(as.Date(DATA$tidpkt[feil1]), 
+                                            "%d.%m.%Y")), 
+                              collapse=", "), ").", 
+                        pre = "OBS: ", linjer.under = 1, ut = TRUE))
       }
       if (vedMaalefeil %=% "oppdragstager") {
         for (i  in (unique(DATA$oppdrt[feil1]) %-% "")) {
@@ -414,31 +427,36 @@ fraVFtilNI <- function(
         }
         feil3 <- unique(feil3)
         er.med <- er.med %-% feil3
-        skriv(length(feil1), ifelse(length(feil1) == 1, " måling", " målinger"),
-              " ligger utafor parameterens definisjonsområde! (Verdiene er mellom ",
-              feil2[1], " og ", feil2[2], ".) I tillegg til d", 
-              ifelse(length(feil1) == 1, "enne", "isse " %+% length(feil1)), 
-              " ble ytterligere ", (length(feil3) - length(feil1)),
-              ifelse((length(feil3) - length(feil1)) == 1," måling", " målinger"), 
-              " ekskludert, fordi de hadde samme oppdragstaker (",
-              paste(unique(DATA$oppdrt[feil1]), collapse=", "), ").", 
-              pre = "OBS: ", linjer.under = 1)
+        u <- c(u, skriv(length(feil1), ifelse(length(feil1) == 1, 
+                                              " måling", " målinger"),
+                        " ligger utafor parameterens definisjonsområde! ",
+                        "(Verdiene er mellom ", feil2[1], " og ", feil2[2], 
+                        ".) I tillegg til d", ifelse(length(feil1) == 1, 
+                                          "enne", "isse " %+% length(feil1)), 
+                        " ble ytterligere ", (length(feil3) - length(feil1)),
+                        ifelse((length(feil3) - length(feil1)) == 1,
+                               " måling", " målinger"), 
+                        " ekskludert, fordi de hadde samme oppdragstaker (",
+                        paste(unique(DATA$oppdrt[feil1]), collapse=", "), ").", 
+                        pre = "OBS: ", linjer.under = 1, ut = TRUE))
       }
     } else {
-      skriv("Alle målinger ligger innafor parameterens definisjonsområde.", 
-            linjer.under = 1)
+      u <- c(u, skriv("Alle målinger ligger innafor parameterens definisjonsområde.", 
+                      linjer.under = 1, ut = TRUE))
     }
     rownames(Aktiviteter) <- Aktiviteter$id
     skjev <- er.med %A% which(abs(Aktiviteter[DATA$aktid, "skaar"]) > maksSkjevhet)
     if (length(skjev)) {
       er.med <- er.med %-% skjev
-      skriv(length(skjev), ifelse(length(skjev) == 1, " måling", " målinger"),
-            " bla samla inn i rammen av en aktivitet som er for lite ",
-            "representativ! Disse ble ekskludert.", pre = "OBS: ", linjer.under = 1)
+      u <- c(u, skriv(length(skjev), ifelse(length(skjev) == 1, 
+                                            " måling", " målinger"),
+                      " bla samla inn i rammen av en aktivitet som er for lite ",
+                      "representativ! Disse ble ekskludert.", 
+                      pre = "OBS: ", linjer.under = 1, ut = TRUE))
     } else {
       if (maksSkjevhet < 3) {
-        skriv("Ingen målinger ble ekskludert pga. aktivitetens skjevhet.",
-              linjer.under = 1)
+        u <- c(u, skriv("Ingen målinger ble ekskludert pga. aktivitetens skjevhet.",
+                        linjer.under = 1, ut = TRUE))
       }
     }
     maaling <- data.frame(vfo="", inn=0, lok=0, are=0, til=0, hoh=0, gbr=0, gle=0,
@@ -509,24 +527,25 @@ fraVFtilNI <- function(
     maaling$per <- as.factor(maaling$per)
     
     if (length(uten.kode)) {
-      skriv(length(uten.kode), ifelse(length(uten.kode) == 1,
-                                      " måling ble ekskludert fordi den",
-                                      " målinger ble ekskludert fordi de"),
-            " ikke kunne knyttes til noen kjent vannlokalitet!", 
-            pre = "OBS: ", linjer.under = 1)
+      u <- c(u, skriv(length(uten.kode), ifelse(length(uten.kode) == 1,
+                                                " måling ble ekskludert fordi den",
+                                                " målinger ble ekskludert fordi de"),
+                      " ikke kunne knyttes til noen kjent vannlokalitet!", 
+                      pre = "OBS: ", linjer.under = 1, ut = TRUE))
     } else {
-      skriv("Alle målinger kunne knyttes til en vannlokalitet.", linjer.under = 1)
+      u <- c(u, skriv("Alle målinger kunne knyttes til en vannlokalitet.", 
+                      linjer.under = 1, ut = TRUE))
     }
     if (length(uten.id)) {
-      skriv(length(uten.id),
-            ifelse(length(uten.id) == 1,
-                   " måling ble ekskludert fordi dens vannlokalitet",
-                   " målinger ble ekskludert fordi deres vannlokaliteter"),
-            " ikke kunne knyttes til noen typifisert vannforekomst!",
-            pre = "OBS: ", linjer.under = 1)
+      u <- c(u, skriv(length(uten.id),
+                      ifelse(length(uten.id) == 1,
+                             " måling ble ekskludert fordi dens vannlokalitet",
+                             " målinger ble ekskludert fordi deres vannlokaliteter"),
+                      " ikke kunne knyttes til noen typifisert vannforekomst!",
+                      pre = "OBS: ", linjer.under = 1, ut = TRUE))
     } else {
-      skriv("Alle vannlokaliteter kunne knyttes til en typifisert vannforekomst.",
-            linjer.under = 1)
+      u <- c(u, skriv("Alle vannlokaliteter kunne knyttes til en typifisert ",
+                      "vannforekomst.", linjer.under = 1, ut = TRUE))
     }
     
     feil <- which(!(maaling$kat %in% vannkategori))
@@ -543,12 +562,13 @@ fraVFtilNI <- function(
                )
         ) %+% "vannforekomst"
       maaling <- maaling[-feil,]
-      skriv(txt1, " ble ekskludert fordi de", ifelse(length(feil) %=% 1, "n", ""),
-            " ikke ble", txt2, "!", pre = "OBS: ", linjer.under = 1)
+      u <- c(u, skriv(txt1, " ble ekskludert fordi de", 
+                      ifelse(length(feil) %=% 1, "n", ""), " ikke ble", txt2, "!", 
+                      pre = "OBS: ", linjer.under = 1, ut = TRUE))
       rm(txt1, txt2, feil)
     } else {
-      skriv("Alle målinger ble foretatt i den riktige vannkategorien.", 
-            linjer.under = 1)
+      u <- c(u, skriv("Alle målinger ble foretatt i den riktige vannkategorien.", 
+                      linjer.under = 1, ut = TRUE))
     }
     rader <- nrow(maaling)
     if (!is.null(bareInkluder)) { #### dette er ikke utvikla!!! ¤¤¤
@@ -566,11 +586,11 @@ fraVFtilNI <- function(
       feil <- nrow(maaling) - length(ta.med)
       if (feil %!=% 0) {
         maaling <- maaling[ta.med, ]
-        skriv(feil, ifelse(feil %=% 1, 
-                           " måling ble ekskludert fordi den",
-                           " målinger ble ekskludert fordi de"),
-              " ble foretatt i en vanntype som parameteren ikke kan brukes i.",
-              pre = "OBS: ", linjer.under = 1)
+        u <- c(u, skriv(feil, ifelse(feil %=% 1, 
+                                     " måling ble ekskludert fordi den",
+                                     " målinger ble ekskludert fordi de"),
+                        " ble foretatt i en vanntype som parameteren ikke kan ",
+                        "brukes i.", pre = "OBS: ", linjer.under = 1, ut = TRUE))
       }
       rm(ta.med, ok, feil)
     }
@@ -584,11 +604,11 @@ fraVFtilNI <- function(
         }
       }
       if (fjerna) {
-        skriv(length(feil), ifelse(length(feil) %=% 1,
-                                   " måling ble ekskludert fordi den",
-                                   " målinger ble ekskludert fordi de"),
-              " ble foretatt i en vanntype som parameteren ikke kan brukes i.",
-              pre = "OBS: ", linjer.under = 1)
+        u <- c(u, skriv(length(feil), ifelse(length(feil) %=% 1,
+                                             " måling ble ekskludert fordi den",
+                                             " målinger ble ekskludert fordi de"),
+                        " ble foretatt i en vanntype som parameteren ikke kan ",
+                        "brukes i.", pre = "OBS: ", linjer.under = 1, ut = TRUE))
       }
       rm(fjerna, feil)
     }
@@ -597,16 +617,17 @@ fraVFtilNI <- function(
       feil <- which(!(maaling$typ %in% okTyper))
       if (length(feil)) {
         maaling <- maaling[-feil, ]
-        skriv(length(feil), ifelse(length(feil) %=% 1,
-                                   " måling ble ekskludert fordi den",
-                                   " målinger ble ekskludert fordi de"),
-              " ble foretatt i en vanntype som parameteren ikke har definerte",
-              " referanseverdier og klassegrenser i.",
-              pre = "OBS: ", linjer.under = 1)
+        u <- c(u, skriv(length(feil), ifelse(length(feil) %=% 1,
+                                             " måling ble ekskludert fordi den",
+                                             " målinger ble ekskludert fordi de"),
+                        " ble foretatt i en vanntype som parameteren ikke har ",
+                        "definerte referanseverdier og klassegrenser i.",
+                        pre = "OBS: ", linjer.under = 1, ut = TRUE))
       }
     }
     if (nrow(maaling) %=% rader) {
-      skriv("Alle målinger ble foretatt i de riktige vanntypene.", linjer.under = 1)
+      u <- c(u, skriv("Alle målinger ble foretatt i de riktige vanntypene.", 
+                      linjer.under = 1, ut = TRUE))
     }
     fjernAar <- c()
     for (i in NI.aar) {
@@ -616,9 +637,10 @@ fraVFtilNI <- function(
           maaling <- maaling[-which(maaling$per == i),]
         }
         fjernAar <- c(fjernAar, i)
-        skriv("For rapportåret ", i, " foreligger bare målinger fra ", w, 
-              " vannforekomster. Det er dessverre for få, og denne rapportperioden",
-              " må derfor utgå.", pre = "OBS: ", linjer.under = 1)
+        u <- c(u, skriv("For rapportåret ", i, " foreligger bare målinger fra ", w, 
+                        " vannforekomster. Det er dessverre for få, og denne",
+                        " rapportperioden må derfor utgå.", 
+                        pre = "OBS: ", linjer.under = 1, ut = TRUE))
       }
     }
     rappAar <- rappAar %-% fjernAar
@@ -629,14 +651,17 @@ fraVFtilNI <- function(
             " vannforekomster er dessverre for få til å tilpasse noen modell!",
             pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
     } else {
-      skriv("Dataene som inngår i modelltilpasninga inneholder dermed")
-      skriv(nrow(maaling), " målinger fra", pre = "- ")
-      skriv(length(unique(maaling$lok)), " vannlokaliteter i", pre = "- ")
-      skriv(length(unique(maaling$vfo)), " vannforekomster i", pre = "- ")
-      skriv(length(unique(fylke(unlist(strsplit(maaling$fyl, ","))) %A% FYL)), 
-                   " fylker", pre = "- ")
-      skriv("mellom ", min(maaling$aar), " og ", max(maaling$aar), ".", 
-            pre = "- ", linjer.under = 1)
+      u <- c(
+        u,
+        skriv("Dataene som inngår i modelltilpasninga inneholder dermed", ut=TRUE),
+        skriv(nrow(maaling), " målinger fra", pre = "- ", ut = TRUE),
+        skriv(length(unique(maaling$lok)), " vannlokaliteter i", pre = "- ", ut=T),
+        skriv(length(unique(maaling$vfo)), " vannforekomster i", pre = "- ", ut=T),
+        skriv(length(unique(fylke(unlist(strsplit(maaling$fyl, ","))) %A% FYL)), 
+                     " fylker", pre = "- ", ut = TRUE),
+        skriv("mellom ", min(maaling$aar), " og ", max(maaling$aar), ".", 
+              pre = "- ", linjer.under = 1, ut = TRUE)
+      )
     }
   }
   
@@ -655,8 +680,11 @@ fraVFtilNI <- function(
       return(x)
     }
     
-    skriv("Oppsummering av variabelverdier før skalering:")
-    print(oppsummer(maaling$vrd))
+    u <- c(u, skriv("Oppsummering av variabelverdier før skalering:", ut = TRUE))
+    o <- oppsummer(maaling$vrd)
+    print(o)
+    u <- c(u, paste(    names(o), collapse = "   "), 
+              paste(as.vector(o), collapse = "   "))
     
     # Spesialbehandling for Raddum I! (del 1 av 2)
     if (parameter == "RADDUM1") {
@@ -701,8 +729,11 @@ fraVFtilNI <- function(
       maaling$vrd[which(maaling$vrd >= 0.8)] <- 0.9
     }
     
-    skriv("Oppsummering av variabelverdier etter skalering:", linjer.over = 1)
-    print(oppsummer(maaling$vrd))
+    u <- c(u, skriv("Oppsummering av variabelverdier etter skalering:", ut = TRUE))
+    o <- oppsummer(maaling$vrd)
+    print(o)
+    u <- c(u, paste(    names(o), collapse = "   "), 
+              paste(as.vector(o), collapse = "   "))
   }
   
   # dett var dett
@@ -721,11 +752,13 @@ fraVFtilNI <- function(
         Aktiviteter <- rbind(Aktiviteter, list(w[i], "?", 0))
         rownames(Aktiviteter)[nrow(Aktiviteter)] <- w[i]
       }
-      skriv("Noen målinger er foretatt i sammenheng med overvåkingsaktiviteter som ",
-            "ikke har fått tildelt noen aktivitetsvekt ennå. Dette gjelder ",
-            paste("\"" %+% w %+% "\"", collapse=", "), ". De respektive skårene ",
-            "har blitt satt til 0. Hvis det blir feil, må dette rettes opp!",
-            pre = "OBS: ", linjer.under = 1)
+      u <- c(u, skriv("Noen målinger er foretatt i sammenheng med overvåkings",
+                      "aktiviteter som ikke har fått tildelt noen aktivitetsvekt ",
+                      "ennå. Dette gjelder ",
+                      paste("\"" %+% w %+% "\"", collapse=", "), 
+                      ". De respektive skårene har blitt satt til 0. ",
+                      "Hvis det blir feil, må dette rettes opp!",
+                      pre = "OBS: ", linjer.under = 1, ut = TRUE))
     }
     
     rownames(Aktiviteter) <- Aktiviteter$id
@@ -749,14 +782,15 @@ fraVFtilNI <- function(
       if (length(w)) {
         if (length(w) > nrow(maaling) * 0.1) {
           Variabler <- Variabler %-% typ
-          skriv("Typologifaktoren \"", Vanntyper[typ], "\" mangla såpass ofte (", 
-                length(w), " ganger) at den ignoreres!", 
-                pre = "OBS: ", linjer.under = 1)
+          u <- c(u, skriv("Typologifaktoren \"", Vanntyper[typ], 
+                          "\" mangla såpass ofte (", length(w), 
+                          " ganger) at den ignoreres!", 
+                          pre = "OBS: ", linjer.under = 1, ut = TRUE))
         } else {
           maaling <- maaling[-w, ]
-          skriv(length(w), " målinger ble ekskludert fordi typologifaktoren \"",
-                Vanntyper[typ], "\" ikke var kjent for dem!", 
-                pre = "OBS: ", linjer.under = 1)
+          u <- c(u, skriv(length(w), " målinger ble ekskludert fordi typologifakt",
+                          "oren \"", Vanntyper[typ], "\" ikke var kjent for dem!", 
+                          pre = "OBS: ", linjer.under = 1, ut = TRUE))
         }
       }
     }
@@ -840,7 +874,8 @@ fraVFtilNI <- function(
     while (RF12 %!=% list(RF1, RF2)) { ####################### Modelltilpasning
       runde <- runde + 1
       RF12 <- list(RF1, RF2)
-      skriv("Modelltilpasning, runde ", runde, ":", linjer.over=1, linjer.under=1)
+      u <- c(u, skriv("Modelltilpasning, runde ", runde, ":", 
+                      linjer.over = 1, linjer.under = 1, ut = TRUE))
       
       # tomme variabler
       REKKEF <- RF1
@@ -864,8 +899,8 @@ fraVFtilNI <- function(
           vrber <- character()
           endra <- T
           if (vis) {
-            skriv(vnavn, " har blitt droppa fordi alle data var fra én klasse.",
-                  pre = "* ")
+            u <- c(u, skriv(vnavn, " har blitt droppa fordi alle data var fra én ",
+                            "klasse.", pre = "* ", ut = TRUE))
           }
         } else {
           if (length(which(vrb. %in% vrber)) < 50) {
@@ -873,7 +908,8 @@ fraVFtilNI <- function(
             vrber <- character()
             endra <- T
             if (vis) {
-              skriv(vnavn, "\ har blitt droppa pga. for lite data.", pre = "* ")
+              u <- c(u, skriv(vnavn, "\ har blitt droppa pga. for lite data.", 
+                              pre = "* ", ut = TRUE))
             }
           } else {
             if (!all(vrb. %in% vrber)) {
@@ -883,8 +919,9 @@ fraVFtilNI <- function(
                 vrber <- character()
                 endra <- T
                 if (vis) {
-                  skriv(vnavn, " har blitt droppa fordi variabelen hadde for mange ",
-                        "manglende verdier.", pre = "* ")
+                  u <- c(u, skriv(vnavn, " har blitt droppa fordi variabelen ",
+                                  "hadde for mange manglende verdier.", 
+                                  pre = "* ", ut = TRUE))
                 }
               } else {
                 vrb.[which(!(vrb. %in% vrber))] <- RF1a[[vrb]] <-
@@ -923,8 +960,8 @@ fraVFtilNI <- function(
           vrber <- character()
           endra <- T
           if (vis) {
-            skriv(vnavn, " har blitt droppa fordi alle data var fra én klasse.",
-                  pre = "* ")
+            u <- c(u, skriv(vnavn, " har blitt droppa fordi alle data var fra én ",
+                            "klasse.", pre = "* ", ut = TRUE))
           }
         } else {
           if (length(which(vrb. %in% vrber)) < 50) {
@@ -932,7 +969,8 @@ fraVFtilNI <- function(
             vrber <- character()
             endra <- T
             if (vis) {
-              skriv(vnavn, " har blitt droppa pga. for lite data.", pre = "* ")
+              u <- c(u, skriv(vnavn, " har blitt droppa pga. for lite data.", 
+                              pre = "* ", ut = TRUE))
             }
           } else {
             if (!all(vrb. %in% vrber)) {
@@ -942,8 +980,9 @@ fraVFtilNI <- function(
                 vrber <- character()
                 endra <- T
                 if (vis) {
-                  skriv(vnavn, " har blitt droppa fordi variabelen hadde for mange ",
-                        "manglende verdier.", pre = "* ")
+                  u <- c(u, skriv(vnavn, " har blitt droppa fordi variabelen ",
+                                  "hadde for mange manglende verdier.", 
+                                  pre = "* ", ut = TRUE))
                 }
               } else {
                 vrb.[which(!(vrb. %in% vrber))] <- RF2a[[vrb]] <-
@@ -1008,8 +1047,9 @@ fraVFtilNI <- function(
               vrber <- sort(unique(c(vrber, combine(pm12[1], pm12[2]))))
               endra <- T
               if (vis && nchar(tekst[lav])) {
-                skriv(vnavn, ": ", tekst[lav],
-                      " har blitt slått sammen pga. for lite data.", pre = "* ")
+                u <- c(u, skriv(vnavn, ": ", tekst[lav],
+                          " har blitt slått sammen pga. for lite data.", 
+                          pre = "* ", ut = TRUE))
               }
             }
           }
@@ -1019,8 +1059,8 @@ fraVFtilNI <- function(
           vrber <- character()
           endra <- T
           if (vis) {
-            skriv(vnavn," har blitt droppa fordi nesten alle data var fra én klasse.",
-                  pre = "* ")
+            u <- c(u, skriv(vnavn," har blitt droppa fordi nesten alle data var ",
+                            "fra én klasse.", pre = "* ", ut = TRUE))
           }
         }
         lengde <- length(unique(vrb.))
@@ -1057,8 +1097,8 @@ fraVFtilNI <- function(
                 vrber <- sort(unique(c(vrber, combine(pm12[1], pm12[2]))))
                 endra <- T
                 if (vis) {
-                  skriv(vnavn, ": ", tekst[lav], " har blitt slått sammen.", 
-                        pre = "* ")
+                  u <- c(u, skriv(vnavn, ": ", tekst[lav], " har blitt slått ",
+                                  "sammen.", pre = "* ", ut = TRUE))
                 }
               }
             }
@@ -1070,13 +1110,14 @@ fraVFtilNI <- function(
           vrber <- character()
           endra <- T
           if (vis) {
-            skriv(vnavn, " har blitt droppa fordi det ikke var forskjell mellom klassene.",
-                  pre = "* ")
+            u <- c(u, skriv(vnavn, " har blitt droppa fordi det ikke var ",
+                            "forskjell mellom klassene.", pre = "* ", ut = TRUE))
           }
         }
         if (!endra & vis) {
-          skriv(vnavn, " har blitt beholdt uendra (med ", length(unique(vrb.)),
-                " ulike verdier).", pre = "* ")
+          u <- c(u, skriv(vnavn, " har blitt beholdt uendra (med ", 
+                          length(unique(vrb.)), " ulike verdier).", 
+                          pre = "* ", ut = TRUE))
         }
         assign(vrb %+% ".", vrb.)
         maaling[,vrb] <- vrb.
@@ -1116,8 +1157,9 @@ fraVFtilNI <- function(
             vrb.[which(vrb. %in% vrber[1:2])] <- paste(vrber[1:2], collapse="+") #  fra venstre
             endra <- T
             if (vis) {
-              skriv(vnavn, ": ", paste(vrber[1:2], collapse=" og "),
-                    " har blitt slått sammen pga. for lite data.", pre = "* ")
+              u <- c(u, skriv(vnavn, ": ", paste(vrber[1:2], collapse=" og "),
+                              " har blitt slått sammen pga. for lite data.", 
+                              pre = "* ", ut = TRUE))
             }
             vrber[2] <- paste(vrber[1:2], collapse="+")
             vrber <- vrber[-1]}
@@ -1126,8 +1168,10 @@ fraVFtilNI <- function(
               paste(vrber[length(vrber) - 1:0], collapse="+")
             endra <- T
             if (vis) {
-              skriv(vnavn, ": ", paste(vrber[length(vrber) - 1:0], collapse=" og "),
-                    " har blitt slått sammen pga. for lite data.", pre = "* ")
+              u <- c(u, skriv(vnavn, ": ", 
+                              paste(vrber[length(vrber) - 1:0], collapse=" og "),
+                              " har blitt slått sammen pga. for lite data.", 
+                              pre = "* ", ut = TRUE))
             }
             vrber[length(vrber) - 1] <- paste(vrber[length(vrber) - 1:0], collapse="+")
             vrber <- vrber[-length(vrber)]
@@ -1152,20 +1196,24 @@ fraVFtilNI <- function(
             assign(vrb %+% "..", vrb..)
             aic2 <- AIC(lm(f(formel..), data=maaling, weights=vkt))
             if (aic1 < aic2) {
-              vrb.[which(vrb. %in% vrber[hvilk1])] <- paste(vrber[hvilk1], collapse="+")
+              vrb.[which(vrb. %in% vrber[hvilk1])] <- paste(vrber[hvilk1], 
+                                                            collapse = "+")
               endra <- T
               if (vis) {
-                skriv(vnavn, ": ", paste(vrber[hvilk1], collapse=" og "),
-                      " har blitt slått sammen pga. for lite data.", pre = "* ")
+                u <- c(u, skriv(vnavn, ": ", paste(vrber[hvilk1], collapse=" og "),
+                                " har blitt slått sammen pga. for lite data.", 
+                                pre = "* ", ut = TRUE))
               }
               vrber[max(hvilk1)] <- paste(vrber[hvilk1], collapse="+")
               vrber <- vrber[-hvilk1[1:(length(hvilk1) - 1)]]
             } else {
-              vrb.[which(vrb. %in% vrber[hvilk2])] <- paste(vrber[hvilk2], collapse="+")
+              vrb.[which(vrb. %in% vrber[hvilk2])] <- paste(vrber[hvilk2], 
+                                                            collapse = "+")
               endra <- T
               if (vis) {
-                skriv(vnavn, ": ", paste(vrber[hvilk2], collapse=" og "),
-                      " har blitt slått sammen pga. for lite data.", pre = "* ")
+                u <- c(u, skriv(vnavn, ": ", paste(vrber[hvilk2], collapse=" og "),
+                                " har blitt slått sammen pga. for lite data.", 
+                                pre = "* ", ut = TRUE))
               }
               vrber[hvilk2[1]] <- paste(vrber[hvilk2], collapse="+")
               vrber <- vrber[-hvilk2[2:length(hvilk2)]]
@@ -1177,8 +1225,8 @@ fraVFtilNI <- function(
           vrber <- character()
           endra <- T
           if (vis) {
-            skriv(vnavn," har blitt droppa fordi nesten alle data var fra én klasse.",
-                  pre = "* ")
+            u <- c(u, skriv(vnavn," har blitt droppa fordi nesten alle data var ",
+                            "fra én klasse.", pre = "* ", ut = TRUE))
           }
         }
         lengde <- length(unique(vrb.))
@@ -1213,8 +1261,9 @@ fraVFtilNI <- function(
                 vrber <- vrber[-lav]
                 endra <- T
                 if (vis && nchar(tekst[lav])) {
-                  skriv(vnavn, ": ", tekst[lav], " har blitt slått sammen.", 
-                        pre = "* ")
+                  u <- c(u, skriv(vnavn, ": ", tekst[lav], 
+                                  " har blitt slått sammen.", 
+                                  pre = "* ", ut = TRUE))
                 }
               }
             }
@@ -1232,7 +1281,8 @@ fraVFtilNI <- function(
               #vrber <- somtall #¤ her trengs det endringer!
               endra <- T
               if (vis) {
-                skriv(vnavn, " har blitt omgjort til en numerisk variabel.", pre = "* ")
+                u <- c(u, skriv(vnavn, " har blitt omgjort til en numerisk ",
+                                "variabel.", pre = "* ", ut = TRUE))
               }
             }
           }
@@ -1242,13 +1292,15 @@ fraVFtilNI <- function(
           vrber <- character()
           endra <- T
           if (vis) {
-            skriv(vnavn, " har blitt droppa fordi det ikke var forskjell mellom klassene.",
-                  pre = "* ")
+            u <- c(u, skriv(vnavn, " har blitt droppa fordi det ikke var ",
+                            "forskjell mellom klassene.",
+                            pre = "* ", ut = TRUE))
           }
         }
         if (!endra & vis) {
-          skriv(vnavn, " har blitt beholdt uendra (med ", length(unique(vrb.)),
-                " ulike verdier).", pre = "* ")
+          u <- c(u, skriv(vnavn, " har blitt beholdt uendra (med ", 
+                          length(unique(vrb.)), " ulike verdier).", 
+                          pre = "* ", ut = TRUE))
         }
         assign(vrb %+% ".", vrb.)
         maaling[,vrb] <- vrb.
@@ -1264,6 +1316,8 @@ fraVFtilNI <- function(
     modell <- lm(f(formel), data=maaling, weights=vkt)
     sdrag <- summary(modell)
     sdrag$call <- f(formel)
+    u <- c(u, "Modellen har en forklart varians (R²) på " %+% 
+              format(round(sdrag$r.squared, 3), nsmall = 3, decimal.mark = ","))
     if (vis) {
       print(sdrag)
     }
@@ -1280,7 +1334,8 @@ fraVFtilNI <- function(
              ifelse(vannkategori %inneholder% "R", "elve",   NA),
              ifelse(vannkategori %inneholder% "C", "kyst",   NA))
     txt <- paste(na.omit(txt), collapse="- og ")
-    skriv("Det fins ", length(utvalg), " typifiserte ", txt, "vannforekomster.")
+    u <- c(u, skriv("Det fins ", length(utvalg), " typifiserte ", txt, 
+                    "vannforekomster.", ut = TRUE))
     if (!is.null(bareInkluder)) {
       ta.med <- numeric(0)
       if (is.list(bareInkluder)) {
@@ -1310,8 +1365,9 @@ fraVFtilNI <- function(
       utvalg <- utvalg %-% fjern
     }
     if (forskj > 0) {
-      skriv("Av disse har ", length(utvalg), " vannforekomster en vanntype som parameteren ",
-            parameter, " er definert for.")
+      u <- c(u, skriv("Av disse har ", length(utvalg), 
+                      " vannforekomster en vanntype som parameteren ",
+                      parameter, " er definert for.", ut = TRUE))
     }
     nydata <- matrix("", length(utvalg), length(explv), T, list(Vf$id[utvalg], explv))
     nydata <- as.data.frame(nydata, stringsAsFactors=FALSE)
@@ -1404,31 +1460,35 @@ fraVFtilNI <- function(
         "e blir ekskludert fra ekstrapoleringa, slik at " %+% length(utvalg) %+%
         " vannforekomster er igjen."
       if (length(beskjed) > 1) {
-        skriv("Dessverre ...")
+        u <- c(u, skriv("Dessverre ...", ut = TRUE))
         for (i in 1:length(beskjed)) {
-          skriv(beskjed[i], ifelse(i == length(beskjed), ".", ";"), pre = "- ")
+          u <- c(u, skriv(beskjed[i], ifelse(i == length(beskjed), ".", ";"), 
+                          pre = "- ", ut = TRUE))
         }
-        skriv(sluttbeskjed)
+        u <- c(u, skriv(sluttbeskjed, ut = TRUE))
       } else {
-        skriv("Dessverre ", beskjed[1], ". ", sluttbeskjed)
+        u <- c(u, skriv("Dessverre ", beskjed[1], ". ", sluttbeskjed, ut = TRUE))
       }
     }
     
     felles <- length(unique(maaling$vfo %A% rownames(nydata)))
     if (felles < length(unique(maaling$vfo))) {
-      skriv("Det forelå målinger for ", length(unique(maaling$vfo)) - felles,
-            " av vannforekomstene som ble fjerna. Disse inngår da heller ikke i ",
-            "ekstrapoleringa.", pre = "OBS: ", linjer.under = 1)
+      u <- c(u, skriv("Det forelå målinger for ", 
+                      length(unique(maaling$vfo)) - felles,
+                      " av vannforekomstene som ble fjerna. Disse inngår da ",
+                      "heller ikke i ekstrapoleringa.", 
+                      pre = "OBS: ", linjer.under = 1, ut = TRUE))
     }
     
     andel <- felles / length(utvalg)
     tekst <- " % av de relevante vannforekomstene (" %+% felles %+% " av " %+%
       length(utvalg) %+% ")."
     if (andel < 0.01) {
-      skriv("Det foreligger målinger for under 1 ", tekst, linjer.under = 1)
+      u <- c(u, skriv("Det foreligger målinger for under 1 ", tekst, 
+                      linjer.under = 1, ut = TRUE))
     } else {
-      skriv("Det foreligger altså målinger for ", round(andel * 100), tekst,
-            linjer.under = 1)
+      u <- c(u, skriv("Det foreligger altså målinger for ", round(andel * 100), 
+                      tekst, linjer.under = 1, ut = TRUE))
     }
   }
   
@@ -1445,9 +1505,10 @@ fraVFtilNI <- function(
                                list(j, "ukjent aktivitet", 0))
           names(Aktiviteter)[nrow(Aktiviteter)] <- j
         }
-        skriv("Noen overvåkingsaktiviteter er ukjent! Disse ble nå tildelt en skår på 0. ",
-              "(Dette gjelder: ", paste(ukjenteAktiviteter, collapse=", "), ".)",
-              pre = "OBS OBS! ", linjer.under = 1)
+        u <- c(u, skriv("Noen overvåkingsaktiviteter er ukjent! Disse ble nå ",
+                        "tildelt en skår på 0. (Dette gjelder: ", 
+                        paste(ukjenteAktiviteter, collapse=", "), ".)",
+                        pre = "OBS OBS! ", linjer.under = 1, ut = TRUE))
       }
       avekt <- aktivitetsvekt^(-abs(Aktiviteter$skaar))
       avekt <- avekt[which(Aktiviteter$id %in% akter)]
@@ -1751,6 +1812,7 @@ fraVFtilNI <- function(
       DeltaAIC        =        DeltaAIC,
       iterasjoner     =     iterasjoner
     )
+    attr(UT, "beskjeder") <- u
     skriv("Sånn. Da har vi omsider kommet i mål.", linjer.over = 1 , linjer.under = 1)
     return(UT)
   } else {
