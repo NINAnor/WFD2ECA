@@ -1,5 +1,4 @@
 
-
 fraVFtilNI <- function(
     DATA,
     vannforekomster,
@@ -31,8 +30,14 @@ fraVFtilNI <- function(
     vis = TRUE,
     tell = TRUE
 ) {
+  ### fraVFtilNI [fra vannforskrift til naturindeks]
+  # ved Hanno Sandvik
+  # desember 2023
+  # se https://github.com/NINAnor/NI_vannf
+  ###
   
-  ### Oversikt over parametere
+  
+  ### Oversikt over argumenter
   # DATA: navn på R-datarammen med målinger fra vannmiljø
   # vannforekomster: navnet på R-datarammen med vannforekomster
   # vannlokaliteter: navnet på R-datarammen med vannlokaliteter
@@ -79,10 +84,10 @@ fraVFtilNI <- function(
   skriv("Innledende tester", pre = "   ", linjer.over  = 1)
   skriv("=================", pre = "   ", linjer.under = 1)
 
-  # Sjekke om nødvendige funksjonsparametere er oppgitt
+  # Sjekke om nødvendige funksjonsargumenter er oppgitt
   if (missing(DATA)) {
     OK <- FALSE
-    skriv("Parameteren \"DATA\" må være oppgitt og inneholde målinger ",
+    skriv("Argumentet \"DATA\" må være oppgitt og inneholde målinger ",
           "som er eksportert fra vannmiljø.",
           pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
   } else {
@@ -95,7 +100,7 @@ fraVFtilNI <- function(
   }
   if (missing(vannforekomster)) {
     OK <- FALSE
-    skriv("Parameteren \"vannforekomster\" må være oppgitt og inneholde ",
+    skriv("Argumentet \"vannforekomster\" må være oppgitt og inneholde ",
           "informasjon fra vann-nett om vannforekomstene.",
           pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
   } else {
@@ -108,7 +113,7 @@ fraVFtilNI <- function(
   }
   if (missing(vannlokaliteter)) {
     OK <- FALSE
-    skriv("Parameteren \"vannlokaliteter\" må være oppgitt og inneholde ",
+    skriv("Argumentet \"vannlokaliteter\" må være oppgitt og inneholde ",
           "informasjon fra vannmiljø om vannlokalitetene.",
           pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
   } else {
@@ -122,14 +127,14 @@ fraVFtilNI <- function(
   if (missing(parameter) ||
     !(length(parameter) %=% 1 && is.character(parameter))) {
       OK <- FALSE
-    skriv("Parameteren \"parameter\" må være oppgitt og bestå av ",
+    skriv("Argumentet \"parameter\" må være oppgitt og bestå av ",
           "en parameter-id fra vannmiljø.",
           pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
   }
   if (missing(vannkategori) ||
       !(length(vannkategori) %=% 1 && vannkategori %in% c("L", "R", "C"))) {
     OK <- FALSE
-    skriv("Parameteren \"vannkategori\" må være nøyaktig én av bokstavene \"L\", ",
+    skriv("Argumentet \"vannkategori\" må være nøyaktig én av bokstavene \"L\", ",
           "\"R\" eller \"C\"!", pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
   }
   if (!(vedMaalefeil %in% c("måling", "dato", "oppdragstager") &
@@ -289,7 +294,8 @@ fraVFtilNI <- function(
       knr <- kommunehistorikk$Nummer[k]
       w <- unique(unlist(kommunehistorikk[k, relevanteRader])) %-% "."
       for (kk in w) {
-        knr <- c(knr, kommunehistorikk$Nummer[which(kommunehistorikk == kk, arr.ind = TRUE)[, 1]])
+        knr <- c(knr, kommunehistorikk$Nummer[which(kommunehistorikk == kk, 
+                                                    arr.ind = TRUE)[, 1]])
       }
       Vk <- erstatt(Vk,         knr[1], paste(sort(unique(knr)), collapse = ","))
       Vk <- erstatt(Vk, "0" %+% knr[1], paste(sort(unique(knr)), collapse = ","))
@@ -644,7 +650,7 @@ fraVFtilNI <- function(
       }
     }
     rappAar <- rappAar %-% fjernAar
-    NI.aar  <- NI.aar  %-% fjernAar # ¤¤¤ hvis det bare er ett år, funker ikke modelleringa!!! ¤¤¤¤¤
+    NI.aar  <- NI.aar  %-% fjernAar # ¤¤¤ hvis det bare er ett år, funker ikke modelleringa!!!
     if (length(unique(maaling$vfo)) < maalingTot) {
       OK <- FALSE
       skriv("De foreliggende målingene fra ", length(unique(maaling$vfo)),
@@ -689,9 +695,9 @@ fraVFtilNI <- function(
     # Spesialbehandling for Raddum I! (del 1 av 2)
     if (parameter == "RADDUM1") {
       maaling$vrd <- ifelse(maaling$ant == 1,
-                            ifelse(maaling$vrd > 0.501, 1,
-                                   ifelse(maaling$vrd > 0.251, 0.5,
-                                          ifelse(maaling$vrd > 0.001, 0.25, 0))), maaling$vrd)
+                     ifelse(maaling$vrd > 0.501, 1,
+                     ifelse(maaling$vrd > 0.251, 0.5,
+                     ifelse(maaling$vrd > 0.001, 0.25, 0))), maaling$vrd)
       maaling$vrd[which(maaling$vrd > 1)] <- 1
       for (i in 1:nrow(maaling)) {
         if (maaling$ant[i] %=% 1) {
@@ -719,7 +725,8 @@ fraVFtilNI <- function(
         # resten, dvs. parametere der terskelverdiene varierer mellom vanntyper:
         for (v in unique(maaling$typ)) {
           K <- as.vector(unlist(KlasseGrenser[v, ]))
-          maaling$vrd[which(maaling$typ == v)] <- mEQR(maaling$vrd[which(maaling$typ == v)], K)
+          maaling$vrd[which(maaling$typ == v)] <- 
+            mEQR(maaling$vrd[which(maaling$typ == v)], K)
         }
       }
     }
@@ -802,11 +809,12 @@ fraVFtilNI <- function(
     
     if (any(maaling$dyp %in% 4:6)) {
       maaling$dyp[which(as.numeric(maaling$dyp) > 3)] <-
-        as.character(as.numeric(maaling$dyp[which(as.numeric(maaling$dyp) > 3)]) - 3)
+        as.character(as.numeric(maaling$dyp[which(as.numeric(maaling$dyp)>3)])-3)
     }
     f <- function(x) as.formula("vrd ~ " %+% x)
     combine <- function(x, y)
-      paste(sort(c(unlist(strsplit(x, "[+]")), unlist(strsplit(y, "[+]")))), collapse="+")
+      paste(sort(c(unlist(strsplit(x, "[+]")), unlist(strsplit(y, "[+]")))), 
+            collapse = "+")
     RF1 <- list(
       akt = sort(unique(maaling$akt)),
       tur = c("1", "2", "3"),
@@ -1026,7 +1034,7 @@ fraVFtilNI <- function(
         vnavn <- VNAVN[[vrb]]
         lengde <- length(vrber)
         if (lengde > 1 & sum(table(vrb.)) >= 50) { #¤¤ 50 + 25 som variabel!!
-          while (sort(table(vrb.))[[1]] < 25) { # hvis det er få datapunkt, må_det slås sammen
+          while (sort(table(vrb.))[[1]] < 25) { # hvis det er få datapunkt, må det slås sammen
             pm1 <- names(sort(table(vrb.)))[1]
             aic <- Inf
             VLI <- list(vrb.)
@@ -1173,7 +1181,8 @@ fraVFtilNI <- function(
                               " har blitt slått sammen pga. for lite data.", 
                               pre = "* ", ut = TRUE))
             }
-            vrber[length(vrber) - 1] <- paste(vrber[length(vrber) - 1:0], collapse="+")
+            vrber[length(vrber) - 1] <- paste(vrber[length(vrber) - 1:0], 
+                                              collapse = "+")
             vrber <- vrber[-length(vrber)]
           }
         }
@@ -1369,14 +1378,15 @@ fraVFtilNI <- function(
                       " vannforekomster en vanntype som parameteren ",
                       parameter, " er definert for.", ut = TRUE))
     }
-    nydata <- matrix("", length(utvalg), length(explv), T, list(Vf$id[utvalg], explv))
+    nydata <- matrix("", length(utvalg), length(explv), T, 
+                     list(Vf$id[utvalg], explv))
     nydata <- as.data.frame(nydata, stringsAsFactors=FALSE)
     hvilke <- 1:length(explv) %-% which(explv %in% c("per", "rar", "akt"))
     nydata[, explv[hvilke]] <- Vf[utvalg, explv[hvilke]]
     if ("dyp" %in% colnames(nydata)) {
       if (any(nydata$dyp %in% 4:6)) {
         nydata$dyp[which(as.numeric(nydata$dyp) > 3)] <-
-          as.character(as.numeric(nydata$dyp[which(as.numeric(nydata$dyp) > 3)]) - 3)
+          as.character(as.numeric(nydata$dyp[which(as.numeric(nydata$dyp)>3)])-3)
       }
     }
     fjern <- numeric(0)
@@ -1394,9 +1404,11 @@ fraVFtilNI <- function(
                 nydata[which(nydata[,i] == j),i] <- RF1a[[i]]
               } else {
                 fjern <- c(fjern, which(nydata[,i] == j))
-                beskjed[length(beskjed) + 1] <- "er " %+% length(which(nydata[,i]==j)) %+%
-                  " vannforekomster av typen \"" %+% tolower(VN1[[i]]) %+% " = " %+% j %+%
-                  "\", som det ikke foreligger målinger av " %+% parameter %+% " fra"
+                beskjed[length(beskjed) + 1] <- "er " %+% 
+                  length(which(nydata[,i]==j)) %+%
+                  " vannforekomster av typen \"" %+% tolower(VN1[[i]]) %+% 
+                  " = " %+% j %+% "\", som det ikke foreligger målinger av " %+%
+                  parameter %+% " fra"
               }
             }
           } else { # dvs hvis variabelen er ordinal
@@ -1418,9 +1430,11 @@ fraVFtilNI <- function(
                   }
                   for (n in 1:length(RF2[[i]])) {
                     k <- which(RF2.sik[[i]] == substr(RF2[[i]][n],1,1))
-                    l <- which(RF2.sik[[i]] == substr(RF2[[i]][n], nchar(RF2[[i]][n]),
+                    l <- which(RF2.sik[[i]] == substr(RF2[[i]][n], 
+                                                      nchar(RF2[[i]][n]),
                                                       nchar(RF2[[i]][n])))
-                    m <- which(RF2.sik[[i]] == substr(RF2[[i]][min(n+1,length(RF2[[i]]))],1,1))
+                    m <- which(RF2.sik[[i]] ==
+                               substr(RF2[[i]][min(n+1, length(RF2[[i]]))], 1, 1))
                     if (w >= k & w <= l) {
                       nydata[which(nydata[,i] == j),i] <- RF2[[i]][n]
                     }
@@ -1441,10 +1455,11 @@ fraVFtilNI <- function(
                     nydata[which(nydata[,i] == j),i] <- RF2a[[i]]
                   } else {
                     fjern <- c(fjern, which(nydata[,i] == j))
-                    beskjed[length(beskjed) +1] <- "har " %+% length(which(nydata[,i]==j)) %+%
-                      " vannforekomst" %+% ifelse(length(which(nydata[,i]==j))==1,"","er") %+%
-                      " den ukjente vanntypen \""  %+%  tolower(VN2[[i]])  %+% " = " %+% j %+%
-                      "\""
+                    beskjed[length(beskjed) +1] <- "har " %+% 
+                      length(which(nydata[,i]==j)) %+% " vannforekomst" %+% 
+                      ifelse(length(which(nydata[,i]==j))==1,"","er") %+%
+                      " den ukjente vanntypen \"" %+% tolower(VN2[[i]]) %+% 
+                      " = " %+% j %+% "\""
                   }
                 }
               }
@@ -1632,7 +1647,8 @@ fraVFtilNI <- function(
                                 simuleringer="pred"))
         for (j in 1:length(NI.aar)) {
           nydata$per <- factor(NI.aar[i], levels=levels(maaling$per))
-          pred <- predict(modell, nydata, TRUE, interval="pred", level=0.5, weights=1)
+          pred <- predict(modell, nydata, TRUE, interval = "pred", level = 0.5,
+                          weights = 1)
           simdata[,i,1] <- pred$fit[,1]
         }
       } else {
@@ -1642,13 +1658,14 @@ fraVFtilNI <- function(
         while (s < nsim) {
           SIM <- min(1000, nsim - s)
           simdata   <- array(0, c(nrow(nydata), length(NI.aar), SIM),
-                             list(vannforekomst=rownames(nydata), aar=NI.aar, 
-                                  simuleringer=1:SIM))
+                             list(vannforekomst = rownames(nydata), aar = NI.aar, 
+                                  simuleringer = 1:SIM))
           for (i in (1:SIM + s)) {
             slumptall <- rt(nrow(nydata), df)
             names(slumptall) <- rownames(nydata)
             if (any(names(nydata) == "akt")) {
-              nydata$akt <- sample(sort(unique(maaling$akt)), nrow(nydata), T, avekt)
+              nydata$akt <- sample(sort(unique(maaling$akt)), 
+                                   nrow(nydata), T, avekt)
               # BLAA
               # for (j in which(apply(konfident, 1, any))) {
               #   nydata$akt[j] <- sample(unique(maaling$akt[which(maaling$vfo ==
@@ -1657,8 +1674,10 @@ fraVFtilNI <- function(
             }
             for (j in 1:length(NI.aar)) {
               nydata$per <- factor(NI.aar[j], levels=levels(maaling$per))
-              pred <- predict(modell, nydata, TRUE, interval="pred", level=0.5, weights=1)
-              conf <- predict(modell,nydata[konfident,],TRUE,interval="conf",level=0.5,weights=1) # !BLAA
+              pred <- predict(modell, nydata, TRUE, interval = "pred", level = 0.5, 
+                              weights = 1)
+              conf <- predict(modell, nydata[konfident, ], TRUE, 
+                              interval = "conf", level = 0.5, weights = 1) # !BLAA
               pred$fit[,2] <- 0.5 * (pred$fit[,3] - pred$fit[,2]) / qt(0.75, df)
               pred <- pred$fit[,1:2]
               # BLAA
@@ -1766,8 +1785,8 @@ fraVFtilNI <- function(
             }
             if ("norge" %begynner% e) {
               for (j in as.character(NI.aar)) {
-                UT$Norge[1, j, 1:SIM + s + 1] <- apply(simdata[, j, ], 2, weighted.mean,
-                                                       areal, na.rm=TRUE)
+                UT$Norge[1, j, 1:SIM + s + 1] <- 
+                  apply(simdata[, j, ], 2, weighted.mean, areal, na.rm = TRUE)
               }
               #skriv("Norge:", linjer.over = 1)
               #sdrag <- UT$Norge[1,,1]
@@ -1783,7 +1802,7 @@ fraVFtilNI <- function(
       for (i in 1:length(UT)) {
         for (j in 1:length(NI.aar)) {
           for (k in 1:dim(UT[[i]])[1]) {
-            UT[[i]][k, j, 1] <- median(UT[[i]][k, j, -1], na.rm=TRUE)
+            UT[[i]][k, j, 1] <- median(UT[[i]][k, j, -1], na.rm = TRUE)
           }
         }
       }
@@ -1813,12 +1832,12 @@ fraVFtilNI <- function(
       iterasjoner     =     iterasjoner
     )
     attr(UT, "beskjeder") <- u
-    skriv("Sånn. Da har vi omsider kommet i mål.", linjer.over = 1 , linjer.under = 1)
+    skriv("Sånn. Da har vi omsider kommet i mål.", 
+          linjer.over = 1 , linjer.under = 1)
     return(UT)
   } else {
     return(NULL)
   }
 }
     
-
 
