@@ -4,11 +4,11 @@
 
 ## Argumenter
 
-Etter argumentets navn (med `grå bakgrunn`) følger variabeltypen (i **halvfeit skrift** i parentes). De relevante variabeltypene skiller mellom skalarer (nøyaktig én verdi) og vektorer (en eller flere verdier) av tekststrenger («tekst»), tall («numerisk») og sannhetsverdier (`TRUE` eller `FALSE`) samt datarammer og lister. De første fem argumentene _må alltid angis_. De øvrige er frivillige, som vil si at det brukes en standardverdi om ikke noe annet angitt.
+Etter argumentets navn (med `grå bakgrunn`) følger variabeltypen (i **halvfeit skrift** i parentes). De relevante variabeltypene skiller mellom skalarer (nøyaktig én verdi) og vektorer (en eller flere verdier) av tekststrenger («tekst»), tall («numerisk») og sannhetsverdier (`TRUE` eller `FALSE`) samt tabeller (_dataframes_) og lister. De første fem argumentene _må alltid angis_. De øvrige er frivillige, som vil si at det brukes en standardverdi om ikke noe annet angitt.
 
--	`DATA` (**dataramme**). _Argumentet må angis_. Det skal være navnet på **R**-datarammen som inneholder de relevante målingene fra vannmiljø-databasen.
--	`vannforekomster` (**dataramme**). _Argumentet må angis_. Det skal være navnet på **R**-datarammen som inneholder informasjonen om vannforekomster.
-- `vannlokaliteter` (**dataramme**). _Argumentet må angis_. Det skal være navnet på **R**-datarammen som inneholder informasjonen om vannlokaliteter.
+-	`DATA` (**tabell**). _Argumentet må angis_. Det skal være navnet på **R**-tabellen som inneholder de relevante målingene fra vannmiljø-databasen.
+-	`vannforekomster` (**tabell**). _Argumentet må angis_. Det skal være navnet på **R**-tabellen som inneholder informasjonen om vannforekomster.
+- `vannlokaliteter` (**tabell**). _Argumentet må angis_. Det skal være navnet på **R**-tabellen som inneholder informasjonen om vannlokaliteter.
 - `parameter` (**tekst-skalar**). _Argumentet må angis_. Det skal være forkortelsen på den relevante vannforskriftsparameteren. (Forkortelsen må følge vannmiljø-databasen. For eksempel er «planteplankton trofiindeks», som er kjent som PTI, i vannmiljø forkortet som «PPTI».)
 - `vannkategori` (**tekst-skalar**). _Argumentet må angis_. Det skal være én av bokstavene "L", "R" eller "C", som står for henholdsvis innsjø, elv og kyst.
 - `filKlasser` (**tekst-skalar**). Filnavn på excel-regnearket med parameterens klassegrenser. Hvis det ikke er angitt, antas filnavnet å være «klassegrenser_[`parameter`].xslx», altså f.eks. «klassegrenser_ASPT.xslx» for parameteren ASPT.
