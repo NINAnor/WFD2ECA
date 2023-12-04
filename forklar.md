@@ -54,6 +54,6 @@ Listen har følgende attributter:
 
 - `parameter` (**tekst-skalar**) er vannforskriftsparameteren (dvs. identisk med argumentet `parameter`).
 - `vannkategori` (**tekst-skalar**) er vannkategorien (dvs. identisk med argumentet `vannkategori`).
-- `tidspunkt` (**tidspunkt**) er tidspunktet når funksjonsverdien ble beregnet (dato + klokkeslett).
+- `tidspunkt` (**tidspunkt**) er tidspunktet når funksjonsverdien ble beregna (dato + klokkeslett).
 - `innstillinger` (**liste**) er en liste over de øvrige innstillingene, slik de ble valgt for den aktuelle kjøringa.
 - `beskjeder` (**tekst-vektor**) er en samling av de relevante beskjedene som ble produsert under kjøringa.
