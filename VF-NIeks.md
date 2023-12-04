@@ -550,7 +550,7 @@ histogram, f.eks. slik:
          ylab="Trolighet", 
          cex.lab=1.2, cex.main=1.8)
 
-![](VF-NIeks_files/figure-markdown_strict/unnamed-chunk-13-1.png)
+![](fig/fig1.png)
 
 De fylkesvise gjennomsnittsresultatene kan vises på kart:
 
@@ -574,7 +574,7 @@ De fylkesvise gjennomsnittsresultatene kan vises på kart:
          pos = 2, cex = 0.96)
     text(rep(26, 5), 59.8+0:4*1.6, c("SD", "D", "M", "G", "SG"), pos = 4, cex = 1.2)
 
-![](VF-NIeks_files/figure-markdown_strict/unnamed-chunk-14-1.png)
+![](fig/fig2.png)
 
 Det samme gjelder de kommunevise resultatene:
 
@@ -598,4 +598,4 @@ Det samme gjelder de kommunevise resultatene:
          pos = 2, cex = 0.96)
     text(rep(26, 5), 59.8+0:4*1.6, c("SD", "D", "M", "G", "SG"), pos = 4, cex = 1.2)
 
-![](VF-NIeks_files/figure-markdown_strict/unnamed-chunk-15-1.png)
+![](fig/fig3.png)
