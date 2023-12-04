@@ -9,12 +9,14 @@ Disse er ikke nærmere forklart her.
 ### `lesVannforekomster` 
 
 Funksjonen [`lesVannforekomster`](Vannfork.R) leser inn tabellen over vannforekomster fra vann-nett.
-Funksjonen har to parametere:
+Funksjonen har to argumenter:
 
 * `vannkategori` (**tekst-vektor**) må være én eller flere av bokstavene "L", "R" og/eller "C". Det angir vannkategorien som skal leses inn (innsjø, elv og/eller kyst).
 * `kolonnenavn` (**tekst-skalar**) angir navnet på en fil med kolonnenavn. Fila må være en semikolondelt tabell. Standardinnstillinga er å lese inn fila "[navnVN.csv](navnVN.csv)".
 
-Funksjonen forutsetter dessuten at filer over vannforekomster er lasta fra [vann-nett](https://vann-nett.no/portal/):
+Funksjonsverdien er en **tabell** (_dataframe_) med informasjon om alle vannforekomster.
+
+Funksjonen forutsetter dessuten at filer over vannforekomster er lasta ned fra [vann-nett](https://vann-nett.no/portal/):
 
 `https://vann-nett.no/portal/ > Rapporter > Vanntyper`
 
@@ -31,17 +33,19 @@ For at filene kan leses inn, må de få følgende navn:
 - "**V-C.csv**" for kystvannforekomstene
 
 Man trenger ikke å laste ned alle tre. Det holder med den vannkategorien som er relevant for vannforskrift-parameteren eller -parameterne.
-Dette må samsvare med funksjonsparameteren `vannkategori`.
+Dette må samsvare med funksjonsargumentet `vannkategori`.
 
 
 
 ### `lesVannlokaliteter`
 
 Funksjonen [`lesVannlokaliteter`](Vannfork.R) leser inn tabellen over vannlokaliteter fra vannmiljø.
-Funksjonen har to parametere:
+Funksjonen har to argumenter:
 
 * `vannkategori` (**tekst-vektor**) må være én eller flere av bokstavene "L", "R" og/eller "C". Det angir vannkategorien som skal leses inn (innsjø, elv og/eller kyst).
 * `kolonnenavn` (**tekst-skalar**) angir navnet på en fil med kolonnenavn. Fila må være en semikolondelt tabell. Standardinnstillinga er å lese inn fila "[navnVL.csv](navnVL.csv)".
+
+Funksjonsverdien er en **tabell** (_dataframe_) med informasjon om alle vannlokaliteter.
 
 Funksjonen forutsetter dessuten at filer over vannlokaliteter er lasta fra [vannmiljø](https://vannmiljo.miljodirektoratet.no/)-databasen:
 
@@ -63,23 +67,25 @@ For at filene kan leses inn, må de få følgende navn:
 - "**VL-C.xlsx**" for kystvannlokaliteter
 
 Man trenger ikke å laste ned alle tre. Det holder med den vannkategorien som er relevant for vannforskrift-parameteren eller -parameterne.
-Dette må samsvare med funksjonsparameteren `vannkategori`.
+Dette må samsvare med funksjonsargumentet `vannkategori`.
 
 
 
 ### `lesInnsjodatabasen` 
 
 Funksjonen [`lesInnsjodatabasen`](Vannfork.R) leser inn datasettet over innsjøer fra NVE.
-Funksjonen har to parametere:
+Funksjonen har to argumenter:
 
 * `filnavn` (**tekst-skalar**) angir navnet på datasettet. Standardinnstillinga er å lese inn fila "Innsjo_Innsjo.dbf".
 * `kolonnenavn` (**tekst-skalar**) angir navnet på en fil med kolonnenavn. Fila må være en semikolondelt tabell. Standardinnstillinga er å lese inn fila "[navnNVEl.csv](navnNVEl.csv)".
+
+Funksjonsverdien er en **tabell** (_dataframe_) med informasjon om alle innsjøer.
 
 Funksjonen forutsetter at datasettet over innsjøer er lasta ned som en formfil fra [NVE](http://nedlasting.nve.no/gis/):
 
 `http://nedlasting.nve.no/gis/ > Innsjø > Innsjø`
 
-I menyen må man foreta de følgende valg:
+I menyen må man foreta følgende valg:
 
 - kartformat "ESRI shapefil (.shp)"
 - koordinatsystem "Geografiske koordinater ETRS89"
@@ -90,21 +96,24 @@ I menyen må man foreta de følgende valg:
 
 ### `oppdaterVannforekomster`
 
-Funksjonen [`oppdaterVannforekomster`](Vannfork.R) kobler informasjonen om innsjøvannforekomster (fra vann-nett) med informasjon fra innsjødatabasen (fra NVE). Funksjonen trengs bare om de(n) aktuelle vannforskrift-parameteren (-parameterne) er relevant for innsjøer.
+Funksjonen [`oppdaterVannforekomster`](Vannfork.R) kobler informasjonen om innsjøvannforekomster (fra vann-nett) med informasjon fra innsjødatabasen (fra NVE). Funksjonen trengs bare om de(n) aktuelle vannforskrift-parameteren (-parameterne) er relevant for innsjøer. Funksjonen har tre argumenter:
 
-Funksjonen har tre parametere:
-* `V` er **R**-datarammen for vannforekomster (som må ha blitt lest inn ved hjelp av `lesVannforekomster`).
-* `nve` er **R**-datarammen for innsjødatabasen (som må ha blitt lest inn ved hjelp av `lesInnsjoforekomster`).
+* `V` er **R**-tabellen for vannforekomster (som må ha blitt lest inn ved hjelp av `lesVannforekomster`).
+* `nve` er **R**-tabellen for innsjødatabasen (som må ha blitt lest inn ved hjelp av `lesInnsjoforekomster`).
 * `slingringsmonn` (**numerisk skalar**) angir hvilket relativt avvik fra de reelle verdiene som godtas før opplysninger blir korrigert for en vannforekomst. Standardinnstillinga er 0.1 (dvs. 10 %).
+
+Funksjonsverdien er en **tabell** (_dataframe_) med oppdatert informasjon om alle vannforekomster.
 
 
 
 ### `lesMaalinger`
 
-Funksjonen [`lesMaalinger`](Vannfork.R) leser inn tabellen over målinger fra vannmiljø. Funksjonen har to parametere:
+Funksjonen [`lesMaalinger`](Vannfork.R) leser inn tabellen over målinger fra vannmiljø. Funksjonen har to argumenter:
 
 * `filnavn` (**tekst-skalar**) angir navnet på en fil med målinger. Fila må være et excel-regneark.
 * `kolonnenavn` (**tekst-skalar**) angir navnet på en fil med kolonnenavn. Fila må være en semikolondelt tabell. Standardinnstillinga er å lese inn fila "[navnVM.csv](navnVM.csv)".
+
+Funksjonsverdien er en **tabell** (_dataframe_) med informasjon om alle målinger.
 
 Funksjonen forutsetter dessuten at et regneark med målinger er lasta fra [vannmiljø](https://vannmiljo.miljodirektoratet.no/)-databasen:
 
