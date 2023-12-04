@@ -1,5 +1,9 @@
-
-# Hjelpefunksjoner
+### Hjelpefunksjoner
+# Hjelpefunksjoner til NI_vannf
+# ved Hanno Sandvik
+# desember 2023
+# se https://github.com/NINAnor/NI_vannf
+###
 
 
 
@@ -135,15 +139,15 @@ mEQR <- function(x, klassegrenser) {
 
 # Omregning av Raddum-II- til Raddum-I-verdier
 Raddum1_2 <- function(DATA) {
-  w <- which(DATA$parid == "RADDUM2")
-  if (length(w)) {
-    DATA$parid[w] <- "RADDUM1"
-    skriv(length(w), " Raddum-II-målinger har blitt regna om til Raddum-I.",
-          linjer.under = 1)
+  w1 <- which(DATA$parid == "RADDUM2")
+  w2 <- which(DATA$parid == "RADDUM2" & DATA$verdi > 0.5)
+  if (length(w2)) {
+    DATA$verdi[w2] <- 1
   }
-  w <- which(DATA$parid == "RADDUM2" & DATA$verdi > 0.5)
-  if (length(w)) {
-    DATA$verdi[w] <- 1
+  if (length(w1)) {
+    DATA$parid[w1] <- "RADDUM1"
+    skriv(length(w1), " Raddum-II-målinger har blitt regna om til Raddum-I.",
+          linjer.under = 1)
   }
   return(DATA)
 }
@@ -200,10 +204,12 @@ kombiner <- function(ut1, ut2) {
       }
     }
     if (ok) {
-      attr(UT, "parameter")    <- attr(ut1, "parameter")
-      attr(UT, "vannkategori") <- attr(ut1, "vannkategori") %+% "," %+%
-                                  attr(ut2, "vannkategori")
-      attr(UT, "tidspunkt")    <- Sys.time()      
+      attr(UT, "parameter")     <- attr(ut1, "parameter")
+      attr(UT, "vannkategori")  <- attr(ut1, "vannkategori") %+% "," %+%
+                                   attr(ut2, "vannkategori")
+      attr(UT, "tidspunkt")     <- Sys.time()
+      attr(UT, "innstillinger") <- NULL
+      attr(UT, "beskjeder")     <- NULL
     }
   } else {
     ok <- FALSE

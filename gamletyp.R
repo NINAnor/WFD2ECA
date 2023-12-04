@@ -1,3 +1,10 @@
+### Gamle vanntyper
+# Hjelpefil til NI_vannf
+# ved Hanno Sandvik
+# desember 2023
+# se https://github.com/NINAnor/NI_vannf
+###
+
 
 
 "%&%" <- function(a,b) rep(a, each=length(b)) %+% rep(b, length(a))
