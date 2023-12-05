@@ -1,9 +1,14 @@
 # Oversikt over funksjoner
 
-### Hjelpefunksjoner
+-   <a href="#lesvannforekomster" id="toc-lesvannforekomster">lesVannforekomster</a>
+-   <a href="#lesvannlokaliteter" id="toc-lesvannlokaliteter">lesVannlokaliteter</a>
+-   <a href="#lesinnsjodatabasen" id="toc-lesinnsjodatabasen">lesInnsjodatabasen</a>
+-   <a href="#oppdatervannforekomster" id="toc-oppdatervannforekomster">oppdaterVannforekomster</a>
+-   <a href="#lesmaalinger" id="toc-lesmaalinger">lesMaalinger</a>
+-   <a href="#hjelpefunksjoner" id="toc-hjelpefunksjoner">Hjelpefunksjoner</a>
 
-Diverse hjelpefunksjoner er definert i fila "[Funksjon.R](Funksjon.R)".
-Disse er ikke nærmere forklart her.
+Denne sida forklarer de viktigste funksjonene (bortsett fra [`fraVFtilNI`](Dbehandl.R), som er forklart [her](forklar.md)).
+
 
 
 ### `lesVannforekomster` 
@@ -130,8 +135,7 @@ I fanen "Søk i registreringer" må man
 
 
 
-### `fraVFtilNI`
+### Hjelpefunksjoner
 
-Funksjonen [`fraVFtilNI`](Dbehandl.R) er forklart [her](forklar.md).
-
-
+Diverse hjelpefunksjoner er definert i fila "[Funksjon.R](Funksjon.R)".
+Disse er ikke nærmere forklart her.
