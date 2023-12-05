@@ -1,6 +1,9 @@
 # Oversikt over funksjonen `fraVFtilNI`
 
-**R**-funksjonen som står for selve dataflyten, heter `fraVFtilNI` («fra vannforskrift til naturindeks»). I dette avsnittet forklares dens argumenter og funksjonsverdi.
+-   <a href="#argumenter" id="toc-argumenter">Argumenter</a>
+-   <a href="#funksjonsverdi" id="toc-funksjonsverdi">Funksjonsverdi</a>
+
+**R**-funksjonen som står for selve dataflyten, heter `fraVFtilNI` («fra vannforskrift til naturindeks»). På denne siden forklares dens _argumenter_ og _funksjonsverdi_. Funksjonens _gjøremål_ er trinn 2 til 15 av [lista som er beskrevet her](dataflyt.md).
 
 ## Argumenter
 
