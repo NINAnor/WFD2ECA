@@ -1,5 +1,9 @@
 # Illustrasjon av dataflyt fra vannforskrift til naturindeks
 
+Flere vannforskrift-parametere inngår også i naturindeksen. Dette
+dokumentet viser gangen i å forberede opplasting av data som har blitt
+samla inn i rammen av vannforskriften, til naturindeks-databasen.
+
 -   <a href="#forberedelser" id="toc-forberedelser">Forberedelser</a>
 -   <a href="#nødvendig-informasjon-om-vannforekomster"
     id="toc-nødvendig-informasjon-om-vannforekomster">Nødvendig informasjon
@@ -18,9 +22,7 @@
 -   <a href="#analysen" id="toc-analysen">Analysen</a>
 -   <a href="#visualisering" id="toc-visualisering">Visualisering</a>
 
-Flere vannforskrift-parametere inngår også i naturindeksen. Dette
-dokumentet viser gangen i å forberede opplasting av data som har blitt
-samla inn i rammen av vannforskriften, til naturindeks-databasen.
+
 
 ## Forberedelser
 
@@ -37,6 +39,8 @@ Laste inn funksjoner:
     source("Klassegr.R")
     source("Dbehandl.R")
 
+
+
 ## Nødvendig informasjon om vannforekomster
 
 Før vannforskrift-parametere kan analyseres og forberedes for
@@ -45,6 +49,7 @@ komme på plass. Skal flere vannforskrift-parametere “flyttes over” til
 naturindeks, trenger man bare å gjøre dette trinnet én gang. Det
 forutsetter at man har lastet ned oppdaterte versjon av disse filene.
 Eksempelkoden er basert på datafilene som ble lasta ned i juli 2023.
+
 
 ### Vannforekomster
 
@@ -148,6 +153,7 @@ Utmatinga forteller om mindre avvik fra det man kunne forvente. Men
 ingen av dem var kritisk for den videre analysen. I så fall hadde
 innlesinga blitt avbrutt med beskjeden “FEIL” og en forklaring.
 
+
 ### NVEs innsjødatabase
 
 Fila over Norges innsjøer må lastes ned som en formfil fra
@@ -193,6 +199,7 @@ Utmatinga forteller om mindre avvik fra det man kunne forvente. Men
 ingen av dem var kritisk for den videre analysen. I så fall hadde
 innlesinga blitt avbrutt med beskjeden “FEIL” og en forklaring.
 
+
 ### Vannlokaliteter
 
 Fila over vannlokaliteter må lastes ned som en excel-fil (xlsx) fra
@@ -236,6 +243,7 @@ Utmatinga forteller om mindre avvik fra det man kunne forvente. Men
 ingen av dem var kritisk for den videre analysen. I så fall hadde
 innlesinga blitt avbrutt med beskjeden “FEIL” og en forklaring.
 
+
 ### Kobling av informasjon
 
 Til slutt kan informasjonen om innsjøvannforekomster (fra vann-nett)
@@ -259,6 +267,7 @@ med størrelse og høyde over havet, slik de fremgår av innsjødatabasen.
 Under antagelse av at innsjødatabasen er mer pålitelig enn
 vannforekomsttypifisering, har typifiseringa blitt justert for enkelte
 vannforekomster.
+
 
 ### Ytterligere datafiler
 
@@ -301,6 +310,8 @@ forbehold om at enkelte målinger kan bli tilordna feil kommune, i
 tilfeller der målinger ble tatt i en sammenslått kommune og
 tilbakedateres til et tidspunkt før sammenslåinga.
 
+
+
 ## Målinger fra vannmiljø-databasen
 
 Målingene fra
@@ -324,6 +335,8 @@ I dette eksempelet er målingene for ASPT lasta ned og lagra i fila
 “ASPT.xlsx”. Den leses inn slik:
 
     DATA <- lesMaalinger("ASPT.xlsx")
+
+
 
 ## Analysen
 
@@ -537,6 +550,8 @@ trenger man bare å oppgi om man ønsker å endre på standardinnstillingene
     ## 
     ## Sånn. Da har vi omsider kommet i mål.
 
+
+
 ## Visualisering
 
 Her kommer noen eksempler på visualiseringer av resultatene. For det
@@ -599,3 +614,4 @@ Det samme gjelder de kommunevise resultatene:
     text(rep(26, 5), 59.8+0:4*1.6, c("SD", "D", "M", "G", "SG"), pos = 4, cex = 1.2)
 
 ![](fig/fig3.png)
+
