@@ -1,4 +1,4 @@
-# Spesielle krav til de ulike vannforskriftsparamterne
+# Spesielle krav til de ulike vannforskriftsparameterne
 
 Funksjonen `fraVFtilNI` sjekker om målinger som er rapporter i vannmiljø-databasen inneholder åpenbare måle- eller rapporteringsfeil (dvs. verdier som er uforenlige med parameterens definisjon). 
 I tillegg eksisterer imidlertid spesifikke krav til de fleste vannforskriftsparameterne. 
@@ -6,34 +6,41 @@ Om disse har vært oppfylt ved måling eller rapportering, er vanskeligere å te
 Nedenfor gis en liste over kjente krav og hvordan man eventuelt kan korrigere for at disse ikke er oppfylt.
 Merk at lista mest sannsynlig ikke er uttømmende.
 
+-   <a href="#aip" id="toc-aip">AIP</a>
+-   <a href="#hbi2" id="toc-hbi2">HBI2</a>
+-   <a href="#pit" id="toc-pit">PIT</a>
+-   <a href="#pti" id="toc-pti">PTI</a>
+-   <a href="#raddum" id="toc-raddum">Raddum</a>
+-   <a href="#sic-tic-wic" id="toc-sic-tic-wic">SIc, TIc, WIc</a>
+
 
 ## AIP
 
-AIP () skal måles mellom juni og oktober.
+AIP (forsuringsindeks påvekstalger artssammensetning) skal måles mellom juni og oktober.
 Hver måling bør dessuten være basert på minst tre arter.
 
 
 ## HBI2
 
-HBI2 () skal baseres på minst to målinger per år, der den første er tatt på våren (januar–april) og den andre på høsten (oktober–desember).
+HBI2 (heterotrof begroingsindeks) skal baseres på minst to målinger per år, der den første er tatt på våren (januar–april) og den andre på høsten (oktober–desember).
 
 
 ## PIT
 
-PIT () skal måles mellom juni og oktober.
+PIT (trofiindeks påvekstalger artssammensetning) skal måles mellom juni og oktober.
 Hver måling bør dessuten være basert på minst to arter.
 
 
 ## PTI
 
-PTI () skal baseres på minst månedlige prøver gjennom hele vekstsesongen.
+PTI (planteplankton trofiindeks, vannmiljø-id "PPTI") skal baseres på minst månedlige prøver gjennom hele vekstsesongen.
 
 Det samme gjelder for andre parametere for kvalitetselementet alger (f.eks. KLFA, CYANOM).
 
 
 ## Raddum
 
-Raddum-indikatorene I og II () har ikke definierte terskelverdier for (svært) humøse vannforekomster. 
+Raddum-indikatorene I og II (Raddum forsuringsindeks 1 og 2, vannmiljø-id "RADDUM1" og "RADDUM2") har ikke definierte terskelverdier for (svært) humøse vannforekomster. 
 Videre har ikke Raddum I definerte terskelverdier for (moderat) kalkrike innsjøer, mens Raddum II _bare_ har definerte terskelverdier for elver.
 
 Merk at Raddum II ikke ... 
@@ -43,5 +50,5 @@ Raddum II-målinger er imidlertid enkelt å regne om til Raddum I-verdier. Dette
 
 ## SIc, TIc, WIc
 
-SIc (), TIc () og WIc () skal måles mellom juli og september.
+SIc (forsuringsindeks makrofytter antall arter innsjø, vannmilj-id "SIANTL"), TIc (trofiindeks makrofytter antall arter innsjø, vannmiljø-id "TIANTL") og WIc (vannstandsindeks makrofytter, vannmiljø-id "WIANTL") skal måles mellom juli og september.
 
