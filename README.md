@@ -7,10 +7,10 @@ Prosjektet har utvikla kode for å laste opp data som har blitt innsamla i ramme
 ## Oversikt
 På disse sidene blir
 
-- [dataflyten oppsummert](dataflyt.md),
+- [dataflyten oppsummert](forklar/dataflyt.md),
 - [dataflyten illustrert gjennom en eksempelkjøring](VF-NIeks.md),
-- [hovedfunksjonen forklart](forklar.md),
-- [øvrige funksjoner forklart](oversikt.md).
+- [hovedfunksjonen forklart](forklar/VFtilNI.md),
+- [øvrige funksjoner forklart](forklar/funksjon.md).
 
 En detaljert forklaring av dataflyten fra vannforskriften til naturindeks er gitt i [NINA-rapport 1723](http://hdl.handle.net/11250/2631056).
 
