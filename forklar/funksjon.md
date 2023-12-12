@@ -1,6 +1,6 @@
 # Oversikt over funksjoner
 
-Denne sida forklarer de viktigste funksjonene (bortsett fra [`fraVFtilNI`](Dbehandl.R), som er forklart [her](forklar.md)).
+Denne sida forklarer de viktigste funksjonene (bortsett fra [`fraVFtilNI`](../Dbehandl.R), som er forklart [her](VFtilNI.md)).
 
 -   <a href="#lesvannforekomster" id="toc-lesvannforekomster">lesVannforekomster</a>
 -   <a href="#lesvannlokaliteter" id="toc-lesvannlokaliteter">lesVannlokaliteter</a>
@@ -13,11 +13,11 @@ Denne sida forklarer de viktigste funksjonene (bortsett fra [`fraVFtilNI`](Dbeha
 
 ### `lesVannforekomster` 
 
-Funksjonen [`lesVannforekomster`](Vannfork.R) leser inn tabellen over vannforekomster fra vann-nett.
+Funksjonen [`lesVannforekomster`](../Vannfork.R) leser inn tabellen over vannforekomster fra vann-nett.
 Funksjonen har to argumenter:
 
 * `vannkategori` (**tekst-vektor**) må være én eller flere av bokstavene "L", "R" og/eller "C". Det angir vannkategorien som skal leses inn (innsjø, elv og/eller kyst).
-* `kolonnenavn` (**tekst-skalar**) angir navnet på en fil med kolonnenavn. Fila må være en semikolondelt tabell. Standardinnstillinga er å lese inn fila "[navnVN.csv](navnVN.csv)".
+* `kolonnenavn` (**tekst-skalar**) angir navnet på en fil med kolonnenavn. Fila må være en semikolondelt tabell. Standardinnstillinga er å lese inn fila "[navnVN.csv](../navnVN.csv)".
 
 Funksjonsverdien er en **tabell** (_dataframe_) med informasjon om alle vannforekomster.
 
@@ -44,11 +44,11 @@ Dette må samsvare med funksjonsargumentet `vannkategori`.
 
 ### `lesVannlokaliteter`
 
-Funksjonen [`lesVannlokaliteter`](Vannfork.R) leser inn tabellen over vannlokaliteter fra vannmiljø.
+Funksjonen [`lesVannlokaliteter`](../Vannfork.R) leser inn tabellen over vannlokaliteter fra vannmiljø.
 Funksjonen har to argumenter:
 
 * `vannkategori` (**tekst-vektor**) må være én eller flere av bokstavene "L", "R" og/eller "C". Det angir vannkategorien som skal leses inn (innsjø, elv og/eller kyst).
-* `kolonnenavn` (**tekst-skalar**) angir navnet på en fil med kolonnenavn. Fila må være en semikolondelt tabell. Standardinnstillinga er å lese inn fila "[navnVL.csv](navnVL.csv)".
+* `kolonnenavn` (**tekst-skalar**) angir navnet på en fil med kolonnenavn. Fila må være en semikolondelt tabell. Standardinnstillinga er å lese inn fila "[navnVL.csv](../navnVL.csv)".
 
 Funksjonsverdien er en **tabell** (_dataframe_) med informasjon om alle vannlokaliteter.
 
@@ -78,11 +78,11 @@ Dette må samsvare med funksjonsargumentet `vannkategori`.
 
 ### `lesInnsjodatabasen` 
 
-Funksjonen [`lesInnsjodatabasen`](Vannfork.R) leser inn datasettet over innsjøer fra NVE.
+Funksjonen [`lesInnsjodatabasen`](../Vannfork.R) leser inn datasettet over innsjøer fra NVE.
 Funksjonen har to argumenter:
 
 * `filnavn` (**tekst-skalar**) angir navnet på datasettet. Standardinnstillinga er å lese inn fila "Innsjo_Innsjo.dbf".
-* `kolonnenavn` (**tekst-skalar**) angir navnet på en fil med kolonnenavn. Fila må være en semikolondelt tabell. Standardinnstillinga er å lese inn fila "[navnNVEl.csv](navnNVEl.csv)".
+* `kolonnenavn` (**tekst-skalar**) angir navnet på en fil med kolonnenavn. Fila må være en semikolondelt tabell. Standardinnstillinga er å lese inn fila "[navnNVEl.csv](../navnNVEl.csv)".
 
 Funksjonsverdien er en **tabell** (_dataframe_) med informasjon om alle innsjøer.
 
@@ -101,7 +101,7 @@ I menyen må man foreta følgende valg:
 
 ### `oppdaterVannforekomster`
 
-Funksjonen [`oppdaterVannforekomster`](Vannfork.R) kobler informasjonen om innsjøvannforekomster (fra vann-nett) med informasjon fra innsjødatabasen (fra NVE). Funksjonen trengs bare om de(n) aktuelle vannforskrift-parameteren (-parameterne) er relevant for innsjøer. Funksjonen har tre argumenter:
+Funksjonen [`oppdaterVannforekomster`](../Vannfork.R) kobler informasjonen om innsjøvannforekomster (fra vann-nett) med informasjon fra innsjødatabasen (fra NVE). Funksjonen trengs bare om de(n) aktuelle vannforskrift-parameteren (-parameterne) er relevant for innsjøer. Funksjonen har tre argumenter:
 
 * `V` er **R**-tabellen for vannforekomster (som må ha blitt lest inn ved hjelp av `lesVannforekomster`).
 * `nve` er **R**-tabellen for innsjødatabasen (som må ha blitt lest inn ved hjelp av `lesInnsjoforekomster`).
@@ -113,10 +113,10 @@ Funksjonsverdien er en **tabell** (_dataframe_) med oppdatert informasjon om all
 
 ### `lesMaalinger`
 
-Funksjonen [`lesMaalinger`](Vannfork.R) leser inn tabellen over målinger fra vannmiljø. Funksjonen har to argumenter:
+Funksjonen [`lesMaalinger`](../Vannfork.R) leser inn tabellen over målinger fra vannmiljø. Funksjonen har to argumenter:
 
 * `filnavn` (**tekst-skalar**) angir navnet på en fil med målinger. Fila må være et excel-regneark.
-* `kolonnenavn` (**tekst-skalar**) angir navnet på en fil med kolonnenavn. Fila må være en semikolondelt tabell. Standardinnstillinga er å lese inn fila "[navnVM.csv](navnVM.csv)".
+* `kolonnenavn` (**tekst-skalar**) angir navnet på en fil med kolonnenavn. Fila må være en semikolondelt tabell. Standardinnstillinga er å lese inn fila "[navnVM.csv](../navnVM.csv)".
 
 Funksjonsverdien er en **tabell** (_dataframe_) med informasjon om alle målinger.
 
@@ -137,7 +137,7 @@ I fanen "Søk i registreringer" må man
 
 ### Hjelpefunksjoner
 
-Diverse hjelpefunksjoner er definert i fila "[Funksjon.R](Funksjon.R)".
+Diverse hjelpefunksjoner er definert i fila "[Funksjon.R](../Funksjon.R)".
 Disse er ikke nærmere forklart her.
 
 
