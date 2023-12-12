@@ -138,7 +138,7 @@ mEQR <- function(x, klassegrenser) {
 
 
 # Omregning av Raddum-II- til Raddum-I-verdier
-Raddum1_2 <- function(DATA) {
+Raddum2_1 <- Raddum1_2 <- function(DATA) {
   w1 <- which(DATA$parid == "RADDUM2")
   w2 <- which(DATA$parid == "RADDUM2" & DATA$verdi > 0.5)
   if (length(w2)) {

@@ -1,6 +1,11 @@
 # Oversikt over funksjonen `fraVFtilNI`
 
-**R**-funksjonen som står for selve dataflyten, heter `fraVFtilNI` («fra vannforskrift til naturindeks»). I dette avsnittet forklares dens argumenter og funksjonsverdi.
+**R**-funksjonen som står sentralt i dataflyten, heter `fraVFtilNI` («fra vannforskrift til naturindeks»). På denne siden forklares dens _argumenter_ og _funksjonsverdi_. Funksjonens _gjøremål_ er å gjennomføre [trinn 2 til 15 av dataflyten](dataflyt.md). Selve funksjonen ligger i fila [Dbehandl.R](Dbehandl.R).
+
+-   <a href="#argumenter" id="toc-argumenter">Argumenter</a>
+-   <a href="#funksjonsverdi" id="toc-funksjonsverdi">Funksjonsverdi</a>
+
+
 
 ## Argumenter
 
@@ -39,6 +44,7 @@ Etter argumentets navn (med `grå bakgrunn`) følger variabeltypen (i **halvfeit
 - `DeltaAIC` (**numerisk skalar**). ΔAIC-verdien angir hvor mye lavere AIC (Akaikes informasjonskriterium) en mer kompleks modell skal ha for å bli foretrukket fremfor en enklere modell (se Burnham & Anderson 2002). Standardinnstillinga er 2.
 - `iterasjoner` (**numerisk skalar**). Antall iterasjoner som skal brukes i simuleringa. Standardinnstillinga er satt til 100 000. Mye lavere bør det ikke være for bruk i naturindeks, men merk at en kjøring med så mange iterasjoner vil ta svært lang tid. For et prøvekjør bør tallet settes betydelig lavere, f.eks. til 1 000.
 - `vis` (**sannhetsverdi-skalar**). Ved `vis = TRUE` (standardinnstillinga) vises fortløpende informasjon om progresjonen. Argumentet er ikke fullt utviklet (som vil si at `vis = FALSE` foreløpig ikke vil slå av alle meldinger).
+
 
 
 ## Funksjonsverdi

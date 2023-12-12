@@ -5,10 +5,14 @@
 Prosjektet har utvikla kode for å laste opp data som har blitt innsamla i rammen av [vannforskriften](https://lovdata.no/dokument/SF/forskrift/2006-12-15-1446), til [naturindeks](https://www.naturindeks.no/)-databasen. **R**-koden, en eksempelkjøring og ytterligere forklaringer er tilgjengelig i filene som er deponert her.
 
 ## Oversikt
-Se [eksempelkjøringen](VF-NIeks.md) for en illustrasjon av dataflyten og de involverte funksjonene.
+På disse sidene blir
 
-Nærmere forklaringer av funksjonenes parametere gis [her for `fraVFtilNI`](forklar.md) og [her for de øvrige funksjonene](oversikt.md).
+- [dataflyten oppsummert](dataflyt.md),
+- [dataflyten illustrert gjennom en eksempelkjøring](VF-NIeks.md),
+- [hovedfunksjonen forklart](forklar.md),
+- [øvrige funksjoner forklart](oversikt.md).
+
+En detaljert forklaring av dataflyten fra vannforskriften til naturindeks er gitt i [NINA-rapport 1723](http://hdl.handle.net/11250/2631056).
 
 ## Kontakt
 Denne sida vedlikeholdes av [Hanno Sandvik](mailto:hanno.sandvik@nina.no).
-
