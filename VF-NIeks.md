@@ -367,9 +367,9 @@ bør man velge en større verdi (f.eks. 100000).
 Funksjonen som gjennomfører analysen, heter [`fraVFtilNI`](Dbehandl.R)
 (“fra vannforkrift til naturindeks”). Den har mange flere parametere enn
 de som vises under, som tillater ulike justeringer som er [forklart
-her](forklar.md). De første fem parametrene må alltid oppgis. Resten
+her](forklar/VFtilNI.md). De første fem parametrene må alltid oppgis. Resten
 trenger man bare å oppgi om man ønsker å endre på standardinnstillingene
-(som også er [forklart her](forklar.md)).
+(som også er [forklart her](forklar/VFtilNI.md)).
 
     utmating <- fraVFtilNI(
                            DATA, 

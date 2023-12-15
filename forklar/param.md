@@ -52,12 +52,20 @@ Videre har ikke Raddum I definerte terskelverdier for (moderat) kalkrike innsjø
 
 Merk at kun Raddum I og ikke Raddum II inngår i naturindeksen.
 Raddum II-målinger er imidlertid enkelt å regne om til Raddum I-verdier.
-Dette kan gjøres ved hjelp av funksjonen `Raddum2_1`.
+Dette kan gjøres ved hjelp av funksjonen `Raddum2_1`:
+
+    DATA.sik <- DATA  # ta eventuelt bækkøpp av datafila, siden Raddum I ikke kan regnes om til Raddum II
+    DATA <- Raddum2_1(DATA)
+    utmating_Raddum <- fraVFtilNI(DATA, vannforekomster = V, vannlokaliteter = VL,
+                                  parameter = "RADDUM1", vannkategori = "R")
+
+Utmatinga vil opplyse om hvor mange Raddum-II-målinger som har blitt regna om til Raddum I.
 
 
 ## SIc, TIc, WIc
 
 SIc (forsuringsindeks makrofytter antall arter innsjø, vannmiljø-id "SIANTL"), TIc (trofiindeks makrofytter antall arter innsjø, vannmiljø-id "TIANTL") og WIc (vannstandsindeks makrofytter, vannmiljø-id "WIANTL") skal måles mellom juli og september.
 Målinger som eventuelt ikke oppfyller kravet om tidspunkt, bør fjernes manuelt ved hjelp av datoen for målinga, før de resterende målingene brukes som innmating til funksjonen `fraVFtilNI`.
+
 
 
