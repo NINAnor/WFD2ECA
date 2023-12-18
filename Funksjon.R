@@ -146,7 +146,7 @@ Raddum2_1 <- Raddum1_2 <- function(DATA) {
   }
   if (length(w1)) {
     DATA$parid[w1] <- "RADDUM1"
-    skriv(length(w1), " Raddum-II-målinger har blitt regna om til Raddum-I.",
+    skriv(length(w1), " Raddum-II-målinger har blitt regna om til Raddum I.",
           linjer.under = 1)
   }
   return(DATA)
