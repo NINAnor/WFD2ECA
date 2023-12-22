@@ -8,6 +8,7 @@
 
 
 lesVannforekomster <- function(vannkategori = c("L", "R", "C"),
+                               filsti = "",
                                kolonnenavn = "navnVN.csv") {
   
   # Kolonner som datarammen V trenger for å fungere:
@@ -67,13 +68,19 @@ lesVannforekomster <- function(vannkategori = c("L", "R", "C"),
   if (OK) {
     # Innlesing av "tolkningstabellen": 
     # Hvilke kolonner i vann-nett-tabellen svarer til hvilke kolonner i V
-    navnV <- try(read.table(kolonnenavn, 
+    if (nchar(filsti)) {
+      if (substr(filsti, nchar(filsti), nchar(filsti)) %!=% "/" &
+          substr(filsti, nchar(filsti), nchar(filsti)) %!=% "\\") {
+        filsti <- filsti %+% "/"
+      }
+    }
+    navnV <- try(read.table(filsti %+% kolonnenavn, 
                             header = TRUE, sep = ";", quote = "", 
                             na.strings = "", strip.white = TRUE, comment.char = "", 
                             stringsAsFactors = FALSE, fileEncoding="latin1"))
     if (inherits(navnV, "try-error")) {
       OK <- FALSE
-      skriv("Dette skjedde en feil under innlesing av fila \"",
+      skriv("Dette skjedde en feil under innlesing av fila \"", filsti %+%
             kolonnenavn, ". Sjekk om fila fins, at det er oppgitt korrekt ",
             "navn på den, og at den er formatert som semikolondelt tabell.",
             pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
@@ -85,10 +92,10 @@ lesVannforekomster <- function(vannkategori = c("L", "R", "C"),
       if (OK) {
         # leser inn separate tabeller for innsjø- (L), elve- (R) og
         # kystvannforekomster (C)
-        test <- try(readLines("V-" %+% i %+% ".csv", 1))
+        test <- try(readLines(filsti %+% "V-" %+% i %+% ".csv", 1))
         if (inherits(test, "try-error")) {
           OK <- FALSE
-          skriv("Dette skjedde en feil under innlesing av fila \"",
+          skriv("Dette skjedde en feil under innlesing av fila \"", filsti,
                 "V-", i, ".csv", ". Sjekk om fila fins, og at det er oppgitt ",
                 "korrekt navn på den.",
                 pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
@@ -105,14 +112,14 @@ lesVannforekomster <- function(vannkategori = c("L", "R", "C"),
         }
       }
       if (OK) {
-        V[[i]] <- try(read.table("V-" %+% i %+% ".csv",
+        V[[i]] <- try(read.table(filsti %+% "V-" %+% i %+% ".csv",
                                  header = TRUE, sep = "\t", quote = "\"", 
                                  na.strings = "Not applicable", 
                                  strip.white = TRUE, comment.char = "", 
                                  stringsAsFactors = FALSE, fileEncoding="latin1"))
         if (inherits(V[[i]], "try-error")) {
           OK <- FALSE
-          skriv("Dette skjedde en feil under innlesing av fila \"",
+          skriv("Dette skjedde en feil under innlesing av fila \"", filsti,
                 "V-", i, ".csv", ". Sjekk om fila fins, og at det er oppgitt ",
                 "korrekt navn på den.",
                 pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
@@ -425,6 +432,7 @@ lesInnsjodatabasen <- function(filnavn = "Innsjo_Innsjo.dbf",
 
 
 lesVannlokaliteter <- function(vannkategori = c("L", "R", "C"),
+                               filsti = "",
                                kolonnenavn = "navnVL.csv") {
   
   # Kolonner som datarammen VL trenger for å fungere:
@@ -451,13 +459,19 @@ lesVannlokaliteter <- function(vannkategori = c("L", "R", "C"),
   if (OK) {
     # Innlesing av "tolkningstabellen": Hvilke kolonner i vannlokalitetstabellen
     # svarer til hvilke kolonner i VL
-    navnVL <- try(read.table(kolonnenavn, 
+    if (nchar(filsti)) {
+      if (substr(filsti, nchar(filsti), nchar(filsti)) %!=% "/" &
+          substr(filsti, nchar(filsti), nchar(filsti)) %!=% "\\") {
+        filsti <- filsti %+% "/"
+      }
+    }
+    navnVL <- try(read.table(filsti %+% kolonnenavn, 
                              header = TRUE, sep = ";", quote = "", 
                              na.strings = "", strip.white = TRUE, comment.char = "", 
                              stringsAsFactors = FALSE, fileEncoding="latin1"))
     if (inherits(navnVL, "try-error")) {
       OK <- FALSE
-      skriv("Dette skjedde en feil under innlesing av fila \"",
+      skriv("Dette skjedde en feil under innlesing av fila \"", filsti %+%
             kolonnenavn, ". Sjekk om fila fins, at det er oppgitt korrekt ",
             "navn på den, og at den er formatert som semikolondelt tabell.",
             pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
@@ -467,11 +481,11 @@ lesVannlokaliteter <- function(vannkategori = c("L", "R", "C"),
     # Innlesing av vannlokalitetsfilene som har blitt lasta ned fra vannmiljø
     VL <- list()
     for (i in vannkategori) {
-      VL[[i]] <- try(as.data.frame(read_xlsx("VL-" %+% i %+% ".xlsx", 
+      VL[[i]] <- try(as.data.frame(read_xlsx(filsti %+% "VL-" %+% i %+% ".xlsx", 
                                              col_types = "text")))
       if (inherits(VL[[i]], "try-error")) {
         OK <- FALSE
-        skriv("Dette skjedde en feil under innlesing av fila \"",
+        skriv("Dette skjedde en feil under innlesing av fila \"", filsti,
               "VL-", i, ".xlsx", ". Sjekk om fila fins, og at det er oppgitt ",
               "korrekt navn på den.",
               pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
@@ -634,6 +648,7 @@ oppdaterVannforekomster <- function(V,
 
 
 lesMaalinger <- function(filnavn,
+                         filsti = "",
                          kolonnenavn = "navnVM.csv") {
   
   # Kolonner som datarammen V trenger for å fungere:
@@ -668,29 +683,43 @@ lesMaalinger <- function(filnavn,
   
   # Innlesing av "tolkningstabellen": 
   # Hvilke kolonner i vannmiljø-tabellen svarer til hvilke kolonner i DATA
-  navnVM <- read.table(kolonnenavn, 
-                       header = TRUE, sep = ";", quote = "", 
-                       na.strings = "", strip.white = TRUE, comment.char = "", 
-                       stringsAsFactors = FALSE, fileEncoding="latin1")
-  
-  # Så "oversettes" kolonnenavnene
-  if (colnames(DATA) %=% navnVM$vm) {
-    colnames(DATA) <- navnVM$nytt
-    if (all(nyeKolonner %in% navnVM$nytt)) {
-      DATA <- DATA[, nyeKolonner]
-      DATA$verdi <- as.numeric(erstatt(DATA$verdi, ",", "."))
-      DATA$antverdi <- as.numeric(DATA$antverdi)
-      DATA$antverdi[which(is.na(DATA$antverdi))] <- 1
-    } else {
-      skriv("Kolonnenavnene i \"", kolonnenavn, "\" er ikke som forventa!",
-            pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
+  if (nchar(filsti)) {
+    if (substr(filsti, nchar(filsti), nchar(filsti)) %!=% "/" &
+        substr(filsti, nchar(filsti), nchar(filsti)) %!=% "\\") {
+      filsti <- filsti %+% "/"
     }
-  } else {
-    skriv("Kolonnenavnene i den innleste datafila fra \"vannmiljø\" er ikke " %+%
-          "som forventa!", pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
   }
-  return(DATA)
-}
+  navnVM <- try(read.table(filsti %+% kolonnenavn, 
+                           header = TRUE, sep = ";", quote = "", 
+                           na.strings = "", strip.white = TRUE, comment.char = "", 
+                           stringsAsFactors = FALSE, fileEncoding="latin1"))
+  if (inherits(navnVM, "try-error")) {
+      OK <- FALSE
+      skriv("Dette skjedde en feil under innlesing av fila \"", filsti %+%
+            kolonnenavn, ". Sjekk om fila fins, at det er oppgitt korrekt ",
+            "navn på den, og at den er formatert som semikolondelt tabell.",
+            pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
+  }
 
+  if (OK) {
+    # Så "oversettes" kolonnenavnene
+    if (colnames(DATA) %=% navnVM$vm) {
+      colnames(DATA) <- navnVM$nytt
+      if (all(nyeKolonner %in% navnVM$nytt)) {
+        DATA <- DATA[, nyeKolonner]
+        DATA$verdi <- as.numeric(erstatt(DATA$verdi, ",", "."))
+        DATA$antverdi <- as.numeric(DATA$antverdi)
+        DATA$antverdi[which(is.na(DATA$antverdi))] <- 1
+      } else {
+        skriv("Kolonnenavnene i \"", kolonnenavn, "\" er ikke som forventa!",
+              pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
+      }
+    } else {
+      skriv("Kolonnenavnene i den innleste datafila fra \"vannmiljø\" er ikke " %+%
+            "som forventa!", pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
+    }
+    return(DATA)
+  }
+}
 
 
