@@ -76,6 +76,13 @@ fraVFtilNI <- function(
   # bredde: bredden til beskjeder i antall tegn
   # vis: skal beskjeder om modelltilpasninga vises 
   # tell: skal prosenttellingen av fremgangen vises
+  ###
+  
+  if (vis) {
+    skriv("****** Fra vannforskrift til naturindeks ******", linjer.over  = 2)
+    skriv("***************   versjon 1.1   ***************", linjer.under = 0)
+    skriv("**************  (desember 2023)  **************", linjer.under = 2)
+  }
   
   OK <- TRUE
   u  <- c()
@@ -1813,6 +1820,7 @@ fraVFtilNI <- function(
     attr(UT, "parameter")     <- parameter
     attr(UT, "vannkategori")  <- vannkategori
     attr(UT, "tidspunkt")     <- Sys.time()
+    attr(UT, "versjon")       <- "fraVFtilNI v. 1.1"
     attr(UT, "innstillinger") <- list(
       adminAar        =        adminAar,
       rapportperiode  =  rapportperiode,
