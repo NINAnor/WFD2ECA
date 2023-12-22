@@ -31,13 +31,14 @@ Laste inn nødvendige R-pakker:
     library(foreign)
     library(sf)
     library(readxl)
+    library(raster)
 
 Laste inn funksjoner:
 
-    source("Funksjon.R")
-    source("Vannfork.R")
-    source("Klassegr.R")
-    source("Dbehandl.R")
+    source("R/Funksjon.R")
+    source("R/Vannfork.R")
+    source("R/Klassegr.R")
+    source("R/Dbehandl.R")
 
 
 
@@ -80,12 +81,12 @@ Benytta vannkategorier må også spesifiseres ved innlesing (se under).
 I tillegg trenger man en tabell som forklarer kolonnenavne i fila fra
 vann-nett. Denne fila er nødvendig for å lese inn vannforekomstdataene,
 og den ligger i dette arkivet under navnet
-“[**navnVN.csv**](navnVN.csv)”. Hvis vann-nett endrer kolonnenavnene i
+“[**navnVN.csv**](data/navnVN.csv)”. Hvis vann-nett endrer kolonnenavnene i
 sin nedlastingsløsning, må denne fila oppdateres tilsvarende.
 
-Filene leses inn i R på følgende måte:
+Filene er plassert i mappa "data". De leses da inn i R på følgende måte:
 
-    V <- lesVannforekomster(c("L", "R", "C"))
+    V <- lesVannforekomster(c("L", "R", "C"), filsti = "data")
 
     ## 
     ## OBS: Noen vannforekomster har ukjente verdier for alkalitet:
@@ -172,13 +173,13 @@ Datasettet man da får, heter “Innsjo\_Innsjo”.
 
 I tillegg trenger man en tabell som forklarer kolonnenavne i fila fra
 NVE. Denne fila er nødvendig for å lese inn innsjødataene, og den ligger
-i dette arkivet under navnet “[**navnNVEl.csv**](navnNVEl.csv)”. Hvis
+i dette arkivet under navnet “[**navnNVEl.csv**](data/navnNVEl.csv)”. Hvis
 NVE endrer kolonnenavnene i sin nedlastingsløsning, må denne fila
 oppdateres tilsvarende.
 
-Filnavnet oppgis som parameter når dataene leses inn i R:
+Filnavnet (med eventuell filsti) oppgis som parameter når dataene leses inn i R:
 
-    nve <- lesInnsjodatabasen("Innsjo_Innsjo.dbf")
+    nve <- lesInnsjodatabasen("data/Innsjo_Innsjo.dbf")
 
     ## 
     ## OBS: For 3 innsjøer var høyden over havet angitt å være negativ. Disse ble satt til <NA>.
@@ -229,12 +230,12 @@ Benytta vannkategorier må også spesifiseres ved innlesing (se under).
 I tillegg trenger man en tabell som forklarer kolonnenavne i fila fra
 vannmiljø. Denne fila er nødvendig for å lese inn vannforekomstdataene,
 og den ligger i dette arkivet under navnet
-“[**navnVL.csv**](navnVL.csv)”. Hvis vannmiljø endrer kolonnenavnene i
-sin nedlastingsløsning, må denne fila oppdateres tilsvarende.
+“[**navnVL.csv**](data/navnVL.csv)”. Hvis vannmiljø endrer kolonnenavnene
+i sin nedlastingsløsning, må denne fila oppdateres tilsvarende.
 
-Filene leses inn i R på følgende måte:
+Filene er plassert i mappa "data". De leses da inn i R på følgende måte:
 
-    VL <- lesVannlokaliteter(c("L", "R", "C"))
+    VL <- lesVannlokaliteter(c("L", "R", "C"), filsti = "data")
 
     ## 
     ## OBS: For 13 vannlokaliteter var det oppgitt koordinater som ligger utenfor Norge. Disse koordinatene ble satt til <NA>.
@@ -274,7 +275,7 @@ vannforekomster.
 Viktig informasjon om vannforskrift-parametere og -indekser er samla i
 et excel-regneark, som må leses inn.
 
-    Parametere <- as.data.frame(read_xlsx("VM-param.xlsx", na = "NA",
+    Parametere <- as.data.frame(read_xlsx("data/VM-param.xlsx", na = "NA",
                                            col_types = c("text", "text", 
                                                          "numeric", "numeric")))
     head(Parametere)
@@ -291,7 +292,7 @@ Informasjon om de ulike overvåkingsaktivitetene som ligger til grunn for
 datainnsamlinga, er også vesentlig. Denne må også leses inn fra et
 excel-regneark:
 
-    Aktiviteter <- as.data.frame(read_xlsx("VM-aktiv.xlsx", na = "NA",
+    Aktiviteter <- as.data.frame(read_xlsx("data/VM-aktiv.xlsx", na = "NA",
                                            col_types = c("text", "text", "numeric")))
     head(Aktiviteter)
 
@@ -305,10 +306,11 @@ excel-regneark:
 
 Til slutt trengs det en liste over kommune- og fylkesnummer og -navn.
 Denne informasjonen leses inn automatisk, gitt at den er lagra i to
-excel-regneark som heter “**knr.xlsx**” og “**fnr.xlsx**”. Det tas
-forbehold om at enkelte målinger kan bli tilordna feil kommune, i
-tilfeller der målinger ble tatt i en sammenslått kommune og
-tilbakedateres til et tidspunkt før sammenslåinga.
+excel-regneark som heter “**knr.xlsx**” og “**fnr.xlsx**”, og at 
+disse er plassert i mappa “data”. Det tas forbehold om at enkelte 
+målinger kan bli tilordna feil kommune, i tilfeller der målinger ble
+tatt i en sammenslått kommune og tilbakedateres til et tidspunkt før 
+sammenslåinga.
 
 
 
@@ -331,10 +333,15 @@ I fanen “Søk i registreringer” må man
 -   velge eksporttype “Redigeringsformat”,
 -   trykke “Eksporter til epost”.
 
-I dette eksempelet er målingene for ASPT lasta ned og lagra i fila
-“ASPT.xlsx”. Den leses inn slik:
+I tillegg trenger man en tabell som forklarer kolonnenavne i fila fra
+vannmiljø. Denne fila er nødvendig for å lese inn målingene,
+og den ligger i dette arkivet under navnet
+“[**navnVM.csv**](data/navnVM.csv)”. Hvis vannmiljø endrer kolonnenavnene
+i sin nedlastingsløsning, må denne fila oppdateres tilsvarende.
 
-    DATA <- lesMaalinger("ASPT.xlsx")
+Filene er plassert i mappa “data”. De leses da inn i R på følgende måte:
+
+    DATA <- lesMaalinger("data/ASPT.xlsx", filsti = "data")
 
 
 
@@ -364,7 +371,7 @@ Simuleringa kan ta spesielt mye tid, avhengig av antall iterasjoner. For
 illustrasjonen her er det valgt 1000 iterasjoner. For bruk i naturindeks
 bør man velge en større verdi (f.eks. 100000).
 
-Funksjonen som gjennomfører analysen, heter [`fraVFtilNI`](Dbehandl.R)
+Funksjonen som gjennomfører analysen, heter [`fraVFtilNI`](R/Dbehandl.R)
 (“fra vannforkrift til naturindeks”). Den har mange flere parametere enn
 de som vises under, som tillater ulike justeringer som er [forklart
 her](forklar/VFtilNI.md). De første fem parametrene må alltid oppgis. Resten
@@ -569,7 +576,6 @@ histogram, f.eks. slik:
 
 De fylkesvise gjennomsnittsresultatene kan vises på kart:
 
-    library(raster)
     load("norge.map")
     source("adminenh.R")
     plot(Norge.fylker, asp = 2.1)
