@@ -1,6 +1,6 @@
 # Oversikt over funksjonen `fraVFtilNI`
 
-**R**-funksjonen som står sentralt i dataflyten, heter `fraVFtilNI` («fra vannforskrift til naturindeks»). På denne siden forklares dens _argumenter_ og _funksjonsverdi_. Funksjonens _gjøremål_ er å gjennomføre [trinn 2 til 15 av dataflyten](dataflyt.md). Selve funksjonen ligger i fila [Dbehandl.R](../Dbehandl.R).
+**R**-funksjonen som står sentralt i dataflyten, heter `fraVFtilNI` («fra vannforskrift til naturindeks»). På denne siden forklares dens _argumenter_ og _funksjonsverdi_. Funksjonens _gjøremål_ er å gjennomføre [trinn 2 til 15 av dataflyten](dataflyt.md). Selve funksjonen ligger i fila [Dbehandl.R](../R/Dbehandl.R).
 
 -   <a href="#argumenter" id="toc-argumenter">Argumenter</a>
 -   <a href="#funksjonsverdi" id="toc-funksjonsverdi">Funksjonsverdi</a>
@@ -61,5 +61,6 @@ Listen har følgende attributter:
 - `parameter` (**tekst-skalar**) er vannforskriftsparameteren (dvs. identisk med argumentet `parameter`).
 - `vannkategori` (**tekst-skalar**) er vannkategorien (dvs. identisk med argumentet `vannkategori`).
 - `tidspunkt` (**tidspunkt**) er tidspunktet når funksjonsverdien ble beregna (dato + klokkeslett).
+- `versjon` (**tekst-skalar**) er versjonsnummeret til funksjonen som har blitt brukt.
 - `innstillinger` (**liste**) er en liste over de øvrige innstillingene, slik de ble valgt for den aktuelle kjøringa.
 - `beskjeder` (**tekst-vektor**) er en samling av de relevante beskjedene som ble produsert under kjøringa.
