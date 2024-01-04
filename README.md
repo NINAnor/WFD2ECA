@@ -20,16 +20,16 @@ Denne sida vedlikeholdes av [Hanno Sandvik](mailto:hanno.sandvik@nina.no).
 
 
 
-# English summary
-**Automated data flow from the Water Framework Directive to the Nature Index**
+# _English summary_
+_**Automated data flow from the Water Framework Directive to the Nature Index**_
 
-## Purpose
-The **R** code developed here streamlines the flow of data that have been sampled in connection with the Water Framework Directive to the [Nature Index for Norway](https://www.naturindeks.no/).
+## _Purpose_
+_The **R** code developed here streamlines the flow of data that have been sampled in connection with the Water Framework Directive to the [Nature Index for Norway](https://www.naturindeks.no/)._
 
-Currently, documentation is available in Norwegian only.
-That may change in a later version.
+_Currently, documentation is available in Norwegian only.
+That may change in a later version._
 
-## Contact
-The repository is maintained by [Hanno Sandvik](mailto:hanno.sandvik@nina.no).
+## _Contact_
+_The repository is maintained by [Hanno Sandvik](mailto:hanno.sandvik@nina.no)._
 
 
