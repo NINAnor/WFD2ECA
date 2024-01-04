@@ -4,7 +4,8 @@ Med [naturindeksen](https://www.naturindeks.no/) og [vannforskriften](https://lo
 Naturindeksen har tatt i bruk flere ferskvanns- og kystvannsindikatorer som også inngår i vannforskriften ([Schartau mfl. 2016](http://hdl.handle.net/11250/2384734)).
 Det bør være et mål at disse indikatorene gir mest mulig sammenfallende beskrivelser i begge rammeverkene. 
 Basert på tidligere analyser og anbefalinger om samordning ([Schartau mfl. 2016](http://hdl.handle.net/11250/2384734), [Gundersen mfl. 2018](http://hdl.handle.net/11250/2584222)) har Sandvik ([2019](http://hdl.handle.net/11250/2631056)) beskrevet en dataflyt av data som er samla inn i sammenheng med vannforskriften, til naturindeks.
-Denne dataflyten Den kan sammenfattes i 16 trinn ([Sandvik 2019](http://hdl.handle.net/11250/2631056), s. 11):
+Når vannforskriftsdata skal benyttes i rammen av et økologisk tilstandsregnskap ([Fremstad mfl. 2023](https://hdl.handle.net/11250/3104185)), kan det være aktuelt å følge samme fremgangsmåte.
+Denne dataflyten kan sammenfattes i 16 trinn ([Sandvik 2019](http://hdl.handle.net/11250/2631056), s. 11):
 
 1. _Målinger leses inn fra [vannmiljø](https://vannmiljo.miljodirektoratet.no/)-databasen._ Dette trinnet krever inntil videre en manuell nedlasting av målinger, siden vannmiljø ikke er tilrettelagt for maskinell innlesing av målingene. Etter nedlasting må funksjonen [`lesMaalinger`](funksjon.md#lesmaalinger) brukes for å tilrettelegge datasettet for de neste trinnene.
 2. _Målinger som ligger utafor rapporteringsperiodene for naturindeksen, fjernes._ Trinnene 2 til 15 gjennomføres av funksjonen [`fraVFtilNI`](VFtilNI.md).
