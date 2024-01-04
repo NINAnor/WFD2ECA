@@ -1,5 +1,5 @@
 # NI_vannf
-**Automatisert dataflyt fra vannforskriften til naturindeks** <sub> <sup> _[English version below](#english-summary)_ <sup> <sub>
+**Automatisert dataflyt fra vannforskriften til naturindeks** &nbsp;&nbsp; <sub> &nbsp;&nbsp; <sup> &nbsp;&nbsp; _[English version below](#english-summary)_ <sup> <sub>
 
 ## Mål
 Prosjektet har utvikla kode for å laste opp data som har blitt innsamla i rammen av [vannforskriften](https://lovdata.no/dokument/SF/forskrift/2006-12-15-1446), til [naturindeks](https://www.naturindeks.no/)-databasen. 
