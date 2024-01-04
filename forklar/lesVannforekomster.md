@@ -76,7 +76,7 @@ Funksjonsverdien er en **tabell** (_dataframe_) med informasjon om alle vannfore
 - `knr` (**tekst**), kommunenummer (ev. flere, adskilt ved komma)
 - `kommune` (**tekst**), kommune(r)
 - `fylke` (**tekst**), fylke(r)
-- `hoh` (**numerisk**), høyde over havet (i meter)
+- `hoh` (**numerisk**), høyde over havet (i meter); denne og de følgende kolonnene kan foreløpig ikke fylles med data fra vann-nett (ved innlesing inneholder de dermed kun `NA`)
 - `areal` (**numerisk**), innsjøareal (i km^2^)
 - `dybde` (**numerisk**), dybde ( i meter)
 - `tilsig` (**numerisk**), tilsigsfeltets areal (i km^2^)
