@@ -116,27 +116,6 @@ tillatteVerdier <- function(id) {
 
 
 
-# Beregne mEQR-verdier ("modifiserte EQR-verdier")
-mEQR <- function(x, klassegrenser) {
-  K <- klassegrenser
-  if ((K[8] < K[1]) %=% TRUE) {
-    K <- -K
-    x <- -x
-  }
-  x <- ifelse(x < K[1], NA,
-       ifelse(x < K[2], (x - K[1]) / (K[2] - K[1]) - 1,
-       ifelse(x < K[3], (x - K[2]) / (K[3] - K[2]) + 0,
-       ifelse(x < K[4], (x - K[3]) / (K[4] - K[3]) + 1,
-       ifelse(x < K[5], (x - K[4]) / (K[5] - K[4]) + 2,
-       ifelse(x < K[6], (x - K[5]) / (K[6] - K[5]) + 3,
-       ifelse(x < K[7], (x - K[6]) / (K[7] - K[6]) + 4,
-       ifelse(x <=K[8], (x - K[7]) / (K[8] - K[7]) + 5,
-                        NA))))))))
-  return(x * 0.2)
-}
-
-
-
 # Omregning av Raddum-II- til Raddum-I-verdier
 Raddum2_1 <- Raddum1_2 <- function(DATA) {
   w1 <- which(DATA$parid == "RADDUM2")
@@ -170,57 +149,6 @@ farge <- function(eqr, na.farge=0.84) {
               ifelse(eqr < 0.7, 0,
                      ifelse(eqr < 0.8, eqr * 10 - 7, 1)))
   rgb(r,g,b)
-}
-
-
-
-# Kombiner to utmatinger
-# (Må kun brukes for ulike vannkategorier innenfor samme parameter!)
-kombiner <- function(ut1, ut2) {
-  ok <- TRUE
-  UT <- ut1
-  if (names(ut1) %=% names(ut2) &
-      !is.null(attr(ut1, "parameter")) &
-      attr(ut1, "parameter") %=% attr(ut2, "parameter") &
-      !is.null(attr(ut1, "vannkategori")) &
-      !is.null(attr(ut2, "vannkategori"))) {
-    for (i in names(ut1)) {
-      if (dimnames(ut1[[i]])[1:2] %=% dimnames(ut2[[i]])[1:2]) {
-        ny <- array(0, dim = dim(ut1[[i]]) + c(0, 0, dim(ut2[[i]])[3] - 1))
-        dimnames(ny) <- list(dimnames(ut1[[i]])[[1]],
-                             dimnames(ut1[[i]])[[2]],
-                             c("pred", 2:(dim(ny)[3]) - 1))
-        ny[, , 2:dim(ut1[[i]])[3]] <- ut1[[i]][, , 2:dim(ut1[[i]])[3]]
-        ny[, , dim(ut1[[i]])[3] - 1 +
-               2:dim(ut2[[i]])[3]] <- ut2[[i]][, , 2:dim(ut2[[i]])[3]]
-        for (j in 1:dim(ny)[1]) {
-          for (k in 1:dim(ny)[2]) {
-            ny[j, k, 1] <- median(ny[j, k, -1])
-          }
-        }
-        UT[[i]] <- ny
-      } else {
-        ok <- FALSE
-      }
-    }
-    if (ok) {
-      attr(UT, "parameter")     <- attr(ut1, "parameter")
-      attr(UT, "vannkategori")  <- attr(ut1, "vannkategori") %+% "," %+%
-                                   attr(ut2, "vannkategori")
-      attr(UT, "tidspunkt")     <- Sys.time()
-      attr(UT, "innstillinger") <- NULL
-      attr(UT, "beskjeder")     <- NULL
-    }
-  } else {
-    ok <- FALSE
-  }
-  if (ok) {
-    return(UT)
-  } else {
-    skriv("De to utmatingene var ikke kompatible og kunne ikke kombineres!",
-          pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
-    return(NULL)
-  }
 }
 
 

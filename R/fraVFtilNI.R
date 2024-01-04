@@ -1,3 +1,11 @@
+### fraVFtilNI
+# Dataflyt "fra vannforskriften til naturindeks"
+# ved Hanno Sandvik
+# desember 2023
+# se https://github.com/NINAnor/NI_vannf
+###
+
+
 
 fraVFtilNI <- function(
     DATA,
@@ -79,9 +87,10 @@ fraVFtilNI <- function(
   ###
   
   if (vis) {
-    skriv("****** Fra vannforskrift til naturindeks ******", linjer.over  = 2)
-    skriv("***************   versjon 1.1   ***************", linjer.under = 0)
-    skriv("**************  (desember 2023)  **************", linjer.under = 2)
+    cat("\n\n")
+    cat("****** Fra vannforskrift til naturindeks ******\n")
+    cat("***************   versjon 1.1   ***************\n")
+    cat("**************  (desember 2023)  **************\n\n\n")
   }
   
   OK <- TRUE
@@ -203,7 +212,7 @@ fraVFtilNI <- function(
   if (OK) {
     # Lese inn klassegrenser for den angitte parameteren
     if (is.null(filKlasser)) {
-      filKlasser <- "klassegrenser_" %+% parameter %+% ".xlsx"
+      filKlasser <- "klassegr/klassegrenser_" %+% parameter %+% ".xlsx" #¤¤
     }
     KlasseGrenser <- hentKlassegrenser(filKlasser)
     if (is.null(KlasseGrenser)) {
