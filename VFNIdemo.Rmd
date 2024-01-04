@@ -1,7 +1,7 @@
 ---
 title: "Dataflyt fra vannforskriften til naturindeks"
 author: "Hanno Sandvik"
-date: "1 December 2023"
+date: "3 January 2024"
 output:
   md_document:
     toc: yes
@@ -14,21 +14,31 @@ Dette dokumentet viser gangen i å forberede opplasting av data som har blitt sa
 
 ## Forberedelser
 
-Laste inn nødvendige R-pakker:
-```{r}
+Laste inn nødvendige **R**-pakker:
+```{r, eval=FALSE, echo=TRUE}
 library(foreign)
 library(sf)
 library(readxl)
 library(raster)
+library(NIcalc)
+```
+```{r, eval=TRUE, echo=FALSE}
+library(foreign)
+library(sf)
+library(readxl)
+library(raster)
+# library(NIcalc)
+# I eksempel-varianten kjøres ikke NIcalc-funksjonene, de vises bare
 ```
 
 Laste inn funksjoner:
 ```{r}
 source("R/Funksjon.R")
-source("R/Vannfork.R")
-source("R/Klassegr.R")
-source("R/Dbehandl.R")
+for (filnavn in list.files("R", full.names = TRUE)) {
+  source(filnavn)
+}
 ```
+
 
 ## Nødvendig informasjon om vannforekomster
 
@@ -36,6 +46,7 @@ Før vannforskrift-parametere kan analyseres og forberedes for naturindeksen, m�
 Skal flere vannforskrift-parametere "flyttes over" til naturindeks, trenger man bare å gjøre dette trinnet én gang. 
 Det forutsetter at man har lastet ned oppdaterte versjon av disse filene.
 Eksempelkoden er basert på datafilene som ble lasta ned i juli 2023.
+
 
 ### Vannforekomster
 
@@ -49,7 +60,7 @@ Filer for de ulike vannkategoriene må lastes ned hver for seg:
 - Elvevannforekomster   med vanntypeparametere, påvirkninger, tilstand, potensial og miljømål
 - Kystvannforekomster   med vanntypeparametere, påvirkninger, tilstand, potensial og miljømål
 
-For at filene kan leses inn, må de få følgende navn:
+For at filene kan leses inn, må de ha følgende navn:
 
 - "**V-L.csv**" for innsjøvannforekomstene
 - "**V-R.csv**" for elvevannforekomstene
@@ -59,12 +70,12 @@ Man trenger ikke å laste ned alle tre. Det holder med den vannkategorien som er
 Benytta vannkategorier må også spesifiseres ved innlesing (se under).
 
 I tillegg trenger man en tabell som forklarer kolonnenavne i fila fra vann-nett.
-Denne fila er nødvendig for å lese inn vannforekomstdataene, og den ligger i dette arkivet under navnet "[**navnVN.csv**](navnVN.csv)".
+Denne fila er nødvendig for å lese inn vannforekomstdataene, og den ligger i dette arkivet under navnet "[**navnVN.csv**](data/navnVN.csv)".
 Hvis vann-nett endrer kolonnenavnene i sin nedlastingsløsning, må denne fila oppdateres tilsvarende.
 
-Filene er plassert i mappa "data". De leses da inn i R på følgende måte:
+Filene er plassert i mappa "[data](data/)". De leses da inn i **R** på følgende måte:
 ```{r}
-V <- lesVannforekomster(c("L", "R", "C"), filsti = "data")
+V <- lesVannforekomster(c("L", "R", "C"))
 ```
 
 Utmatinga forteller om mindre avvik fra det man kunne forvente.
@@ -91,20 +102,22 @@ I tillegg trenger man en tabell som forklarer kolonnenavne i fila fra NVE.
 Denne fila er nødvendig for å lese inn innsjødataene, og den ligger i dette arkivet under navnet "[**navnNVEl.csv**](data/navnNVEl.csv)".
 Hvis NVE endrer kolonnenavnene i sin nedlastingsløsning, må denne fila oppdateres tilsvarende.
 
-Filnavnet (med eventuell filsti) oppgis som parameter når dataene leses inn i R:
+Filnavnet oppgis som parameter når dataene leses inn i **R**:
 ```{r, eval=FALSE, echo=TRUE}
-nve <- lesInnsjodatabasen("data/Innsjo_Innsjo.dbf")
+nve <- lesInnsjodatabasen("Innsjo_Innsjo.dbf")
 ```
 ```{r, eval=TRUE, echo=FALSE}
 # Eksporten fra innsjødatabasen var for stor til å legges ut på GitHub.
 # Derfor må det her kjøres en annen versjon, som rett og slett laster inn datarammen som ble innlest tidligere:
-load("data/nve.RData")
-# Så gjengis beskjedene som ble generert under denne tidligere innlesinga:
-cat("\nOBS: For 3 innsjøer var høyden over havet angitt å være negativ. Disse ble satt til <NA>.\n")
-cat("\nOBS: For 4 innsjøer var det norske arealet angitt å være negativ. Disse ble satt til <NA>.\n")
-cat("\nOBS: For 1 innsjøer var tilsigsfeltet angitt å være negativ. Disse ble satt til <NA>.\n")
-cat("\nOBS: For 589 innsjøer var deres tilsigsfelt angitt å være mindre enn deres areal. For disse ble tilsigsfeltet satt")
-cat("\n     til arealet.\n")
+{
+  load("data/nve.RData")
+  # Så gjengis beskjedene som ble generert under denne tidligere innlesinga:
+  cat("\nOBS: For 3 innsjøer var høyden over havet angitt å være negativ. Disse ble satt til <NA>.\n")
+  cat("\nOBS: For 4 innsjøer var det norske arealet angitt å være negativ. Disse ble satt til <NA>.\n")
+  cat("\nOBS: For 1 innsjøer var tilsigsfeltet angitt å være negativ. Disse ble satt til <NA>.\n")
+  cat("\nOBS: For 589 innsjøer var deres tilsigsfelt angitt å være mindre enn deres areal. For disse ble tilsigsfeltet")
+  cat("\n     satt til arealet.\n")
+}
 ```
 
 Utmatinga forteller om mindre avvik fra det man kunne forvente.
@@ -140,9 +153,9 @@ I tillegg trenger man en tabell som forklarer kolonnenavne i fila fra vannmiljø
 Denne fila er nødvendig for å lese inn vannforekomstdataene, og den ligger i dette arkivet under navnet "[**navnVL.csv**](data/navnVL.csv)".
 Hvis vannmiljø endrer kolonnenavnene i sin nedlastingsløsning, må denne fila oppdateres tilsvarende.
 
-Filene er plassert i mappa "data". De leses da inn i R på følgende måte:
+Filene er plassert i mappa "[data](data/)". De leses da inn i **R** på følgende måte:
 ```{r}
-VL <- lesVannlokaliteter(c("L", "R", "C"), filsti = "data")
+VL <- lesVannlokaliteter(c("L", "R", "C"))
 ```
 
 Utmatinga forteller om mindre avvik fra det man kunne forvente.
@@ -208,9 +221,9 @@ I tillegg trenger man en tabell som forklarer kolonnenavne i fila fra vannmiljø
 Denne fila er nødvendig for å lese inn målingene, og den ligger i dette arkivet under navnet "[**navnVM.csv**](data/navnVM.csv)".
 Hvis vannmiljø endrer kolonnenavnene i sin nedlastingsløsning, må denne fila oppdateres tilsvarende.
 
-Filene er plassert i mappa "data". De leses da inn i R på følgende måte:
+Filene er plassert i mappa "[data](data/)". De leses da inn i **R** på følgende måte:
 ```{r}
-DATA <- lesMaalinger("ASPT.xlsx", filsti = "data")
+DATA <- lesMaalinger("ASPT.xlsx")
 ```
 
 
@@ -236,7 +249,7 @@ Simuleringa kan ta spesielt mye tid, avhengig av antall iterasjoner.
 For illustrasjonen her er det valgt 1000 iterasjoner.
 For bruk i naturindeks bør man velge en større verdi (f.eks. 100000).
 
-Funksjonen som gjennomfører analysen, heter [`fraVFtilNI`](R/Dbehandl.R) ("fra vannforkrift til naturindeks").
+Funksjonen som gjennomfører analysen, heter [`fraVFtilNI`](R/fraVFtilNI.R) ("fra vannforkrift til naturindeks").
 Den har mange flere parametere enn de som vises under, som tillater ulike justeringer som er [forklart her](forklar/VFtilNI.md).
 De første fem parametrene må alltid oppgis.
 Resten trenger man bare å oppgi om man ønsker å endre på standardinnstillingene (som også er [forklart her](forklar/VFtilNI.md)).
@@ -257,7 +270,7 @@ utmating <- fraVFtilNI(
                       )
 ```
 ```{r, eval=TRUE, echo=FALSE}
-# For ikke å rote til visninga i markdown-fila, tilføyes bredde = 96 og tell = FALSE.
+# For ikke å rote til visninga i markdown-fila, tilføyes bredde = 90 og tell = FALSE.
 # Dette medfører en rent layoutmessig forskjell. Alt ennet er identisk.
 utmating <- fraVFtilNI(
                        DATA, 
@@ -271,7 +284,7 @@ utmating <- fraVFtilNI(
                        ikkeInkluder = list(typ="tur", vrd=2),
                        ignorerVariabel = "reg",
                        iterasjoner = 1000,
-                       bredde = 96,
+                       bredde = 90,
                        tell = FALSE
                       )
 ```
@@ -293,8 +306,7 @@ hist(utmating$fylke["1900", "2019", ],
 
 De fylkesvise gjennomsnittsresultatene kan vises på kart:
 ```{r}
-load("norge.map")
-source("adminenh.R")
+load("data/norge.map")
 plot(Norge.fylker, asp = 2.1)
 text(6, 70, "ASPT", cex = 2.4, font = 1.6)
 text(6, 69, "fylkesvis", cex = 0.96)
@@ -337,4 +349,30 @@ text(rep(24, 6), 59+0:5*1.6, c("0,0", "0,2", "0,4", "0,6", "0,8", "1,0"),
 text(rep(26, 5), 59.8+0:4*1.6, c("SD", "D", "M", "G", "SG"), pos = 4, cex = 1.2)
 ```
 
+
+## Opplasting til naturindeks-databasen
+
+Når utmatinga fra modelleringa er klar og har blitt behørig testa, kan den lastes opp til naturindeks-(NI-)databasen.
+Disse trinnene er her bare _illustrert_, men ikke _utført_.
+
+```{r, eval=FALSE, echo=TRUE}
+# For å logge  seg inn til NI-databasen trenger man et brukernavn (epost-adressen) 
+# og passord.
+# Koden fungerer om disse er lagra som to variabler som heter henholdsvis 
+# "epost.adressen.min" og "passordet.mitt".
+NIcalc::getToken(username = epost.adressen.min, password = passordet.mitt)
+
+# Så bør man sjekke hvilke indikatorer man har tillatelse til å endre:
+NIindikatorer <- NIcalc::getIndicators()
+# Utmatinga viser indikator-id-en(e) som må benyttes i neste trinn.
+# Indikator-id-ens verdi antas å være lagret i variabelen "indikatorID".
+
+# Siste trinn er selve opplastinga:
+oppdaterteIndikatorverdier <- oppdaterNImedVF(indikatorID, utmating)
+```
+
+Før en opplasting sjekkes det oppdaterte datasettet (`utmating`) for eventuelle inkompatibiliteter med NI-databasen. 
+Slike vises i så fall som feilmeldinger.
+Om det derimot ikke skjer noen feil, har man mulighet til å fullføre opplastinga.
+Velger man å avbryte før opplasting, lagres det oppdaterte datasettet som variabel i stedet (i eksempelet over som `oppdaterteIndikatorverdier`).
 

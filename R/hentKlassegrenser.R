@@ -67,7 +67,7 @@ hentKlassegrenser <- function(filKlasser) {
               if (kl %in% rownames(KlasseGrenser)) {
                 hvilke <- kl
               } else {
-                source("gamletyp.R")
+                source("R/gamletyp.R")
                 if (kl %in% toupper(names(gamleTyper))) {
                   names(gamleTyper) <- toupper(names(gamleTyper))
                   hvilke <- gamleTyper[[kl]]

@@ -7,8 +7,8 @@
 
 
 
-kommunehistorikk <- as.data.frame(read_xlsx("knr.xlsx", col_types = "text"))
-fylkeshistorikk  <- as.data.frame(read_xlsx("fnr.xlsx", col_types = "text"))
+kommunehistorikk <- as.data.frame(read_xlsx("data/knr.xlsx", col_types = "text"))
+fylkeshistorikk  <- as.data.frame(read_xlsx("data/fnr.xlsx", col_types = "text"))
 
 
 for (i in 2:ncol(kommunehistorikk)) {
