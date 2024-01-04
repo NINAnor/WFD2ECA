@@ -1,15 +1,26 @@
-# Oversikt over funksjonen `fraVFtilNI`
+# Forklaringer for funksjonen `fraVFtilNI`
 
-**R**-funksjonen som står sentralt i dataflyten, heter `fraVFtilNI` («fra vannforskrift til naturindeks»). På denne siden forklares dens _argumenter_ og _funksjonsverdi_. Funksjonens _gjøremål_ er å gjennomføre [trinn 2 til 15 av dataflyten](dataflyt.md). Funksjonens [kode kan inspiseres her](../R/fraVFtilNI.R).
+Funksjonen gjennomfører mesteparten av dataflyten «fra vannforskrift til naturindeks».
 
--   <a href="#argumenter" id="toc-argumenter">Argumenter</a>
--   <a href="#funksjonsverdi" id="toc-funksjonsverdi">Funksjonsverdi</a>
 
+## Syntaks
+
+```{r}
+fraVFtilNI(DATA, vannforekomster, vannlokaliteter, parameter, vannkategori,
+           filKlasser = NULL, NI.aar = c(1990, 2000, 2010, 2014, 2019, 2024),
+           rapportenhet = c("kommune", "fylke", "landsdel", "norge"),
+           adminAar = 2010, kommHist = "data/knr.xlsx", fylkHist = "data/fnr.xlsx",
+           rapportperiode = 10, vedMaalefeil = "dato", maksSkjevhet = 3,
+           bareInkluder = NULL, ikkeInkluder = NULL,
+           maalingPer = 25, maalingTot = 100,
+           ignorerVariabel = NULL, fastVariabel = NULL,
+           aktivitetsvekt = 5, antallvekt = 0.5, tidsvekt = 1, arealvekt = 2,
+           DeltaAIC = 2, iterasjoner = 100000,
+           bredde = NULL, vis = TRUE, tell = TRUE)
+```
 
 
 ## Argumenter
-
-Etter argumentets navn (med `grå bakgrunn`) følger variabeltypen (i **halvfeit skrift** i parentes). De relevante variabeltypene skiller mellom skalarer (nøyaktig én verdi) og vektorer (en eller flere verdier) av tekststrenger («tekst»), tall («numerisk») og sannhetsverdier (`TRUE` eller `FALSE`) samt tabeller (_dataframes_) og lister. De første fem argumentene _må alltid angis_. De øvrige er frivillige, som vil si at det brukes en standardverdi om ikke noe annet angitt.
 
 -	`DATA` (**tabell**). _Argumentet må angis_. Det skal være navnet på **R**-tabellen som inneholder de relevante målingene fra vannmiljø-databasen.
 -	`vannforekomster` (**tabell**). _Argumentet må angis_. Det skal være navnet på **R**-tabellen som inneholder informasjonen om vannforekomster.
@@ -43,8 +54,16 @@ Etter argumentets navn (med `grå bakgrunn`) følger variabeltypen (i **halvfeit
 - `arealvekt` (**numerisk skalar**). Tallverdi for vekting av innsjøstørrelse. Meningsfulle verdier er heltall mellom 0 og 3, der 0 innebærer _lik_ vekt for alle innsjøvannforekomster, 1 vekting med innsjøvannforekomstenes idealiserte _diameter_, 2 vekting med innsjø-vannfore¬komstenes faktiske _areal_ og 3 vekting med innsjøvannforekomstenes idealiserte _volum_. Standardinnstillinga er 2, altså vekting med innsjøarealet (se begrunnelse i [Sandvik 2019](http://hdl.handle.net/11250/2631056), s. 21–23).
 - `DeltaAIC` (**numerisk skalar**). ΔAIC-verdien angir hvor mye lavere AIC (Akaikes informasjonskriterium) en mer kompleks modell skal ha for å bli foretrukket fremfor en enklere modell. Standardinnstillinga er 2.
 - `iterasjoner` (**numerisk skalar**). Antall iterasjoner som skal brukes i simuleringa. Standardinnstillinga er satt til 100 000. Mye lavere bør det ikke være for bruk i naturindeks, men merk at en kjøring med så mange iterasjoner vil ta svært lang tid. For et prøvekjør bør tallet settes betydelig lavere, f.eks. til 1 000.
+- bredde¤
 - `vis` (**sannhetsverdi-skalar**). Ved `vis = TRUE` (standardinnstillinga) vises fortløpende informasjon om progresjonen. Argumentet er ikke fullt utviklet (som vil si at `vis = FALSE` foreløpig ikke vil slå av alle meldinger).
+- tell¤
 
+
+## Detaljer
+
+Funksjonen gjennomfører [trinn 2 til 15 av dataflyten](dataflyt.md) «fra vannforskrift til naturindeks» som ble beskrevet av Sandvik ([2019](http://hdl.handle.net/11250/2631056)).
+
+De første fem argumentene _må alltid angis_. De øvrige er frivillige, som vil si at det brukes en standardverdi om ikke noe annet angitt.
 
 
 ## Funksjonsverdi
@@ -64,3 +83,10 @@ Listen har følgende attributter:
 - `versjon` (**tekst-skalar**) er versjonsnummeret til funksjonen som har blitt brukt.
 - `innstillinger` (**liste**) er en liste over de øvrige innstillingene, slik de ble valgt for den aktuelle kjøringa.
 - `beskjeder` (**tekst-vektor**) er en samling av de relevante beskjedene som ble produsert under kjøringa.
+
+
+## Kode
+
+Funksjonens [kode kan inspiseres her](../R/fraVFtilNI.R).
+
+
