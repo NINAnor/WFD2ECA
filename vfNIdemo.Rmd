@@ -356,7 +356,7 @@ Når utmatinga fra modelleringa er klar og har blitt behørig testa, kan den las
 Disse trinnene er her bare _illustrert_, men ikke _utført_.
 
 ```{r, eval=FALSE, echo=TRUE}
-# For å logge  seg inn til NI-databasen trenger man et brukernavn (epost-adressen) 
+# For å logge seg inn til NI-databasen trenger man et brukernavn (epost-adressen) 
 # og passord.
 # Koden fungerer om disse er lagra som to variabler som heter henholdsvis 
 # "epost.adressen.min" og "passordet.mitt".
