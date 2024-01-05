@@ -10,15 +10,14 @@ På disse sidene blir
 
 - [dataflyten oppsummert](forklar/dataflyt.md),
 - [dataflyten illustrert gjennom en eksempelkjøring](vfNIdemo.md),
-- [hovedfunksjonen forklart](forklar/VFtilNI.md),
-- [øvrige funksjoner forklart](forklar/funksjon.md).
+- [de involverte funksjonene forklart](forklar/funksjon.md).
 
 En detaljert forklaring av dataflyten fra vannforskriften til naturindeks er gitt i [NINA-rapport 1723](http://hdl.handle.net/11250/2631056).
 
 ## Kontakt
 Denne sida vedlikeholdes av [Hanno Sandvik](mailto:hanno.sandvik@nina.no).
 
-
+&nbsp;
 
 # _English summary_
 _**Automated data flow from the Water Framework Directive to the Nature Index**_
