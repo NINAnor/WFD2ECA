@@ -1,3 +1,9 @@
+# Illustrasjon av dataflyt fra vannforskrift til naturindeks
+
+Flere vannforskrift-parametere inngår også i naturindeksen. Dette
+dokumentet viser gangen i å forberede opplasting av data som har blitt
+samla inn i rammen av vannforskriften, til naturindeks-databasen.
+
 -   <a href="#forberedelser" id="toc-forberedelser">Forberedelser</a>
 -   <a href="#nødvendig-informasjon-om-vannforekomster"
     id="toc-nødvendig-informasjon-om-vannforekomster">Nødvendig informasjon
@@ -18,10 +24,6 @@
 -   <a href="#opplasting-til-naturindeks-databasen"
     id="toc-opplasting-til-naturindeks-databasen">Opplasting til
     naturindeks-databasen</a>
-
-Flere vannforskrift-parametere inngår også i naturindeksen. Dette
-dokumentet viser gangen i å forberede opplasting av data som har blitt
-samla inn i rammen av vannforskriften, til naturindeks-databasen.
 
 ## Forberedelser
 
@@ -568,7 +570,7 @@ histogram, f.eks. slik:
          ylab="Trolighet", 
          cex.lab=1.2, cex.main=1.8)
 
-![](vfNIdemo_files/figure-markdown_strict/unnamed-chunk-14-1.png)
+![](fig/fig1.png)
 
 De fylkesvise gjennomsnittsresultatene kan vises på kart:
 
@@ -590,7 +592,7 @@ De fylkesvise gjennomsnittsresultatene kan vises på kart:
          pos = 2, cex = 0.96)
     text(rep(26, 5), 59.8+0:4*1.6, c("SD", "D", "M", "G", "SG"), pos = 4, cex = 1.2)
 
-![](vfNIdemo_files/figure-markdown_strict/unnamed-chunk-15-1.png)
+![](fig/fig2.png)
 
 Det samme gjelder de kommunevise resultatene:
 
@@ -614,7 +616,7 @@ Det samme gjelder de kommunevise resultatene:
          pos = 2, cex = 0.96)
     text(rep(26, 5), 59.8+0:4*1.6, c("SD", "D", "M", "G", "SG"), pos = 4, cex = 1.2)
 
-![](vfNIdemo_files/figure-markdown_strict/unnamed-chunk-16-1.png)
+![](fig/fig3.png)
 
 ## Opplasting til naturindeks-databasen
 
@@ -622,7 +624,7 @@ Når utmatinga fra modelleringa er klar og har blitt behørig testa, kan
 den lastes opp til naturindeks-(NI-)databasen. Disse trinnene er her
 bare *illustrert*, men ikke *utført*.
 
-    # For å logge  seg inn til NI-databasen trenger man et brukernavn (epost-adressen) 
+    # For å logge seg inn til NI-databasen trenger man et brukernavn (epost-adressen) 
     # og passord.
     # Koden fungerer om disse er lagra som to variabler som heter henholdsvis 
     # "epost.adressen.min" og "passordet.mitt".
