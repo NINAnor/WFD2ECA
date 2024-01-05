@@ -2,6 +2,8 @@
 
 Funksjonen beregner modifiserte EQR-verdier.
 
+_Innhold:_ [syntaks](#syntaks) – [argumenter](#argumenter) – [detaljer](#detaljer) – [funksjonsverdi](#funksjonsverdi) – [kode](#kode)
+
 
 ## Syntaks
 
