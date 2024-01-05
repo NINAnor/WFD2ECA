@@ -21,6 +21,9 @@ Funksjonen forutsetter at klassegrensene er tilgjengelig i det spesifiserte exce
 Tilgjengelige regneark er samla i mappa [klassegr](../klassegr/).
 Om et regneark må endres eller et nytt legges til, følg instruksjonene som er [bekrevet her](param.md).
 
+Funksjonen forutsetter også at fila [gamletyp.R](../R/gamletyp.R) er tilgjengelig.
+Denne brukes bare om excel-arket benytter nasjonale vanntyper.
+
 
 ## Funksjonsverdi
 
