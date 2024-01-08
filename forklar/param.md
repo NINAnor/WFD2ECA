@@ -16,32 +16,31 @@ Funksjonen `fraVFtilNI` forutsetter at informasjon om vannforskriftsparameteren 
 
 ## Vannforskriftsparametere som er klare til bruk
 
-For de følgende tolv vannforskriftsparameterne er dataflyten gjort klar til bruk:
+For tolv vannforskriftsparameterne er dataflyten gjort klar til bruk.
+Disse listes her opp med vannmiljø-databasens forkortelse (halvfeit), etterfulgt av fullt navn (kursiv), eventuell annen og bedre kjent forkortelse (halvfeit i parentes) samt vanntype (i parentes).
+Så gis det utdypende informasjon om klassegrensene.
 
-* **AIP** (forsuringsindeks påvekstalger artssammensetning, _elver_), 
-* **ASPT** (Average Score per Taxon, _elver_),
-* **ES100** (Hurlberts diversitetsindeks marin bløtbunnsfauna, _kystvann_),
-* **HBI2** (heterotrof begroingsindeks, _elver_),
-* **ISI** (indikatorartsindeks marin bløtbunnsfauna, _kystvann_),
-* **MBH** (Shannon-Wiener diversitetsindeks, H', _kystvann_), 
-* **NQI1** (norsk kvalitetsindeks marin bløtbunnsfauna, _kystvann_), 
-* **NSI** (norsk sensitivitetsindeks marin bløtbunnsfauna, rev. 2020, _kystvann_),
-* **PIT** (trofiindeks påvekstalger artssammensetning, _elver_), 
-* **PPTI** (planteplankton trofiindeks, PTI, _innsjøer_),
-* **RADDUM1** (Raddum forsuringsindeks I, _elver_ og _innsjøer_) og
-* **TIANTL** (trofiindeks makrofytter antall arter innsjø, TIc, _innsjøer_).
-
-Vannmiljø-databasens forkortelse er angitt i halvfeit.
-Vanntypen(e) som parameteren er definert for, er angitt i kursivt.
+* **AIP**, _forsuringsindeks påvekstalger artssammensetning_ (elver) &ndash; nedre (dårligste) grense for svært dårlig tilstand er 5,17 (gjennomsnittet for de tre laveste indeksverdiene; se ¤, s. 68&ndash;69), men verdier ned til 5,13 er mulig (laveste indeksverdi for en enkeltart; se ¤VV, s. 67&ndash;68). Høyeste (beste) mulige verdi er 7,5 (høyeste indeksverdi for en enkeltart). [xls ok - virkelig??? minst 3 arter!!!]
+* **ASPT**, _Average Score per Taxon_ (elver) &ndash; ...
+* **ES100**, _Hurlberts diversitetsindeks marin bløtbunnsfauna_ (kystvann) - ???
+* **HBI2**, _heterotrof begroingsindeks_ (elver) &ndash; mulige tallverdier ligger mellom 0 og 400 (¤, s. 66&ndash;68). [xls ok]
+* **ISI**, _indikatorartsindeks marin bløtbunnsfauna_ (kystvann) &ndash; nedre (dårligste) grense for svært dårlig tilstand er angitt som 0,00 (¤, s. 166&ndash;167), men mindre verdier enn 1,58 er ikke mulig (laveste indeksverdi for en enkeltart; se ¤VV, s. 125&ndash;139). ¤ så?! ¤ Høyeste (beste) mulige verdi er 37,65 (høyeste indeksverdi for en enkeltart).
+* **MBH**, _Shannon-Wiener diversitetsindeks_ (**H'**, kystvann) &ndash; den høyeste referanseverdien er 6,3 (¤, s. 166). Siden det ikke fins noen naturlig maksimumsverdi, er den øvre grensa her vilkårlig satt 7,3 (som tilsvarer det dobbelte [158 arter] av den høyeste referanseverdien [79 arter], gitt maksimal diversitet, dvs. at alle arter er representert med ett individ hver). Laveste (dårligste) mulige verdi er 0,0 (alle individer i prøven tilhører én art). [xls ok]
+* **NQI1**, _norsk kvalitetsindeks marin bløtbunnsfauna_ (kystvann) &ndash; det er oppgitt at "NQI1 kan ha verdier mellom 0 og 1" (¤VV, s. 118), der nedre grense på 0 er i tråd med Borja mfl. ([2000](https://doi.org/10.1016/S0025-326X(00)00061-8)), mens opplysningene gitt i ¤VV (s. 118&ndash;119) tilsier NQI1 ikke kan bli mindre enn 0,07. ¤ så?! ¤ Større verdier enn 1 er teoretisk mulig, men er åpenbart aldri målt og urealistisk å få i Norge.
+* **NSI**, _norsk sensitivitetsindeks marin bløtbunnsfauna_, rev. 2020 (kystvann) &ndash; nedre (dårligste) grense for svært dårlig tilstand er i ¤ (s. 166&ndash;167) angitt som 0,00, men mindre verdier enn 4,68 er ikke mulig (laveste indeksverdi for en enkeltart; se ¤VV, s. 125&ndash;139). ¤ så?! ¤ Høyeste (beste) mulige verdi er 43,91 (høyeste indeksverdi for en enkeltart).
+* **PIT**, _trofiindeks påvekstalger artssammensetning_ (elver) &ndash; øvre (dårligste) grense for svært dårlig tilstand er 60,84 (gjennomsnittet for de to høyeste indeksverdiene; ¤, s. 65&ndash;66), men verdier opp til 68,91 er mulig (høyeste indeksverdi for en enkeltart; se ¤VV, s. 62&ndash;64). Laveste (beste) mulige verdi er 1,87 (laveste indeksverdi for en enkeltart). [xls ok - virkelig??? minst 2 arter!!!]
+* **PPTI**, _planteplankton trofiindeks_ (**PTI**, innsjøer) &ndash; øvre (dårligste) grense for svært dårlig tilstand er 4,00 (¤, s. 46&ndash;49), men verdier opp til 4,77 er mulig (høyeste indeksverdi for en enkeltart; se ¤VV, s. 8&ndash;15). Laveste (beste) mulige verdi er 1,16 (laveste indeksverdi for en enkeltart). [xls ok]
+* **RADDUM1**, _Raddum forsuringsindeks I_ (elver og innsjøer) &ndash; ...
+* **TIANTL**, _trofiindeks makrofytter antall arter innsjø_ (**TIc**, innsjøer) &ndash; mulige tallverdier ligger mellom &minus;100 og +100 (¤, s. 70&ndash;71). (OBS: Per 2023 var hele 21&nbsp;% av datapunktene i vannmiljø-databasen større enn 100, hadde altså ugyldige verdier.) [xls ok]
 
 De relevante filene er samla i mappa "[klassegr](../klassegr)".
 Filnavnene er "klassgrenser_", etterfulgt av parameterens forkortelse og filendelsen ".xlsx".
-Før analysen må filen flyttes til riktig mappe.
+Analysen forventer å finne filen i denne mappa.
 Alternativt kan filnavn og -sti angis med funksjonsargumentet `filKlasser`, f.eks. slik:
 
     utmating_MBH <- fraVFtilNI(data_MBH, vannforekomster = V, vannlokaliteter = VL,
                                parameter = "MBH", vannkategori = "C",
-                               filKlasser = "klassegr/klassegrenser_MBH.xlsx")
+                               filKlasser = "C:/minMappe/klassegrenser_MBH.xlsx")
 
 Hvis klassegrensene for en vannforskriftsparameter blir endra, må informasjonen i mappa "klassegr" oppdateres tilsvarende.
 Neste avsnitt forklarer hvordan dette gjøres.
