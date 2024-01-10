@@ -27,7 +27,7 @@ _skalering_ betyr at at tallverdiene omregnes (lineært) til en skala der 0 tils
 I et ytterligere trinn kan disse EQR-verdiene _transformeres_ til **nEQR**-verdier ("normaliserte økologiske kvalitetskvotienter"), der
 _transformering_ betyr at tallverdiene "forskyves" (muligens ikke-lineært) slik at de tilsvarer de fem økologiske tilstandsklassene (0,0&ndash;0,2 for svært dårlig, 0,2&ndash;0,4 for dårlig, 0,4&ndash;0,6 for moderat, 0,6&ndash;0,8 for god, 0,8&ndash;1,0 for svært god). 
 (Merk at [veileder 02:2018](https://www.vannportalen.no/veiledere/klassifiseringsveileder/), kap. 3.5, omtaler det siste trinnet som _normalisering_, ikke som _transformering_, som det matematisk sett er snakk om.
-Matematisk betegner _normalisering_ det trinnet som over er omtalt som _skalering_.)
+Matematisk betegner _normalisering_ det trinnet som her er omtalt som _skalering_.)
 
 I naturindeksen er det imidlertid behov for ikke-trunkerte tilstandsverdier.
 Sandvik ([2019](http://hdl.handle.net/11250/2631056), kap. 2.3) har derfor foreslått å endre på trinnenes rekkefølge: (1) skalering, (2) transformering, (3) trunkering
