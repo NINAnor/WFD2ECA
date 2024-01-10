@@ -1,2 +1,2 @@
-I denne mappa forklares bakgrunnen, dataflyten og de enkelte funksjonene som er involvert.
+I denne mappa forklares [dataflyten](dataflyt.md) og de enkelte [funksjonene](funksjon.md) som er involvert i den.
 
