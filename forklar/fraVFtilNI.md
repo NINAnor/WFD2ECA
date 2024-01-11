@@ -2,6 +2,8 @@
 
 Funksjonen gjennomfører mesteparten av dataflyten «fra vannforskrift til naturindeks».
 
+_Innhold:_ [syntaks](#syntaks) – [argumenter](#argumenter) – [detaljer](#detaljer) – [funksjonsverdi](#funksjonsverdi) – [kode](#kode)
+
 
 ## Syntaks
 

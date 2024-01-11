@@ -8,8 +8,7 @@ output:
 ---
 
 
-Flere vannforskrift-parametere inngår også i naturindeksen.
-Dette dokumentet viser gangen i å forberede opplasting av data som har blitt samla inn i rammen av vannforskriften, til naturindeks-databasen.
+Dette dokumentet viser gangen i å forberede og gjennomføre opplasting av data som har blitt samla inn i rammen av vannforskriften, til naturindeks-databasen.
 
 
 ## Forberedelser

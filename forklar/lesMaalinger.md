@@ -2,6 +2,8 @@
 
 Funksjonen leser inn tabellen over målinger fra vannmiljø-databasen.
 
+_Innhold:_ [syntaks](#syntaks) – [argumenter](#argumenter) – [detaljer](#detaljer) – [funksjonsverdi](#funksjonsverdi) – [kode](#kode)
+
 
 ## Syntaks
 

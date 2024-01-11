@@ -1,6 +1,6 @@
 # Oversikt over funksjoner
 
-De følgende R-funksjonene er forklart på egne sider:
+De følgende **R**-funksjonene er forklart på egne sider:
 
 - [fraVFtilNI](fraVFtilNI.md)
 - [hentKlassegrenser](hentKlassegrenser.md)

@@ -10,9 +10,11 @@ På disse sidene blir
 
 - [dataflyten oppsummert](forklar/dataflyt.md),
 - [dataflyten illustrert gjennom en eksempelkjøring](vfNIdemo.md),
-- [de involverte funksjonene forklart](forklar/funksjon.md).
+- [de involverte funksjonene forklart](forklar/funksjon.md),
+- [parametrene som er klargjort for dataflyt, presentert](forklar/param.md),
+- [endringer mellom versjonene lista opp](forklar/versjon.md).
 
-En detaljert forklaring av dataflyten fra vannforskriften til naturindeks er gitt i [NINA-rapport 1723](http://hdl.handle.net/11250/2631056).
+En detaljert forklaring av dataflyten fra vannforskriften til naturindeks er gitt i [NINA-rapport 1723](http://hdl.handle.net/11250/2631056). 
 
 ## Kontakt
 Denne sida vedlikeholdes av [Hanno Sandvik](mailto:hanno.sandvik@nina.no).

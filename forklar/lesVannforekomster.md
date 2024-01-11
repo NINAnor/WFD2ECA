@@ -2,6 +2,8 @@
 
 Funksjonen leser inn tabellen over vannforekomster fra vann-nett.
 
+_Innhold:_ [syntaks](#syntaks) – [argumenter](#argumenter) – [detaljer](#detaljer) – [funksjonsverdi](#funksjonsverdi) – [kode](#kode)
+
 
 ## Syntaks
 

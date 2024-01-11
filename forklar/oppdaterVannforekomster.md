@@ -2,6 +2,8 @@
 
 Funksjonen kobler informasjonen om innsjøvannforekomster (fra vann-nett) med informasjon fra innsjødatabasen (fra NVE).
 
+_Innhold:_ [syntaks](#syntaks) – [argumenter](#argumenter) – [detaljer](#detaljer) – [funksjonsverdi](#funksjonsverdi) – [kode](#kode)
+
 
 ## Syntaks
 

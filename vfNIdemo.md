@@ -1,8 +1,8 @@
 # Illustrasjon av dataflyt fra vannforskrift til naturindeks
 
-Flere vannforskrift-parametere inngår også i naturindeksen. Dette
-dokumentet viser gangen i å forberede opplasting av data som har blitt
-samla inn i rammen av vannforskriften, til naturindeks-databasen.
+Dette dokumentet viser gangen i å forberede og gjennomføre opplasting 
+av data som har blitt samla inn i rammen av vannforskriften, til 
+naturindeks-databasen.
 
 -   <a href="#forberedelser" id="toc-forberedelser">Forberedelser</a>
 -   <a href="#nødvendig-informasjon-om-vannforekomster"
