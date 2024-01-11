@@ -25,8 +25,8 @@ I tillegg kan dataflyten være relevant for vannforskriftsparametere som inngår
 
 I den aktuelle versjonen av [naturindeksen](https://www.naturindeks.no/) (dvs. 2019) er det brukt flere vannforskriftsparametere:
 
-- For ferskvann brukes parametrene AIP, ASPT, PIT, PTI, Raddum 1 og TIc. For ASPT og Raddum 1 ble naturindeksen i 2019 basert på den her beskrevne dataflyten. Dataflyten er i prinsippet også tilgjengelig for de øvrige parametrene (se [under](#vannforskriftsparametere-som-er-klare-til-bruk)). 
-- For kystvann brukes MBH, NQI1, klorofyll a (vannmiljø-id KLFA), "hardbunn vegetasjon algeindeks" (RSLA1&ndash;3 og RSL4&ndash;5) og "hardbunn vegetasjon nedre voksegrense" (MSMDI). Den her beskrevne dataflyten har ikke blitt brukt på noen av disse, men for de to førstnevnte er den i prinsippet tilgjengelig (se [under](#vannforskriftsparametere-som-er-klare-til-bruk)). 
+- For ferskvann brukes parametrene **AIP**, **ASPT**, **PIT**, **PTI**, **Raddum 1** og **TIc**. For ASPT og Raddum 1 ble naturindeksen i 2019 basert på den her beskrevne dataflyten. Dataflyten er i prinsippet også tilgjengelig for de øvrige parametrene (se [under](#vannforskriftsparametere-som-er-klare-til-bruk)). 
+- For kystvann brukes **MBH**, **NQI1**, klorofyll a (vannmiljø-id **KLFA**), "hardbunn vegetasjon algeindeks" (**RSLA**1&ndash;3 og **RSL**4&ndash;5) og "hardbunn vegetasjon nedre voksegrense" (**MSMDI**). Den her beskrevne dataflyten har ikke blitt brukt på noen av disse, men for de to førstnevnte er den i prinsippet tilgjengelig (se [under](#vannforskriftsparametere-som-er-klare-til-bruk)). 
 
 
 ## Vannforskriftsparametere som er klare til bruk
