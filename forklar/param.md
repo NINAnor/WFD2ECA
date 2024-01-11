@@ -1,7 +1,10 @@
 # Håndtering av ulike vannforskriftsparametere
 
 Funksjonen `fraVFtilNI` forutsetter at informasjon om vannforskriftsparameteren som skal flyttes fra vannforskriften til naturindeksen, er tilgjengelig i en spesifisert form.
+Parametrenes klassegrenser må bl.a. foreligge i form av regneark.
+På denne sida forklares for hvilke parametere slike regneark er klargjort, og hvordan man kan revidere dem eller klargjøre flere.
 
+-   <a href="#vannforskriftsparametere-som-er-relevante" id="toc-vannforskriftsparametere-som-er-relevante">Vannforskriftsparametere som er relevante</a>
 -   <a href="#vannforskriftsparametere-som-er-klare-til-bruk" id="toc-vannforskriftsparametere-som-er-klare-til-bruk">Vannforskriftsparametere som er klare til bruk</a>
 -   <a href="#hvordan-flere-vannforskriftsparametere-kan-gjøres-klar-til-bruk" id="toc-hvordan-flere-vannforskriftsparametere-kan-gjøres-klar-til-bruk">Hvordan flere vannforskriftsparametere kan gjøres klar til bruk</a>
 -   <a href="#spesielle-krav-til-de-ulike-vannforskriftsparameterne" id="toc-spesielle-krav-til-de-ulike-vannforskriftsparameterne">Spesielle krav til de ulike vannforskriftsparameterne</a>
@@ -14,12 +17,24 @@ Funksjonen `fraVFtilNI` forutsetter at informasjon om vannforskriftsparameteren 
     -   <a href="#sic-tic-wic" id="toc-sic-tic-wic">SIc, TIc, WIc</a>
 
 
+## Vannforskriftsparametere som er relevante
+
+Eksisterende vannforskriftsparametere er beskrevet i [Direktoratsgruppas klassifiseringsveileder (02:2018)](https://www.vannportalen.no/veiledere/klassifiseringsveileder/), og relevante målinger er samla i [vannmiljø-databasen](https://vannmiljo.miljodirektoratet.no/).
+Vannforskriftsparametere som den her beskrevne dataflyten er relevante for, er i første rekke slike som også brukes som indikatorer av naturindeksen ([Sandvik 2019](http://hdl.handle.net/11250/2631056)).
+I tillegg kan dataflyten være relevant for vannforskriftsparametere som inngår i et fremtidig økologisk tilstandsregnskap ([Fremstad mfl. 2023](https://hdl.handle.net/11250/3104185)).
+
+I den aktuelle versjonen av [naturindeksen](https://www.naturindeks.no/) (dvs. 2019) er det brukt flere vannforskriftsparametere:
+
+- For ferskvann brukes parametrene AIP, ASPT, PIT, PTI, Raddum 1 og TIc. For ASPT og Raddum 1 ble naturindeksen i 2019 basert på den her beskrevne dataflyten. Dataflyten er i prinsippet også tilgjengelig for de øvrige parametrene (se [under](#vannforskriftsparametere-som-er-klare-til-bruk)). 
+- For kystvann brukes MBH, NQI1, klorofyll a (vannmiljø-id KLFA), "hardbunn vegetasjon algeindeks" (RSLA1&ndash;3 og RSL4&ndash;5) og "hardbunn vegetasjon nedre voksegrense" (MSMDI). Den her beskrevne dataflyten har ikke blitt brukt på noen av disse, men for de to førstnevnte er den i prinsippet tilgjengelig (se [under](#vannforskriftsparametere-som-er-klare-til-bruk)). 
+
+
 ## Vannforskriftsparametere som er klare til bruk
 
 For tolv vannforskriftsparameterne er dataflyten gjort klar til bruk.
 Disse listes her opp med vannmiljø-databasens forkortelse (halvfeit), etterfulgt av fullt navn (kursiv), eventuell annen og bedre kjent forkortelse (halvfeit i parentes) samt vanntype (i parentes).
-Parametrenes klassegrenser følger [Direktoratsgruppas klassifiseringsveileder (02:2018)](https://www.vannportalen.no/veiledere/klassifiseringsveileder/).
-Imidlertid er dårligste (nedre eller øvre) grense for svært dårlig tilstand og minste og største mulige verdi ikke alltid angitt i veiledere, så disse presenteres under.
+Parametrenes klassegrenser følger [veileder 02:2018](https://www.vannportalen.no/veiledere/klassifiseringsveileder/).
+Imidlertid er dårligste (nedre eller øvre) grense for svært dårlig tilstand og minste og største mulige verdi ikke alltid angitt i veilederen, så disse presenteres under.
 
 * **AIP** &ndash; _forsuringsindeks påvekstalger artssammensetning_ (elver): Nedre (dårligste) grense for svært dårlig tilstand er 5,17 (gjennomsnittet for de tre laveste indeksverdiene; se [veileder 02:2018](https://www.vannportalen.no/veiledere/klassifiseringsveileder/), s. 68&ndash;69), men verdier ned til 5,13 er mulig (laveste indeksverdi for en enkeltart; se [vedlegg til veileder 02:2018](https://www.vannportalen.no/veiledere/02-2018-vedlegg-til-veileder-klassifisering-av-miljotilstanden-i-vann.pdf), s. 67&ndash;68). Høyeste (beste) mulige verdi er 7,42 (gjennomsnittet for de tre høyeste indeksverdiene). [xls må oppdateres til 7,42]
 * **ASPT** &ndash; _Average Score per Taxon_ (elver): Mulige tallverdier ligger mellom 1 og 10 ([veileder 02:2018](https://www.vannportalen.no/veiledere/klassifiseringsveileder/), s. 76&ndash;79; [vedlegg til veileder 02:2018](https://www.vannportalen.no/veiledere/02-2018-vedlegg-til-veileder-klassifisering-av-miljotilstanden-i-vann.pdf), s. 84). [hva med 0?]
