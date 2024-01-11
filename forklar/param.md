@@ -87,7 +87,7 @@ For å gjøre nye parametere klar til dataflyt eller oppdatere klassegrensene et
 
 Som mal kan man bruke et av de foreliggende regnearkene, f.eks. [klassegrenser_AIP.xlsx](../klassegr/klassegrenser_AIP.xlsx).
 
-Gyldige klassegrenser forutsetter at _alle_ klassegrensene er **mindre enn eller lik** naboverdien, _enten_ lest fra venstre til høyre (hvis tilstanden er bedre jo _høyere_ måleverdien er) _eller_ lest fra høyre til venstre (hvis tilstanden er bedre jo _lavere_ måleverdien er).
+Gyldige klassegrenser forutsetter at klassegrensene er **mindre enn** naboverdien, _enten_ lest fra venstre til høyre (hvis tilstanden er bedre jo _høyere_ måleverdien er) _eller_ lest fra høyre til venstre (hvis tilstanden er bedre jo _lavere_ måleverdien er); minste og største mulige verdi (ytterpunktene) kan også være **lik** sine naboverdier.
 Hvis denne forutsettelsen ikke er oppfylt, vil det føre til feilmeldinger.
 Manglende verdier (`NA`) er ikke tillatt i noen av cellene.
 
