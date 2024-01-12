@@ -1,7 +1,7 @@
 ### fraVFtilNI
 # Dataflyt "fra vannforskriften til naturindeks"
 # ved Hanno Sandvik
-# desember 2023
+# januar 2024
 # se https://github.com/NINAnor/NI_vannf
 ###
 
@@ -40,7 +40,7 @@ fraVFtilNI <- function(
 ) {
   ### fraVFtilNI [fra vannforskrift til naturindeks]
   # ved Hanno Sandvik
-  # desember 2023
+  # januar 2024
   # se https://github.com/NINAnor/NI_vannf
   ###
   
@@ -90,7 +90,6 @@ fraVFtilNI <- function(
     cat("\n\n")
     cat("****** Fra vannforskrift til naturindeks ******\n")
     cat("***************   versjon 1.1   ***************\n")
-    cat("**************  (desember 2023)  **************\n\n\n")
   }
   
   OK <- TRUE

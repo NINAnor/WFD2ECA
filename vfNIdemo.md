@@ -389,7 +389,6 @@ her](forklar/VFtilNI.md)).
     ## 
     ## ****** Fra vannforskrift til naturindeks ******
     ## ***************   versjon 1.1   ***************
-    ## **************  (desember 2023)  **************
     ## 
     ## 
     ## 
