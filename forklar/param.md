@@ -115,7 +115,7 @@ Antall arter som en AIP-verdi er basert på, fremgår imidlertid ikke av vannmil
 ### ASPT
 
 ASPT (Average Score per Taxon) skal ikke brukes for breelver. 
-Eventuelle målinger i breelver kan ekskluderes ved hjelp av argumentet `ikkeInkluder` til funksjonen [`fraVFtilNI`](VFtilNI.md).
+Eventuelle målinger i breelver kan ekskluderes ved hjelp av argumentet `ikkeInkluder` til funksjonen [`fraVFtilNI`](fraVFtilNI.md).
 Det gjøres ved å spesifisere at man for typologifaktoren "turbiditet" (`typ = "tur"`) skal se bort fra brepåvirka elver (`vrd = 2`):
 
     utmating_ASPT <- fraVFtilNI(data_ASPT, vannforekomster = V, vannlokaliteter = VL,
