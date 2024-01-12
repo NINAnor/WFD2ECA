@@ -8,7 +8,6 @@
 
 
 hentKlassegrenser <- function(filKlasser) {
-  
   filOK <- TRUE
   KlasseGrenser <- NULL
   if (file.exists(filKlasser)) {
@@ -23,10 +22,10 @@ hentKlassegrenser <- function(filKlasser) {
             pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
     } else {
       if (is.numeric(unlist(klassegrenser[, 2:8]))) {
-        #if (all(klassegrenser[, 3:8] >= klassegrenser[, 2:7]) %=% FALSE &
-        #    all(klassegrenser[, 3:8] <= klassegrenser[, 2:7]) %=% FALSE) {
-        if (!any(!(klassegrenser[, 3:8] >= klassegrenser[, 2:7])) |
-            !any(!(klassegrenser[, 3:8] <= klassegrenser[, 2:7]))) {
+        if ((!any(!(klassegrenser[, 3:9] >= klassegrenser[, 2:8]))  |
+             !any(!(klassegrenser[, 3:9] <= klassegrenser[, 2:8]))) &
+            (!any(!(klassegrenser[, 4:8] >  klassegrenser[, 3:7]))  |
+             !any(!(klassegrenser[, 4:8] <  klassegrenser[, 3:7])))) {
           if (all(klassegrenser[, 1] %in% c("L", "R", "C")) &
               klassegrenser[, 1] %=% unique(klassegrenser[, 1])) {
             KlasseGrenser <- as.matrix(klassegrenser[, 2:9])
@@ -163,5 +162,4 @@ hentKlassegrenser <- function(filKlasser) {
     return(NULL)
   }
 }
-
 
