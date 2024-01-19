@@ -10,7 +10,7 @@ Hvilken transformasjon skal man bruke på de overskytende verdiene (bedre enn re
 Svaret er ikke gitt i vannforskriften (som jo unngår spørsmålet ved trunkering), og det er heller ikke trivielt.
 Løsninga som nå er implementert i funksjonen [`mEQR`](mEQR.md), tar utgangspunkt i formelen for nEQR:
 
-§§\mathrm{nEQR} = S_{\mathrm{n}} + 0,2 \cdot \displaystyle \frac{x - V_{\mathrm{n}}}{V_{\mathrm{ø}} - V_{\mathrm{n}}} §§
+$$\mathrm{nEQR} = S_{\mathrm{n}} + 0,2 \cdot \displaystyle \frac{x - V_{\mathrm{n}}}{V_{\mathrm{ø}} - V_{\mathrm{n}}} $$
 
 der _S_<sub>n</sub> er den nedre terskelverdien for den respektive tilstandsklassen på nEQR-skala, _V_<sub>n</sub> er den nedre terskelverdien for den respektive tilstandsklassen på parameterens opprinnelig måleskala, _V_<sub>ø</sub> er den øvre terskelverdien for den respektive tilstandsklassen på parameterens opprinnelig måleskala, og _x_ er parameterens måleverdi.
 
@@ -35,12 +35,12 @@ De følgende figurene illustrerer hvordan skaleringa fra måleverdi til mEQR-ver
 
 Den følgende figuren bruker PTI for å illustrere ulike måter å håndtere overskytende verdier på:
 
-![](../fig/asympPTI.png)
+<img src="../fig/asympPTI.png" width="360" height="360" />
 
-1. Gjennomtrukket svart linje: nEQR. Vannforskriftens tilnærming er å trunkere EQR-verdier som er større enn 1, til 1, og de som er mindre enn 0, til 0.
-2. Rød linje: lineær forlengelse av transformasjonene som er valgt for de tilstøtende tilstandsklassene. Resultatet kan være verdier som er vesentlig mye større enn 1 eller vesentlig mye mindre enn 0.
-3. Blå linje: lineær begrensning til intervallet mellom &minus;0,2 og +1,2. Dette er løsninga som ble foreslått av Sandvik (2019), men den leder til uheldige knekk ved 1 og 0.
-4. Punktert svart line: forlengelse av transformasjonene som er valgt for de tilstøtende tilstandsklassene, men med en asymptotisk begrensning til intervallet mellom &minus;0,2 og +1,2. Dette er løsninga som nå er implementert i koden (fra og med versjon 1.2).
+1. _Gjennomtrukket svart linje:_ nEQR. Vannforskriftens tilnærming er å trunkere EQR-verdier som er større enn 1, til 1, og de som er mindre enn 0, til 0.
+2. _Rød linje:_ lineær forlengelse av transformasjonene som er valgt for de tilstøtende tilstandsklassene. Resultatet kan være verdier som er vesentlig mye større enn 1 eller vesentlig mye mindre enn 0.
+3. _Blå linje:_ lineær begrensning til intervallet mellom &minus;0,2 og +1,2. Dette er løsninga som ble foreslått av Sandvik (2019), men den leder til uheldige knekk ved 1 og 0.
+4. _Punktert svart line:_ forlengelse av transformasjonene som er valgt for de tilstøtende tilstandsklassene, men med en asymptotisk begrensning til intervallet mellom &minus;0,2 og +1,2 (om nødvendig). Dette er løsninga som nå er implementert i koden (fra og med versjon 1.2).
 
 
 
