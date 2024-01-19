@@ -8,7 +8,7 @@ Derfor har Sandvik ([2019](http://hdl.handle.net/11250/2631056), s. 13&ndash;15)
 Imidlertid forutsetter denne løsninga at man besvarer et oppfølgingsspørsmål:
 Hvilken transformasjon skal man bruke på de overskytende verdiene (bedre enn referanseverdi eller dårligere enn nullverdi) for å skalere dem til mEQR-skala?
 Svaret er ikke gitt i vannforskriften (som jo unngår spørsmålet ved trunkering), og det er heller ikke trivielt.
-Løsninga som nå er implementert i funksjonen [`mEQR`](mEQR.md), tar utgangspunkt i formelen for nEQR:
+Løsninga som nå er implementert i funksjonen [`mEQR`](mEQR.md), tar utgangspunkt i formelen for nEQR (jf. [veileder 02:2018](https://www.vannportalen.no/veiledere/klassifiseringsveileder/), s. 37):
 
 $$\mathrm{nEQR} = S_{\mathrm{n}} + \mathrm{0,2} \cdot \displaystyle \frac{x - V_{\mathrm{n}}}{V_{\mathrm{ø}} - V_{\mathrm{n}}} $$
 
@@ -39,11 +39,7 @@ De følgende figurene illustrerer hvordan skaleringa fra måleverdi til mEQR-ver
 Der ikke annet er oppgitt, er de opprinnelige måleverdiene enhetsløse indeksverdier.
 
 
-## Begrunnelse
-
-
-
-## Alternative beregningsmåter
+## Begrunnelse og alternative beregningsmåter
 
 Den følgende figuren bruker PTI for å illustrere ulike måter å håndtere overskytende verdier på:
 
@@ -54,5 +50,10 @@ Den følgende figuren bruker PTI for å illustrere ulike måter å håndtere ove
 3. _Blå linje:_ lineær begrensning til intervallet mellom &minus;0,2 og +1,2. Dette er løsninga som ble foreslått av Sandvik ([2019](http://hdl.handle.net/11250/2631056)) og var implementert i tidligere versjoner av koden (til og med versjon 1.1). Et gjennomsnitt av to målinger tilsvarende beste mulige verdi (1,2) og nullverdi (0,0) ville f.eks. resultere i moderat tilstand (0,6), noe som er akseptabelt. Ulempen er at tilnærminga leder til uheldige knekk ved 1 og 0.
 4. _Punktert svart line:_ forlengelse av transformasjonene som er valgt for de tilstøtende tilstandsklassene, men med en asymptotisk begrensning til intervallet mellom &minus;0,2 og +1,2 (om nødvendig). Dette er løsninga som nå er implementert i koden (fra og med versjon 1.2).
 
-
+Tallverdien 1,2 som maksimumsverdi for mEQR ble av Sandvik ([2019](http://hdl.handle.net/11250/2631056), s. 14) begrunna slik:
+"Avstanden på 0,2 mellom maksimumsverdien og referansetilstanden tilsvarer avstanden mellom de øvrige klassegrensene.
+Siden referanseverdien på 1 dermed havner midt mellom den nedre grensa for svært god tilstand og maksimumsverdien, passer dette godt med at noen indikatorer har definert referanseverdien som mediantilstanden ('midtpunktet') av referansevannforekomster."
+Med tanke på at måleverdier fra referanse*vannforekomster* i så fall forventes å ligge i hele intervallet fra nedre grense for svært god tilstand til maksimumsverdien (som tilsvarer mEQR-verdier i intervallet mellom 0,8 og 1,2), bør transformingensfunksjonens stigningstall ikke endre seg sprangvis ved referanse*verdien* (1,0).
+Dette er ivaretatt gjennom den asymptotiske tilnærminga som nå er implementert.
+For tilstander som er dårligere enn nullverdien, er det nærliggende å følge samme prosedyre.
 
