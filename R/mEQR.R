@@ -15,7 +15,7 @@ mEQR <- function(x, klassegrenser) {
     x <- -x
   }
   x <- ifelse(x < K[1], NA,
-              ifelse(x < K[2], ifelse(rep(K[2] - K[1] > K[3] - K[2], length(x)),
+              ifelse(x < K[2], ifelse(   rep(K[2] - K[1] > K[3] - K[2], length(x)),
                                   -atan(    (x    - K[2]) * 
                                         iNv((K[2] - K[1]) / (K[3] - K[2])) / 
                                             (K[1] - K[2])) /
