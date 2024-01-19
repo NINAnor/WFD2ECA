@@ -22,7 +22,7 @@ For de øvrige måleverdiene er beregninga slik:
 
 ## Illustrasjoner
 
-De følgende figurene illustrerer hvordan skaleringa fra måleverdi til mEQR-verdi ser ut for de tolv parametrene som er klargjort for dataflyt:
+De følgende figurene illustrerer hvordan skaleringa fra måleverdi til mEQR-verdi ser ut for de [tolv parametrene som er klargjort for dataflyt](param.md):
 
 <img src="../fig/AIP.png" width="420" height="300" /> <img src="../fig/ASPT.png" width="420" height="300" />
 
@@ -47,9 +47,9 @@ Den følgende figuren bruker PTI for å illustrere ulike måter å håndtere ove
 
 <img src="../fig/asympPTI.png" width="360" height="360" />
 
-1. _Gjennomtrukket svart linje:_ nEQR. Vannforskriftens tilnærming er å trunkere EQR-verdier som er større enn 1, til 1, og de som er mindre enn 0, til 0.
-2. _Rød linje:_ lineær forlengelse av transformasjonene som er valgt for de tilstøtende tilstandsklassene. Resultatet kan være verdier som er vesentlig mye større enn 1 eller vesentlig mye mindre enn 0.
-3. _Blå linje:_ lineær begrensning til intervallet mellom &minus;0,2 og +1,2. Dette er løsninga som ble foreslått av Sandvik (2019), men den leder til uheldige knekk ved 1 og 0.
+1. _Gjennomtrukket svart linje:_ nEQR. Vannforskriftens tilnærming er å trunkere EQR-verdier som er større enn 1, til 1, og de som er mindre enn 0, til 0. Ulempen ved bruk av denne tilnærminga for f.eks. naturindeksen er at informasjon om parameterens variasjon går tapt.
+2. _Rød linje:_ lineær forlengelse av transformasjonene som er valgt for de tilstøtende tilstandsklassene. Ulempen er at tilnærminga kan resultere i verdier som er vesentlig mye større enn 1 eller vesentlig mye mindre enn 0.
+3. _Blå linje:_ lineær begrensning til intervallet mellom &minus;0,2 og +1,2. Dette er løsninga som ble foreslått av Sandvik ([2019](http://hdl.handle.net/11250/2631056)) og var implmentert i tidligere versjoner av koden (til og med versjon 1.1). Ulempen er at den leder til uheldige knekk ved 1 og 0.
 4. _Punktert svart line:_ forlengelse av transformasjonene som er valgt for de tilstøtende tilstandsklassene, men med en asymptotisk begrensning til intervallet mellom &minus;0,2 og +1,2 (om nødvendig). Dette er løsninga som nå er implementert i koden (fra og med versjon 1.2).
 
 
