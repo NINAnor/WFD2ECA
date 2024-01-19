@@ -1,7 +1,7 @@
 ### Hjelpefunksjoner
 # Hjelpefunksjoner til NI_vannf
 # ved Hanno Sandvik
-# desember 2023
+# februar 2024
 # se https://github.com/NINAnor/NI_vannf
 ###
 
@@ -113,6 +113,11 @@ tillatteVerdier <- function(id) {
   rownames(Parametere) <- Parametere$id
   as.numeric(unlist(Parametere[toupper(id), 3:4]))
 }
+
+
+
+# Hjelpefunksjon til funksjonen "mEQR"
+iNv <- function(mx) optimise(function(i) (i / atan(i) - mx)^2, c(0, 1000))$minimum
 
 
 
