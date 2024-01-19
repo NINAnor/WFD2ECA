@@ -10,7 +10,7 @@ Hvilken transformasjon skal man bruke på de overskytende verdiene (bedre enn re
 Svaret er ikke gitt i vannforskriften (som jo unngår spørsmålet ved trunkering), og det er heller ikke trivielt.
 Løsninga som nå er implementert i funksjonen [`mEQR`](mEQR.md), tar utgangspunkt i formelen for nEQR:
 
-$$\mathrm{nEQR} = S_{\mathrm{n}} + 0,2 \cdot \displaystyle \frac{x - V_{\mathrm{n}}}{V_{\mathrm{ø}} - V_{\mathrm{n}}} $$
+$$\mathrm{nEQR} = S_{\mathrm{n}} + \mathrm{0,2} \cdot \displaystyle \frac{x - V_{\mathrm{n}}}{V_{\mathrm{ø}} - V_{\mathrm{n}}} $$
 
 der _S_<sub>n</sub> er den nedre terskelverdien for den respektive tilstandsklassen på nEQR-skala, _V_<sub>n</sub> er den nedre terskelverdien for den respektive tilstandsklassen på parameterens opprinnelig måleskala, _V_<sub>ø</sub> er den øvre terskelverdien for den respektive tilstandsklassen på parameterens opprinnelig måleskala, og _x_ er parameterens måleverdi.
 
@@ -24,7 +24,17 @@ For de øvrige måleverdiene er beregninga slik:
 
 De følgende figurene illustrerer hvordan skaleringa fra måleverdi til mEQR-verdi ser ut for de tolv parametrene som er klargjort for dataflyt:
 
-...
+<img src="../fig/AIP.png" width="420" height="300" /> <img src="../fig/ASPT.png" width="420" height="300" />
+
+<img src="../fig/ES100.png" width="420" height="300" /> <img src="../fig/HBI2.png" width="420" height="300" />
+
+<img src="../fig/ISI.png" width="420" height="300" /> <img src="../fig/MBH.png" width="420" height="300" />
+
+<img src="../fig/NQI1.png" width="420" height="300" /> <img src="../fig/PIT.png" width="420" height="300" />
+
+<img src="../fig/PPBIOMTOVO.png" width="420" height="300" /> <img src="../fig/PPTI.png" width="420" height="300" />
+
+<img src="../fig/RADDUM1.png" width="420" height="300" /> <img src="../fig/TIANTL.png" width="420" height="300" />
 
 
 ## Begrunnelse
