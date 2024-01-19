@@ -8,7 +8,7 @@ Derfor har Sandvik ([2019](http://hdl.handle.net/11250/2631056), s. 13&ndash;15)
 Imidlertid forutsetter denne løsninga at man besvarer et oppfølgingsspørsmål:
 Hvilken transformasjon skal man bruke på de overskytende verdiene (bedre enn referanseverdi eller dårligere enn nullverdi) for å skalere dem til mEQR-skala?
 Svaret er ikke gitt i vannforskriften (som jo unngår spørsmålet ved trunkering), og det er heller ikke trivielt.
-Løsninga som nå er implementert i funksjonen `[mEQR](mEQR.md)`, tar utgangspunkt i formelen for nEQR:
+Løsninga som nå er implementert i funksjonen [`mEQR`](mEQR.md), tar utgangspunkt i formelen for nEQR:
 
 §§\mathrm{nEQR} = S_{\mathrm{n}} + 0,2 \cdot \displaystyle \frac{x - V_{\mathrm{n}}}{V_{\mathrm{ø}} - V_{\mathrm{n}}} §§
 
