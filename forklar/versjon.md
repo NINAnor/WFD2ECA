@@ -6,7 +6,7 @@ Der har hele repositoriet én DOI (<sub><sub>[![DOI](https://zenodo.org/badge/DO
 Denne er alltid lenka opp mot den nyeste av de arkiverte versjonene.
 I tillegg har alle arkiverte versjoner hver sin unike DOI.
 
-_Oversikt over versjoner:_
+_Oversikt over publiserte versjoner:_
 
 
 ## Versjon 1.1
