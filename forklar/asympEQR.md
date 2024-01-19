@@ -12,7 +12,7 @@ Løsninga som nå er implementert i funksjonen `[mEQR](mEQR.md)`, tar utgangspun
 
 §§\mathrm{nEQR} = S_{\mathrm{n}} + 0,2 \cdot \displaystyle \frac{x - V_{\mathrm{n}}}{V_{\mathrm{ø}} - V_{\mathrm{n}}} §§
 
-der _S_<sub>n</sub> er den nedre terskelverdien for den respektive tilstandsklassen på nEQR-skala, _V_<sub>n<sub> er den nedre terskelverdien for den respektive tilstandsklassen på parameterens opprinnelig måleskala, _V_<sub>ø</sub> er den øvre terskelverdien for den respektive tilstandsklassen på parameterens opprinnelig måleskala, og _x_ er parameterens måleverdi.
+der _S_<sub>n</sub> er den nedre terskelverdien for den respektive tilstandsklassen på nEQR-skala, _V_<sub>n</sub> er den nedre terskelverdien for den respektive tilstandsklassen på parameterens opprinnelig måleskala, _V_<sub>ø</sub> er den øvre terskelverdien for den respektive tilstandsklassen på parameterens opprinnelig måleskala, og _x_ er parameterens måleverdi.
 
 Beregning av mEQR følger beregning av nEQR for alle måleverdier mellom null- og referanseverdi.
 For de øvrige måleverdiene er beregninga slik:
@@ -35,7 +35,7 @@ De følgende figurene illustrerer hvordan skaleringa fra måleverdi til mEQR-ver
 
 Den følgende figuren bruker PTI for å illustrere ulike måter å håndtere overskytende verdier på:
 
-![](fig/asympPTI.png)
+![](../fig/asympPTI.png)
 
 1. Gjennomtrukket svart linje: nEQR. Vannforskriftens tilnærming er å trunkere EQR-verdier som er større enn 1, til 1, og de som er mindre enn 0, til 0.
 2. Rød linje: lineær forlengelse av transformasjonene som er valgt for de tilstøtende tilstandsklassene. Resultatet kan være verdier som er vesentlig mye større enn 1 eller vesentlig mye mindre enn 0.
