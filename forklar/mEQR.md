@@ -36,6 +36,7 @@ Verdiene som er skalert og transformert, men ikke trunkert, kalles her **mEQR**-
 Utveksling av data mellom vannforskriften og naturindeks skjer på dette stadiet, altså i form av mEQR-verdier.
 Når disse til slutt trunkeres, får man igjen nEQR-verdier.
 Fordelen er at de ikke-trunkerte verdiene først kan brukes i naturindeks-databasen til å estimere variasjonen i tilstandsverdiene.
+En mer utførlig begrunnelse for og illustrasjon av den valgte beregningsmåten for mEQR er [gitt her](asympEQR.md).
 
 
 ## Funksjonsverdi
