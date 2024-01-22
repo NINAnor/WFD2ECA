@@ -15,7 +15,7 @@ mEQR(x, klassegrenser)
 ## Argumenter
 
 * `x` (**numerisk vektor**) er en verdi (eller en vektor eller matrise av verdier) av en vannforskriftsparameter oppgitt på parameterens opprinnelige måleskala.
-* `klassegrenser` (**numerisk vektor**) er de klassegrensene for den aktuelle vannforskriftsparameteren, f.eks. slik de genereres av funksjonen [`hentKlassegrenser`](hentKlassegrenser.md). Vektoren må ha en lengde på 8 (dårligste mulige verdi, seks klassegrenser og beste mulige verdi).
+* `klassegrenser` (**numerisk vektor**) er klassegrensene for den aktuelle vannforskriftsparameteren, f.eks. slik de genereres av funksjonen [`hentKlassegrenser`](hentKlassegrenser.md). Vektoren må ha en lengde på 8 (dårligste mulige verdi, "nullverdi", fire klassegrenser mellom tilstandsklassene, referanseverdi og beste mulige verdi).
 
 
 ## Detaljer
