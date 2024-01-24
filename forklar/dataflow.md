@@ -1,15 +1,22 @@
 # Summary of the data flow
 
 Norway has two different frameworks within which the ecological status of freshwater and coastal water systems is assessed and reported.
-One is the so-called [Nature Index for Norway](https://www.naturindeks.no/).
-The other is the EU's [Water Framework Directive]() (or, more specifically, its Norwegian implementation, called [_vannforskriften_](https://lovdata.no/dokument/SF/forskrift/2006-12-15-1446)).
+One is the so-called [Nature Index for Norway](https://www.naturindeks.no/) ("NI", hereafter).
+The other is EU's [Water Framework Directive](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32000L0060) ("WFD"), or, more specifically, its Norwegian implementation (_[vannforskriften](https://lovdata.no/dokument/SF/forskrift/2006-12-15-1446)_, "VF").
+All measurements made in connection with the latter are archived in a specialised database called _[vannmiljø](https://vannmiljo.miljodirektoratet.no/)_.
+Several WFD indicators have been included in the NI as well.
+The [Norwegian Environmental Agency](https://www.miljodirektoratet.no/) has expressed the aim that these indicators give compatible descriptions in both frameworks.
+Based on previous analyses and recommendations ([Schartau et al. 2016](http://hdl.handle.net/11250/2384734), [Gundersen et al. 2018](http://hdl.handle.net/11250/2584222)), Sandvik ([2019](http://hdl.handle.net/11250/2631056)) has described a dataflow from the WFD to the NI.
+The same dataflow may be relevant when WFD data are to be used in connection with an Ecosystem Condition Accounting (see [Fremstad et al. 2023](https://hdl.handle.net/11250/3104185)).
+This dataflow is implemented in the [**R** code](../R/) of this GitHub repository and shortly summarised on this very page.
 
-Med [naturindeksen](https://www.naturindeks.no/) og [vannforskriften](https://lovdata.no/dokument/SF/forskrift/2006-12-15-1446) (jf. [veileder 02:2018](https://www.vannportalen.no/veiledere/klassifiseringsveileder/)) har Norge to rammeverk som rapporterer tilstanden for ferskvanns- og kystvannsystemer.
-Naturindeksen har tatt i bruk flere ferskvanns- og kystvannsindikatorer som også inngår i vannforskriften ([Schartau mfl. 2016](http://hdl.handle.net/11250/2384734)).
-Det bør være et mål at disse indikatorene gir mest mulig sammenfallende beskrivelser i begge rammeverkene. 
-Basert på tidligere analyser og anbefalinger om samordning ([Schartau mfl. 2016](http://hdl.handle.net/11250/2384734), [Gundersen mfl. 2018](http://hdl.handle.net/11250/2584222)) har Sandvik ([2019](http://hdl.handle.net/11250/2631056)) beskrevet en dataflyt av data som er samla inn i sammenheng med vannforskriften, til naturindeks.
-Når vannforskriftsdata skal benyttes i rammen av et økologisk tilstandsregnskap ([Fremstad mfl. 2023](https://hdl.handle.net/11250/3104185)), kan det være aktuelt å følge samme fremgangsmåte.
-Denne dataflyten kan sammenfattes i 16 trinn ([Sandvik 2019](http://hdl.handle.net/11250/2631056), s. 11):
+As the relevant authorities have not made their data available in machine-readable format, several datasets need to be downloaded manually prior to the dataflow:
+
+* The **measurements** of WFD parameters and the information on **water localities** (_vannlokaliteter_) are available from the _[vannmiljø](https://vannmiljo.miljodirektoratet.no/)_ database.
+* The information (mainly typology) on the **water bodies** (_vannforekomster_) of Norway is available from the _[vann-nett](https://vann-nett.no/portal/)_ database.
+* More detailed characteristics of the **lakes** of Norway (if needed) are available from the _[innsjødatabase](https://www.nve.no/kart/kartdata/vassdragsdata/innsjodatabase/)_.
+
+Once these datasets are in place, the dataflow proceeds along the following steps (see [Sandvik 2019](http://hdl.handle.net/11250/2631056), s. 11):
 
 1. _Målinger leses inn fra [vannmiljø](https://vannmiljo.miljodirektoratet.no/)-databasen._ Dette trinnet krever inntil videre en manuell nedlasting av målinger, siden vannmiljø ikke er tilrettelagt for maskinell innlesing av målingene. Etter nedlasting må funksjonen [`lesMaalinger`](lesMaalinger.md) brukes for å tilrettelegge datasettet for de neste trinnene.
 2. _Målinger som ligger utafor rapporteringsperiodene for naturindeksen, fjernes._ Trinnene 2 til 15 gjennomføres av funksjonen [`fraVFtilNI`](fraVFtilNI.md).
