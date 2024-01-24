@@ -9,6 +9,12 @@ I tillegg har alle arkiverte versjoner hver sin unike DOI.
 _Oversikt over publiserte versjoner:_
 
 
+## Versjon 1.2
+For tiden i forberedelse. _Endringer:_
+
+- Funksjonen `mEQR` beregnes nå med asymptotisk begrensning ([detaljer](asympEQR.md)).
+
+
 ## Versjon 1.1
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10497345.svg)](https://doi.org/10.5281/zenodo.10497345)  
 Publisert januar 2024. _Endringer:_
