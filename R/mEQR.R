@@ -7,8 +7,8 @@
 
 
 
-# Beregne mEQR-verdier ("modifiserte EQR-verdier")
 mEQR <- function(x, klassegrenser) {
+  # Funksjonen beregner mEQR-verdier ("modifiserte EQR-verdier")
   K <- klassegrenser
   if ((K[8] < K[1]) %=% TRUE) {
     K <- -K
@@ -38,8 +38,8 @@ mEQR <- function(x, klassegrenser) {
 
 
 
-# Beregne mEQR-verdier, versjon "knekk"
 mEQR.knekk <- function(x, klassegrenser) {
+  # Funksjonen beregner mEQR-verdier, versjon "knekk"
   K <- klassegrenser
   if ((K[8] < K[1]) %=% TRUE) {
     K <- -K
@@ -59,8 +59,8 @@ mEQR.knekk <- function(x, klassegrenser) {
 
 
 
-# Beregne mEQR-verdier, versjon "forlengelse"
 mEQR.forlenga <- function(x, klassegrenser) {
+  # Funksjonen beregner mEQR-verdier, versjon "forlengelse"
   K <- klassegrenser
   if ((K[8] < K[1]) %=% TRUE) {
     K <- -K
@@ -78,8 +78,8 @@ mEQR.forlenga <- function(x, klassegrenser) {
 
 
 
-# Beregne nEQR-verdier
 nEQR <- function(x, klassegrenser) {
+  # Funksjonen beregner nEQR-verdier
   K <- klassegrenser
   if ((K[8] < K[1]) %=% TRUE) {
     K <- -K

@@ -8,14 +8,6 @@ På denne sida forklares for hvilke parametere slike regneark er klargjort, og h
 -   <a href="#vannforskriftsparametere-som-er-klare-til-bruk" id="toc-vannforskriftsparametere-som-er-klare-til-bruk">Vannforskriftsparametere som er klare til bruk</a>
 -   <a href="#hvordan-flere-vannforskriftsparametere-kan-gjøres-klar-til-bruk" id="toc-hvordan-flere-vannforskriftsparametere-kan-gjøres-klar-til-bruk">Hvordan flere vannforskriftsparametere kan gjøres klar til bruk</a>
 -   <a href="#spesielle-krav-til-de-ulike-vannforskriftsparameterne" id="toc-spesielle-krav-til-de-ulike-vannforskriftsparameterne">Spesielle krav til de ulike vannforskriftsparameterne</a>
-    -   <a href="#aip" id="toc-aip">AIP</a>
-    -   <a href="#aspt" id="toc-aip">ASPT</a>
-    -   <a href="#biovolum" id="toc-biovolum">Biovolum</a>
-    -   <a href="#hbi2" id="toc-hbi2">HBI2</a>
-    -   <a href="#pit" id="toc-pit">PIT</a>
-    -   <a href="#pti" id="toc-pti">PTI</a>
-    -   <a href="#raddum" id="toc-raddum">Raddum</a>
-    -   <a href="#sic-tic-wic" id="toc-sic-tic-wic">SIc, TIc, WIc</a>
 
 
 ## Vannforskriftsparametere som er relevante
@@ -98,80 +90,16 @@ I slike tilfeller bør den aktuelle verdien (dvs. "max" eller "min") settes vilk
 
 Funksjonen `fraVFtilNI` sjekker om målinger som er rapportert i vannmiljø-databasen, inneholder åpenbare måle- eller rapporteringsfeil (dvs. verdier som er uforenlige med parameterens definisjon). 
 I tillegg eksisterer imidlertid spesifikke krav til de fleste vannforskriftsparameterne. 
-Om disse har vært oppfylt ved måling eller rapportering, er vanskeligere å teste, og funksjonen `fraVFtilNI` gjør ikke noe forsøk på å oppdage slike feil.
-Nedenfor gis en liste over kjente krav og hvordan man eventuelt kan korrigere for at disse ikke er oppfylt.
+Noen av disse kravene, men ikke alle, blir kontrollert av funksjonen `fraVFtilNI` (nærmere bestemt av hjelpefunksjonene [`sjekkXXX`](sjekkPar.md)).
+Nedenfor gis en liste over kjente krav og hvilke av disse som blir kontrollert.
 Merk at lista mest sannsynlig ikke er uttømmende.
 
-
-### AIP
-
-AIP (forsuringsindeks påvekstalger artssammensetning) skal måles mellom juni og oktober.
-Målinger som eventuelt ikke oppfyller kravet om tidspunkt, bør fjernes manuelt ved hjelp av datoen for målinga, før de resterende målingene brukes som innmating til funksjonen `fraVFtilNI`.
-
-Hver måling bør dessuten være basert på minst tre arter.
-Antall arter som en AIP-verdi er basert på, fremgår imidlertid ikke av vannmiljø-databasen.
-
-
-### ASPT
-
-ASPT (Average Score per Taxon) skal ikke brukes for breelver. 
-Eventuelle målinger i breelver kan ekskluderes ved hjelp av argumentet `ikkeInkluder` til funksjonen [`fraVFtilNI`](fraVFtilNI.md).
-Det gjøres ved å spesifisere at man for typologifaktoren "turbiditet" (`typ = "tur"`) skal se bort fra brepåvirka elver (`vrd = 2`):
-
-    utmating_ASPT <- fraVFtilNI(data_ASPT, vannforekomster = V, vannlokaliteter = VL,
-                                parameter = "ASPT", vannkategori = "R",
-                                ikkeInkluder = list(typ = "tur", vrd = 2))
-
-
-### Biovolum
-
-Biovolum (total biomasse planteplankton per volumenhet, vannmiljø-id "PPBIOMTOVO") skal baseres på minst månedlige prøver gjennom hele vekstsesongen. 
-Det samme gjelder for andre parametere for kvalitetselementet planteplankton (f.eks. KLFA, CYANOM).
-Datapunkt som eventuelt ikke oppfyller kravet om antall målinger og deres tidspunkt, bør fjernes manuelt ved hjelp av datoen for målinga, før målingene brukes som innmating til funksjonen `fraVFtilNI`.
-
-
-### HBI2
-
-HBI2 (heterotrof begroingsindeks) skal baseres på minst to målinger per år, der den første er tatt på våren (januar–april) og den andre på høsten (oktober–desember). 
-Datapunkt som eventuelt ikke oppfyller kravet om antall målinger og deres tidspunkt, bør fjernes manuelt ved hjelp av datoen for målinga, før målingene brukes som innmating til funksjonen `fraVFtilNI`.
-
-
-### PIT
-
-PIT (trofiindeks påvekstalger artssammensetning) skal måles mellom juni og oktober.
-Målinger som eventuelt ikke oppfyller kravet om tidspunkt, bør fjernes manuelt ved hjelp av datoen for målinga, før de resterende målingene brukes som innmating til funksjonen `fraVFtilNI`.
-
-Hver måling bør dessuten være basert på minst to arter.
-Antall arter som en PIT-verdi er basert på, fremgår imidlertid ikke av vannmiljø-databasen.
-
-
-### PTI
-
-PTI (planteplankton trofiindeks, vannmiljø-id "PPTI") skal baseres på minst månedlige prøver gjennom hele vekstsesongen. 
-Det samme gjelder for andre parametere for kvalitetselementet planteplankton (f.eks. KLFA, CYANOM).
-Datapunkt som eventuelt ikke oppfyller kravet om antall målinger og deres tidspunkt, bør fjernes manuelt ved hjelp av datoen for målinga, før målingene brukes som innmating til funksjonen `fraVFtilNI`.
-
-
-### Raddum
-
-Raddum I inngår i naturindeksen, men merk at Raddum II ikke gjør det.
-Raddum II-målinger er imidlertid enkelt å regne om til Raddum I-verdier.
-Dermed kan datagrunnlaget utvides betraktelig (men _bare for elver_, siden Raddum II ikke er definert for innsjøer).
-Dette kan gjøres ved hjelp av funksjonen [`Raddum2_1`](../R/Funksjon.R).
-Når det f.eks. foreligger én dataramme hver for målinger av Raddum I (`data_Raddum1`) og Raddum II (`data_Raddum2`), kan det gjøres slik:
-
-    data_Raddum1 <- rbind(data_Raddum1, Raddum2_1(data_Raddum2))
-    
-    ## 7403 Raddum-II-målinger har blitt regna om til Raddum I.
-    
-    utmating_Raddum <- fraVFtilNI(data_Raddum1, vannforekomster = V, vannlokaliteter = VL,
-                                  parameter = "RADDUM1", vannkategori = "R")
-
-Utmatinga til funksjonen `Raddum2_1` vil opplyse om hvor mange Raddum-II-målinger som har blitt regna om til Raddum I.
-
-
-### SIc, TIc, WIc
-
-SIc (forsuringsindeks makrofytter antall arter innsjø, vannmiljø-id "SIANTL"), TIc (trofiindeks makrofytter antall arter innsjø, vannmiljø-id "TIANTL") og WIc (vannstandsindeks makrofytter, vannmiljø-id "WIANTL") skal måles mellom juli og september.
-Målinger som eventuelt ikke oppfyller kravet om tidspunkt, bør fjernes manuelt ved hjelp av datoen for målinga, før de resterende målingene brukes som innmating til funksjonen `fraVFtilNI`.
+* **AIP** skal måles mellom juni og oktober. Målinger som ikke oppfyller dette kravet, blir ekskludert (se [`sjekkAIP`](sjekkPar.md)). Standardinnstillinga tillater et slingringsmonn på to uker. Hver AIP-måling bør dessuten være basert på minst tre arter. Dette kravet blir _ikke_ sjekket, siden antall arter som en AIP-verdi er basert på, ikke fremgår av vannmiljø-databasen.
+* **ASPT** skal ikke brukes for breelver. Målinger som ikke oppfyller dette kravet, blir ekskludert (se [`sjekkASPT`](sjekkPar.md)).
+* **HBI2** skal baseres på minst to målinger per år, der den første er tatt på våren (januar–april) og den andre på høsten (oktober–desember). Målinger som ikke oppfyller dette kravet, blir ekskludert (se [`sjekkHBI2`](sjekkPar.md)).
+* **PIT** skal måles mellom juni og oktober. Målinger som ikke oppfyller dette kravet, blir ekskludert (se [`sjekkPIT`](sjekkPar.md)). Standardinnstillinga tillater et slingringsmonn på to uker. Hver PIT-måling bør dessuten være basert på minst to arter. Dette kravet blir _ikke_ sjekket, siden antall arter som en PIT-verdi er basert på, ikke fremgår av vannmiljø-databasen.
+* **PPBIOMTOVO** skal baseres på minst månedlige prøver gjennom hele vekstsesongen. Målinger som ikke oppfyller dette kravet, blir ekskludert (se [`sjekkPPBIOMTOVO`](sjekkPar.md)). Standardinnstillinga er som for PTI.
+* **PPTI** (PTI) skal baseres på minst månedlige prøver gjennom hele vekstsesongen. Målinger som ikke oppfyller dette kravet, blir ekskludert (se [`sjekkPPBIOMTOVO`](sjekkPar.md)). Standardinnstillinga er å anta at vekstsesongen varer fra mai til oktober, og å kreve at det er tatt minst fire målinger i løpet av denne perioden i Sør-Norge under 200 moh. og minst tre målinger i resten av Norge (dvs. å tillate at det mangler målinger fra noen av månedene).
+* **RADDUM1** (Raddum I) skal kun brukes i klare vannforekomster (humøsitet = 1). Målinger som ikke oppfyller dette kravet, blir ekskludert (se [`sjekkRADDUM1`](sjekkPar.md)). Merk at kun Raddum I inngår i naturindeksen, mens Raddum II ikke gjør det. Raddum&nbsp;II-målinger er imidlertid enkelt å regne om til Raddum&nbsp;I-verdier. Dermed kan datagrunnlaget utvides betraktelig (men _bare for elver_, siden Raddum II ikke er definert for innsjøer). Dette kan gjøres ved hjelp av funksjonen [`Raddum2_1`](../R/Funksjon.R), f.eks. slik (når det foreligger én dataramme hver for målinger av Raddum I og Raddum II): `data_Raddum1 <- rbind(data_Raddum1, Raddum2_1(data_Raddum2))`; eller slik (når alle målinger er i samme dataramme): `data <- Raddum2_1(data)`.
+* **TIANTL** (TIc) skal måles mellom juli og september. Målinger som ikke oppfyller dette kravet, blir ekskludert (se [`sjekkAIP`](sjekkPar.md)). Standardinnstillinga tillater et slingringsmonn på to uker.
 

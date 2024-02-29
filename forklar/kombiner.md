@@ -36,5 +36,5 @@ Matrisens kolonner og rader har de følgende navn:
 
 ## Kode
 
-Funksjonens [kode kan inspiseres her](../R/kombiner.R).
+Funksjonens [kode kan inspiseres her](../R/Funksjon.R).
 

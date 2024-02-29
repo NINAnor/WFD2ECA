@@ -179,36 +179,38 @@ lesVannforekomster <- function(vannkategori = c("L", "R", "C"),
     if (all(V$kat %in% c("L", "R", "C"))) {
       for (vkat in vannkategori) {
         w <- which(V$kat == vkat)
-        hvilke <- list(L = 2:8, R = 2:7, C = c(2, 9:15))[[vkat]]
+        hvilke <- get("Typologi" %+% vkat)
+        Vanntyper$reg <- Vanntyper[["reg" %+% vkat]]
+#        hvilke <- list(L = 2:8, R = 2:7, C = c(2, 9:15))[[vkat]]
         for (i in 1:length(hvilke)) {
           verdi <- substr(V$typ[w], i + 1, i + 1)
           na <- which(!(verdi %in% Vanntyper[[hvilke[i]]]))
           if (length(na)) {
             skriv("Noen vannforekomster har ukjente verdier for " %+%
-                    Typologi[hvilke[i]] %+% ":",
+                    tolower(Typologi[hvilke[i]]) %+% ":",
                   pre = "OBS: ", linjer.over = 1)
             for (j in 1:length(unique(verdi[na]))) {
               ukjent <- sort(unique(verdi[na]))[j]
               skriv(length(which(verdi[na] == ukjent)), " med \"",
                     ukjent %+% "\" = \"", 
-                    V[w[which(verdi == ukjent)], names(Vanntyper)[hvilke[i]]][1],
+                    V[w[which(verdi == ukjent)], hvilke[i]][1],
                     "\"", pre = "* ")
             }
             skriv("Disse blir satt til <NA>!")
             verdi[na] <- NA
           }
           for (j in unique(verdi)) {
-            if (length(unique(V[w[which(verdi == j)], 
-                                names(Vanntyper)[hvilke[i]]])) > 1) {
+            if (length(unique(V[w[which(verdi == j)], hvilke[i]])) > 1) {
+#              if (length(unique(V[w[which(verdi == j)], 
+#                                names(Vanntyper)[hvilke[i]]])) > 1) {
               skriv("Verdien ", j, " av ", Typologi[hvilke[i]],
                     " har ulike beskrivelser:", pre = "OBS: ")
-              skriv(paste(unique(V[w[which(verdi == j)], 
-                                   names(Vanntyper)[hvilke[i]]]), 
+              skriv(paste(unique(V[w[which(verdi == j)], hvilke[i]]), 
                           collapse = ", "))
               skriv("Dette blir ignorert!")
             }
           }
-          V[w, names(Vanntyper)[hvilke[i]]] <- verdi
+          V[w, hvilke[i]] <- verdi
         }
         if (vkat %=% "L") {
           # Estimert dybde likestilles med kjent dybde

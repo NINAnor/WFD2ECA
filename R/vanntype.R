@@ -1,15 +1,108 @@
-### Gamle vanntyper
+### Vanntyper
 # Hjelpefil til NI_vannf
 # ved Hanno Sandvik
-# desember 2023
+# februar 2024
 # se https://github.com/NINAnor/NI_vannf
 ###
 
 
 
+# Navn på nominale typologifaktorer
+Typologi.nominal <- c(
+  tur = "Turbiditet", 
+  tid = "Tidevann"
+)
+
+
+
+# Navn på ordinale typologifaktorer
+Typologi.ordinal <- c(
+  reg = "Region",
+  son = "Sone",
+  stø = "Størrelse", 
+  alk = "Alkalitet", 
+  hum = "Humøsitet", 
+  dyp = "Dybde",
+  kys = "Kysttype",
+  sal = "Salinitet",
+  eks = "Eksponering",
+  mix = "Miksing",
+  opp = "Oppholdstid",
+  str = "Strøm"
+)
+
+
+
+# Navn på alle typologfaktorer
+Typologi <- c(Typologi.ordinal, Typologi.nominal)
+
+
+
+# Forkortelser for typologifaktorer som inngår for de ulike vannkategoriene
+# Rekkefølgen tilsvarer vanntypekoden ifølge vann-nett
+TypologiC <- c("reg", "kys", "sal", "tid", "eks", "mix", "opp", "str")
+TypologiL <- c("reg", "son", "stø", "alk", "hum", "tur", "dyp")
+TypologiR <- c("reg", "son", "stø", "alk", "hum", "tur")
+
+
+
+# Mulige verdier for nominale typologifaktorer
+Vanntyper.nominal <- list(
+  tur = c("1", "2", "3"),
+  tid = c("1", "2")
+)
+
+
+
+# Mulige verdier for ordinale typologifaktorer og deres rekkefølge
+Vanntyper.ordinal <- list(
+  regC= c("S", "N", "M", "H", "G", "B"),
+  regL= c("S", "W", "E", "M", "N", "F"),
+  regR= c("S", "W", "E", "M", "N", "F"),
+  son = c("L", "M", "H"),
+  stø = c("1", "2", "3", "4", "5"),
+  alk = c("5", "6", "7", "1", "8", "2", "3", "4"),
+  hum = c("4", "1", "2", "3"),
+  dyp = c("1", "2", "3"),
+  kys = c("1", "7", "2", "3", "4", "5", "6", "8"),
+  sal = c("1", "2", "3", "6", "4", "7", "5"),
+  eks = c("1", "2", "3"),
+  mix = c("1", "2", "3"),
+  opp = c("1", "2", "3"),
+  str = c("1", "2", "3")
+)
+
+
+
+# Mulige verdier for alle typologifaktorer
+Vanntyper <- append(Vanntyper.ordinal, Vanntyper.nominal)
+
+
+
+# Tallverdier for ordinale typologifaktorer
+Tallverdier <- list(
+  reg = 1:6,
+  son = 1:3,
+  stø = 1:5,
+  alk = c(-0.8, -0.4, -0.2, -0.1, 0, 0.3, 0.9, 1.5),
+  hum = c(0.75, 1.25, 1.75, 2.25),
+  dyp = 1:3,
+  kys = 1:8,
+  sal = c(-0.6, 0.2, 1, 1.1, 1.4, 1.5, 1.6),
+  eks = 1:3,
+  mix = 1:3,
+  opp = 1:3,
+  str = 1:3
+)
+
+
+
+# Funksjonen kombinerer typologifaktorer til en vektor med vanntyper
 "%&%" <- function(a,b) rep(a, each=length(b)) %+% rep(b, length(a))
 
-# innsjøer, norske vanntyper
+
+
+# Norske vanntyper
 LL <- "L" %&% c("E","F","M","N","S","W") %&% "L" %&% 1:4
 LM <- "L" %&% c("E","F","M","N","S","W") %&% "M" %&% 1:4
 LH <- "L" %&% c("E","F","M","N","S","W") %&% "H" %&% 1:4
@@ -17,7 +110,6 @@ LH <- "L" %&% c("E","F","M","N","S","W") %&% "H" %&% 1:4
 RL <- "R" %&% c("E","F","M","N","S","W") %&% "L" %&% 1:5
 RM <- "R" %&% c("E","F","M","N","S","W") %&% "M" %&% 1:5
 RH <- "R" %&% c("E","F","M","N","S","W") %&% "H" %&% 1:5
-
 
 gamleTyper <- list(
   L101a = LL %&% "541" %&% c(2,3,5,6),
@@ -176,5 +268,4 @@ gamleTyper <- list(
   R308  = RH %&% "321",
   R311  = RH %&% 1:8 %&% c(1,4) %&% "2"
 )
-  
   

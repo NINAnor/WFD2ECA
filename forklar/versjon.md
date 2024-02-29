@@ -10,9 +10,13 @@ _Oversikt over publiserte versjoner:_
 
 
 ## Versjon 1.2
-For tiden i forberedelse. _Endringer:_
+Publiseres etter planen i løpet av februar 2024. _Endringer:_
 
 - Funksjonen `mEQR` beregnes nå med asymptotisk begrensning ([detaljer](asympEQR.md)).
+- Parameterspesifikke krav til målinger blir sjekka ([detaljer](sjekkPar.md)).
+- Det ekstrapoleres kun til vanntyper som det foreligger målinger fra ([detaljer](extrapol.md)).
+- Vekting for overvåkingsaktiviteter implementeres på en bedre måte ([detaljer](aktiv.md))
+- Flere mindre forbedringer i funksjoner og forklaringer.
 
 
 ## Versjon 1.1

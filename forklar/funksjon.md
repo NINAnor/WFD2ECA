@@ -12,6 +12,7 @@ De følgende **R**-funksjonene er forklart på egne sider:
 - [mEQR](mEQR.md)
 - [oppdaterNImedVF](oppdaterNImedVF.md)
 - [oppdaterVannforekomster](oppdaterVannforekomster.md)
+- [sjekkXXX](sjekkPar.md)
 
 I tillegg er diverse hjelpefunksjoner definert i fila "[Funksjon.R](../R/Funksjon.R)".
 Disse er ikke nærmere forklart her.

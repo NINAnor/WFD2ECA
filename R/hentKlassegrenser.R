@@ -66,7 +66,17 @@ hentKlassegrenser <- function(filKlasser) {
               if (kl %in% rownames(KlasseGrenser)) {
                 hvilke <- kl
               } else {
-                source("R/gamletyp.R")
+                if (!exists("gamleTyper")) {
+                  if (file.exists("R/vanntype.R")) {
+                    source("R/vanntype.R")
+                  } else {
+                    filOK <- FALSE
+                    skriv("Fila \"vanntype.R\" med variabelen \"gamleTyper\" ble",
+                          "ikke funnet! Fila forventes å ligge i mappa \"R\".",
+                          pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
+                    gamleTyper <- list()
+                  }
+                }
                 if (kl %in% toupper(names(gamleTyper))) {
                   names(gamleTyper) <- toupper(names(gamleTyper))
                   hvilke <- gamleTyper[[kl]]
