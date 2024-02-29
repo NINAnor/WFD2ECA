@@ -1,7 +1,7 @@
 # Korreksjon for overvåkingsaktivitetenes (manglende) representativitet
 
 For hvert datapunkt i [vannmiljø](https://vannmiljo.miljodirektoratet.no/)-databasen er det angitt en «aktivitet» som målingen ble begrunnet med (se [oversikten i vannmiljø](https://vannmiljokoder.miljodirektoratet.no/activity)). 
-Som drøftet av Sandvik ([2019](http://hdl.handle.net/11250/2631056), s. 17–19) og Framstad mfl. ([2023](https://hdl.handle.net/11250/3104185)): s. 53, tab. 6 og vedl. 3),
+Som drøftet av Sandvik ([2019](http://hdl.handle.net/11250/2631056), s. 17–19) og Framstad mfl. ([2023](https://hdl.handle.net/11250/3104185), s. 53, tab. 6 og vedl. 3),
 vil dette si at noen målinger foretas fordi man vet eller antar at tilstanden i den berørte vannforekomsten er (nokså) dårlig, mens andre foretas fordi man vet eller antar at tilstanden i den berørte vannforekomsten er (nokså) god. 
 Hvis det ikke korrigeres for at slike målinger er forskjøvet mot henholdsvis dårlige og gode forhold, kan dette også lede til feilaktige aggregeringer. 
 Det fins flere måter å angripe dette problemet på, bl.a. å vekte ned målinger som ble tatt i sammenheng med aktiviteter der man kan forvente en slagside mot den ene eller andre siden. 
