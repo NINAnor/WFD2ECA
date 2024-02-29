@@ -43,7 +43,7 @@ Der ikke annet er oppgitt på _x_-aksen, er de opprinnelige måleverdiene enhets
 
 Den følgende figuren bruker PTI ("PPTI" ifølge vannmiljø) for å illustrere ulike måter å håndtere overskytende verdier på:
 
-<img src="../fig/asympPTI.png" width="360" height="360" />
+<img src="../fig/asympPTI.png" width="504" height="360" />
 
 1. **Gjennomtrukket svart linje:** **nEQR**. Vannforskriftens tilnærming er å trunkere EQR-verdier som er større enn 1, til 1, og de som er mindre enn 0, til 0. Ulempen ved bruk av denne tilnærminga for f.eks. naturindeksen er at informasjon om parameterens variasjon går tapt.
 2. **Rød linje:** _lineær_ **forlengelse** _av transformeringene som er valgt for de tilstøtende tilstandsklassene_. Ulempen er at tilnærminga kan resultere i verdier som er vesentlig mye større enn 1 eller vesentlig mye mindre enn 0. Et gjennomsnitt av to mEQR-verdier tilsvarende beste mulige verdi (1,64) og "nullverdi" (0,00) ville i PTI-eksempelet resultere i svært god tilstand (0,82), noe som er villedende.
