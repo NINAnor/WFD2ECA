@@ -5,9 +5,6 @@ stede for at [**R**-funksjonene](funksjon.md) fungerer som de skal. Her
 forklares hjelpefilenes betydning og hvordan de eventuelt kan endres, i
 tilfelle det er nødvendig å oppdatere dem.
 
--   <a href="#oversikt-over-og-endring-av-hjelpefiler"
-    id="toc-oversikt-over-og-endring-av-hjelpefiler">Oversikt over og
-    endring av hjelpefiler</a>
 -   <a href="#vannforekomster-v-.csv-navnvn.csv"
     id="toc-vannforekomster-v-.csv-navnvn.csv">Vannforekomster (V-*.csv,
     navnVN.csv)</a>
