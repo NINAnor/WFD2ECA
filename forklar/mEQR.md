@@ -9,6 +9,12 @@ _Innhold:_ [syntaks](#syntaks) – [argumenter](#argumenter) – [detaljer](#det
 
 ```{r}
 mEQR(x, klassegrenser)
+
+mEQR.knekk(x, klassegrenser)
+
+mEQR.forlenga(x, klassegrenser)
+
+nEQR(x, klassegrenser)
 ```
 
 
@@ -36,7 +42,10 @@ Verdiene som er skalert og transformert, men ikke trunkert, kalles her **mEQR**-
 Utveksling av data mellom vannforskriften og naturindeksen skjer på dette stadiet, altså i form av mEQR-verdier.
 Når disse til slutt trunkeres, får man igjen nEQR-verdier.
 Fordelen er at de ikke-trunkerte verdiene først kan brukes i naturindeks-databasen til å estimere variasjonen i tilstandsverdiene.
-En mer utførlig begrunnelse for og illustrasjon av den valgte beregningsmåten for mEQR er [gitt her](asympEQR.md).
+
+Funksjonen [`fraVFtilNI`](fraVFtilNI.md) tillater via argumentet `EQR` å spesifisere fire ulike beregningsmåter for mEQR (se [utdypende forklaring](asympEQR.md)).
+Ifølge standardinnstillinga (`EQR = "asymptotisk"`) benyttes funksjonen `mEQR`.
+De tilgjengelige alternativene blir implementert gjennom funksjonene `mEQR.knekk`, `mEQR.forlenga` og `nEQR`.
 
 
 ## Funksjonsverdi
