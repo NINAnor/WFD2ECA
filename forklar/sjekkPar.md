@@ -56,6 +56,8 @@ I oversikten over [vannforskriftsparametere som er tilrettelagt for dataflyt](pa
 
 Funksjonsverdien er en **numerisk vektor** som angir radene i `maaling` som _ikke_ oppfyller de parameterspesifikke kravene.
 
+For noen av funksjonene (`sjekkASPT` og `sjekkRADDUM1`) har funksjonsverdien et attributt kalt `ikkeInkluder`, som har samme oppgave som det likelydende argumentet til funksjonen `fraVFtilNI`.
+
 
 ## Kode
 
