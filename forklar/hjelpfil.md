@@ -35,7 +35,7 @@ tilfelle det er nødvendig å oppdatere dem.
 
 Før kjøring av analyser bør aktuelle filer over vannforekomster lastes
 ned fra [vann-nett](https://vann-nett.no/portal/) ([se detaljert
-forklaring](lesVannforekomster.md). Filene er tabulatturdelte tekstfiler
+forklaring](lesVannforekomster.md)). Filene er tabulatordelte tekstfiler
 med filendelsen “.csv”. Filnavnene på disse filene må endres til
 “**V-**” etterfulgt av “**C**”, “**L**” eller “**R**” for henholdsvis
 kyst-, innsjø- og elvevannforekomster.
@@ -47,7 +47,7 @@ fire kolonner. Fila bør bare endres hvis funksjonen
 som antyder at filene som er eksportert fra vann-nett, har endra
 kolonnenavn. I så fall må kolonnene “L”, “R” eller “C” av “navnVN.csv”
 oppdateres i samsvar med kolonnenavnene i vann-nett-eksporten. Kolonnen
-“nytt” må *ikke* endres (med ett eneste unntak: om vann-nett-eksporten
+“nytt” må *ikke* endres (med ett eneste unntak: Om vann-nett-eksporten
 har nye kolonner, som ikke tidligere har vært med, må disse fylles med
 unike, men ellers vilkårlige tegnkombinasjoner også i kolonnen “nytt”,
 f.eks. med “n” etterfulgt av et tall).
@@ -56,7 +56,7 @@ f.eks. med “n” etterfulgt av et tall).
 
 Før kjøring av analyser bør aktuelle filer over vannlokaliteter lastes
 ned fra [vannmiljø](https://vannmiljo.miljodirektoratet.no/)-databasen
-([se detaljert forklaring](lesVannlokaliteter.md). Filene er
+([se detaljert forklaring](lesVannlokaliteter.md)). Filene er
 excel-regneark med filendelsen “.xlsx”. Filnavnene på disse filene må
 endres til “**VL-**” etterfulgt av “**C**”, “**L**” eller “**R**” for
 henholdsvis kyst-, innsjø- og elvevannforekomster.
@@ -68,7 +68,7 @@ to kolonner. Fila bør bare endres hvis funksjonen
 som antyder at filene som er eksportert fra vannmiljø-databasen, har
 endra kolonnenavn. I så fall må kolonnen “VL” av “navnVL.csv” oppdateres
 i samsvar med kolonnenavnene i vannmiljø-eksporten. Kolonnen “nytt” må
-*ikke* endres (med ett eneste unntak: om vannmiljø-eksporten har nye
+*ikke* endres (med ett eneste unntak: Om vannmiljø-eksporten har nye
 kolonner, som ikke tidligere har vært med, må disse fylles med unike,
 men ellers vilkårlige tegnkombinasjoner også i kolonnen “nytt”, f.eks.
 med “n” etterfulgt av et tall).
@@ -78,7 +78,7 @@ med “n” etterfulgt av et tall).
 Før innsjødata analyseres, bør aktuelle filer over innsjøer lastes ned
 fra [NVEs
 innsjødatabase](https://www.nve.no/kart/kartdata/vassdragsdata/innsjodatabase/)
-([se detaljert forklaring](lesInnsjodatabasen.md). Filene er en pakke
+([se detaljert forklaring](lesInnsjodatabasen.md)). Filene er en pakke
 med formfiler med bl.a. filendelsene “.dbf” og “.shp”. Filnavnet på
 dbf-fila må angis som argument `filnavn` for funksjonen
 [`lesInnsjodatabasen.md`](lesInnsjodatabasen.md), f.eks. slik:
@@ -91,28 +91,28 @@ med to kolonner. Fila bør bare endres hvis funksjonen
 er eksportert fra innsjødatabasen, har endra kolonnenavn. I så fall må
 kolonnen “NVE” av “navnNVEl.csv” oppdateres i samsvar med kolonnenavnene
 i NVE-eksporten. Kolonnen “nytt” må *ikke* endres (med ett eneste
-unntak: om NVE-eksporten har nye kolonner, som ikke tidligere har vært
+unntak: Om NVE-eksporten har nye kolonner, som ikke tidligere har vært
 med, må disse fylles med unike, men ellers vilkårlige tegnkombinasjoner
 også i kolonnen “nytt”, f.eks. med “n” etterfulgt av et tall).
 
 ## Vannmiljø-data (navnVM.csv)
 
-Målingene som analyseres må lastes ned fra
+Målingene som ønskes analysert, må lastes ned fra
 [vannmiljø](https://vannmiljo.miljodirektoratet.no/)-databasen ([se
-detaljert forklaring](lesMaalinger.md). Filen er et excel-regneark med
-filendelsen “.xlsx”. Filnavnet, som er valgfritt og f.eks. kan være
-parameterforkortelsen, må angis som argument `filnavn` for funksjonen
+detaljert forklaring](lesMaalinger.md)). Filen er et excel-regneark med
+filendelsen “.xlsx”. Filen kan få et valgfritt navn (f.eks. 
+parameterforkortelsen), som må angis som argument `filnavn` for funksjonen
 [`lesMaalinger.md`](lesMaalinger.md), f.eks. slik:
 `lesMaalinger(filnavn = "ASPT.xlsx")`.
 
 For tolkning av filkolonnene trengs det en oversettelsesfil. Fila heter
-“[navnVM.csv](../data/navnVL.csv)” og er en tabulatordelt tekstfil med
+“[navnVM.csv](../data/navnVM.csv)” og er en tabulatordelt tekstfil med
 to kolonner. Fila bør bare endres hvis funksjonen
 [`lesMaalinger`](lesMaalinger.md) genererer feilmeldinger som antyder at
 filene som er eksportert fra vannmiljø-databasen, har endra kolonnenavn.
 I så fall må kolonnen “vm” av “navnVM.csv” oppdateres i samsvar med
 kolonnenavnene i vannmiljø-eksporten. Kolonnen “nytt” må *ikke* endres
-(med ett eneste unntak: om vannmiljø-eksporten har nye kolonner, som
+(med ett eneste unntak: Om vannmiljø-eksporten har nye kolonner, som
 ikke tidligere har vært med, må disse fylles med unike, men ellers
 vilkårlige tegnkombinasjoner også i kolonnen “nytt”, f.eks. med “n”
 etterfulgt av et tall).
@@ -151,13 +151,14 @@ uten betydning.
 For tilordning av vannforekomster til kommuner trengs en oversikt over
 kommunehistorikken. Denne fila heter [knr.xlsx](../data/knr.xlsx) og er
 et excel-regneark. I skrivende stund har regnearket 18 kolonner. De tre
-første inneholder *kommunenummeret* (`Status`), *status* (`Status`:
+første inneholder *kommunenummeret* (`Nummer`), *status* (`Status`:
 “Utgått”, “Gyldig” eller “Sendt inn”) og det offisielle *navnet* som er
-eller var knytta til dette kommunenummeret (`Navn`). Deretter følger et
-antall kolonner som har årstall som kolonnenavn. Det må lages en slik
+eller har vært knytta til dette kommunenummeret (`Navn`). Deretter følger
+et antall kolonner som har årstall som kolonnenavn. Det må lages en slik
 kolonne for hvert år med kommunesammenslåinger eller -oppløsninger.
 Navnene i disse kolonnene skal tilsvare navnet den daværende kommunen
-hadde i det aktuelle året. Den siste kolonnen inneholder alternative
+hadde (eller navnet på kommunen den tidligere kommunen hørte til)
+i det aktuelle året. Den siste kolonnen inneholder alternative
 offisielle navn (f.eks. norske navn for samiske kommuner og motsatt).
 Radene er sortert etter kommunenummer, men rekkefølgen er ellers uten
 betydning.
