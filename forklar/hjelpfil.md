@@ -1,35 +1,35 @@
--   <a href="#oversikt-over-og-endring-av-hjelpefiler"
-    id="toc-oversikt-over-og-endring-av-hjelpefiler">Oversikt over og
-    endring av hjelpefiler</a>
-    -   <a href="#vannforekomster-v-.csv-navnvn.csv"
-        id="toc-vannforekomster-v-.csv-navnvn.csv">Vannforekomster (V-*.csv,
-        navnVN.csv)</a>
-    -   <a href="#vannlokaliteter-vl-.xlsx-navnvl.csv"
-        id="toc-vannlokaliteter-vl-.xlsx-navnvl.csv">Vannlokaliteter (VL-*.xlsx,
-        navnVL.csv)</a>
-    -   <a href="#innsjødatabasen-navnnvel.csv"
-        id="toc-innsjødatabasen-navnnvel.csv">Innsjødatabasen (navnNVEl.csv)</a>
-    -   <a href="#vannmiljø-data-navnvm.csv"
-        id="toc-vannmiljø-data-navnvm.csv">Vannmiljø-data (navnVM.csv)</a>
-    -   <a href="#vannforskriftsparametere-vm-param.xlsx"
-        id="toc-vannforskriftsparametere-vm-param.xlsx">Vannforskriftsparametere
-        (VM-param.xlsx)</a>
-    -   <a href="#måleenheter-vm-enhet.xlsx"
-        id="toc-måleenheter-vm-enhet.xlsx">Måleenheter (VM-enhet.xlsx)</a>
-    -   <a href="#overvåkingsaktiviteter-vm-aktiv.xlsx"
-        id="toc-overvåkingsaktiviteter-vm-aktiv.xlsx">Overvåkingsaktiviteter
-        (VM-aktiv.xlsx)</a>
-    -   <a href="#fylker-fnr.xlsx" id="toc-fylker-fnr.xlsx">Fylker
-        (fnr.xlsx)</a>
-    -   <a href="#kommuner-knr.xlsx" id="toc-kommuner-knr.xlsx">Kommuner
-        (knr.xlsx)</a>
-
 # Oversikt over og endring av hjelpefiler
 
 I mappa [data](../data/) ligger en rekke hjelpefiler som må være til
 stede for at [**R**-funksjonene](funksjon.md) fungerer som de skal. Her
 forklares hjelpefilenes betydning og hvordan de eventuelt kan endres, i
 tilfelle det er nødvendig å oppdatere dem.
+
+-   <a href="#oversikt-over-og-endring-av-hjelpefiler"
+    id="toc-oversikt-over-og-endring-av-hjelpefiler">Oversikt over og
+    endring av hjelpefiler</a>
+-   <a href="#vannforekomster-v-.csv-navnvn.csv"
+    id="toc-vannforekomster-v-.csv-navnvn.csv">Vannforekomster (V-*.csv,
+    navnVN.csv)</a>
+-   <a href="#vannlokaliteter-vl-.xlsx-navnvl.csv"
+    id="toc-vannlokaliteter-vl-.xlsx-navnvl.csv">Vannlokaliteter (VL-*.xlsx,
+    navnVL.csv)</a>
+-   <a href="#innsjødatabasen-navnnvel.csv"
+    id="toc-innsjødatabasen-navnnvel.csv">Innsjødatabasen (navnNVEl.csv)</a>
+-   <a href="#vannmiljø-data-navnvm.csv"
+    id="toc-vannmiljø-data-navnvm.csv">Vannmiljø-data (navnVM.csv)</a>
+-   <a href="#vannforskriftsparametere-vm-param.xlsx"
+    id="toc-vannforskriftsparametere-vm-param.xlsx">Vannforskriftsparametere
+    (VM-param.xlsx)</a>
+-   <a href="#måleenheter-vm-enhet.xlsx"
+    id="toc-måleenheter-vm-enhet.xlsx">Måleenheter (VM-enhet.xlsx)</a>
+-   <a href="#overvåkingsaktiviteter-vm-aktiv.xlsx"
+    id="toc-overvåkingsaktiviteter-vm-aktiv.xlsx">Overvåkingsaktiviteter
+    (VM-aktiv.xlsx)</a>
+-   <a href="#fylker-fnr.xlsx" id="toc-fylker-fnr.xlsx">Fylker
+    (fnr.xlsx)</a>
+-   <a href="#kommuner-knr.xlsx" id="toc-kommuner-knr.xlsx">Kommuner
+    (knr.xlsx)</a>
 
 ## Vannforekomster (V-\*.csv, navnVN.csv)
 
