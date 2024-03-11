@@ -16,7 +16,7 @@ lesVannlokaliteter(vannkategori = c("L", "R", "C"), filsti = "data", kolonnenavn
 
 * `vannkategori` (**tekst-vektor**) må være én eller flere av bokstavene "L", "R" og/eller "C". Det angir vannkategorien som skal leses inn (innsjø, elv og/eller kyst).
 * `filsti`  (**tekst-skalar**) angir filstien for filer som trengs (`kolonnenavn` samt VL-L.xlsx, VL-R.xlsx og VL-C.xlsx).
-* `kolonnenavn` (**tekst-skalar**) angir navnet på en fil med kolonnenavn. Fila må være en semikolondelt tabell. Standardinnstillinga er å lese inn fila "[navnVL.csv](../data/navnVL.csv)".
+* `kolonnenavn` (**tekst-skalar**) angir navnet på en fil med kolonnenavn. Fila må være en semikolondelt tabell ([se detaljer](hjelpfil.md#vannlokaliteter-vl-.xlsx-navnvl.csv)). Standardinnstillinga er å lese inn fila "[navnVL.csv](../data/navnVL.csv)".
 
 
 ## Detaljer

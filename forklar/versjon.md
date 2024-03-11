@@ -9,6 +9,16 @@ I tillegg har alle arkiverte versjoner hver sin unike DOI.
 _Oversikt over publiserte versjoner:_
 
 
+## Versjon 1.2
+Publiseres mars 2024. _Endringer:_
+
+- Funksjonen `mEQR` beregnes nå med asymptotisk begrensning ([detaljer](asympEQR.md)).
+- Parameterspesifikke krav til målinger blir sjekka ([detaljer](sjekkPar.md)).
+- Det ekstrapoleres kun til vanntyper som det foreligger målinger fra ([detaljer](extrapol.md)).
+- Vekting for overvåkingsaktiviteter implementeres på en bedre måte ([detaljer](aktiv.md)).
+- Flere mindre forbedringer i [funksjoner](../R/) og [forklaringer](../forklar/).
+
+
 ## Versjon 1.1
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10497345.svg)](https://doi.org/10.5281/zenodo.10497345)  
 Publisert januar 2024. _Endringer:_
@@ -16,7 +26,7 @@ Publisert januar 2024. _Endringer:_
 - Funksjonen `oppdaterNImedVF` er tilføyd ([detaljer](oppdaterNImedVF.md)).
 - Datafiler for [klassegrenser](../klassegr/) er tilføyd og delvis korrigert.
 - Versjonsnummer er nå del av utmatinga av funksjonen `fraVFtilNI` ([detaljer](fraVFtilNI.md#Funksjonsverdi)).
-- Filstrukturen er standardisert, og [forklaringene](../forklar) er utvida.
+- Filstrukturen er standardisert, og [forklaringene](../forklar/) er utvida.
 
 
 ## Versjon 1.0

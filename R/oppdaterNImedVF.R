@@ -1,7 +1,7 @@
 ### oppdaterNImedVF
 # Funksjoner til NI_vannf
 # ved Hanno Sandvik
-# desember 2023
+# januar 2024
 # se https://github.com/NINAnor/NI_vannf
 ###
 

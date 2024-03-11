@@ -16,7 +16,7 @@ lesMaalinger(filnavn, filsti = "data", kolonnenavn = "navnVM.csv")
 
 * `filnavn` (**tekst-skalar**) angir navnet på en fil med målinger. Fila må være et excel-regneark.
 * `filsti`  (**tekst-skalar**) angir filstien for filer som trengs (`filnavn` og `kolonnenavn`).
-* `kolonnenavn` (**tekst-skalar**) angir navnet på en fil med kolonnenavn. Fila må være en semikolondelt tabell. Standardinnstillinga er å lese inn fila "[navnVM.csv](../data/navnVM.csv)".
+* `kolonnenavn` (**tekst-skalar**) angir navnet på en fil med kolonnenavn. Fila må være en semikolondelt tabell ([se detaljer](hjelpfil.md#vannmiljø-data-navnvm.csv)). Standardinnstillinga er å lese inn fila "[navnVM.csv](../data/navnVM.csv)".
 
 
 ## Detaljer

@@ -29,8 +29,8 @@ _**Automated data flow from the Water Framework Directive to the Nature Index**_
 ## _Purpose_
 _The **R** code developed here streamlines the flow of data that have been sampled in connection with the Water Framework Directive to the [Nature Index for Norway](https://www.naturindeks.no/)._
 
-_Currently, documentation is available in Norwegian only.
-That may change in a later version._
+_[Full documentation](forklar/) is provided in Norwegian only.
+However, an [English summary](forklar/dataflow.md) of the workflow is available._
 
 ## _Contact_
 _The repository is maintained by [Hanno Sandvik](mailto:hanno.sandvik@nina.no)._

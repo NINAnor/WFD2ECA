@@ -1,7 +1,7 @@
 ### Hjelpefunksjoner
 # Hjelpefunksjoner til NI_vannf
 # ved Hanno Sandvik
-# desember 2023
+# mars 2024
 # se https://github.com/NINAnor/NI_vannf
 ###
 
@@ -77,7 +77,14 @@ ln <- function(x) log(x)
 
 # Pen utmating av tekst
 skriv <- function(..., pre = "", linjer.over = 0, linjer.under = 0,
-                  Bredde = bredde, ut = FALSE) {
+                  Bredde, ut = FALSE) {
+  if (missing(Bredde)) {
+    if (exists("breddeUtmating")) {
+      Bredde <- breddeUtmating
+    } else {
+      Bredde <- NULL
+    }
+  }
   txt <- paste(c(...), collapse = "")
   cat(rep("\n", linjer.over),
       paste(strwrap(txt,
@@ -95,6 +102,11 @@ skriv <- function(..., pre = "", linjer.over = 0, linjer.under = 0,
 
 # Erstatte tegn i en tekststreng
 erstatt <- function(i, hva, med) gsub(hva, med, i, fixed = TRUE)
+
+
+
+# Erstatte desimalpunkt med desimalkomma
+komma <- function(x) erstatt(x, ".", ",")
 
 
 
@@ -116,6 +128,16 @@ tillatteVerdier <- function(id) {
 
 
 
+# Regner om en dato til dagen i året
+somDag <- function(d, m, y) as.POSIXlt(y %+% "-" %+% m %+% "-" %+% d)$yday
+
+
+
+# Hjelpefunksjon til funksjonen "mEQR"
+iNv <- function(mx) optimise(function(i) (i / atan(i) - mx)^2, c(0, 1000))$minimum
+
+
+
 # Omregning av Raddum-II- til Raddum-I-verdier
 Raddum2_1 <- Raddum1_2 <- function(DATA) {
   w1 <- which(DATA$parid == "RADDUM2")
@@ -129,6 +151,57 @@ Raddum2_1 <- Raddum1_2 <- function(DATA) {
           linjer.under = 1)
   }
   return(DATA)
+}
+
+
+
+# Kombinerer to utmatinger av "fraVFtilNI"
+# (Må kun brukes for ulike vannkategorier innenfor samme parameter!)
+kombiner <- function(ut1, ut2) {
+  ok <- TRUE
+  UT <- ut1
+  if (names(ut1) %=% names(ut2) &
+      !is.null(attr(ut1, "parameter")) &
+      attr(ut1, "parameter") %=% attr(ut2, "parameter") &
+      !is.null(attr(ut1, "vannkategori")) &
+      !is.null(attr(ut2, "vannkategori"))) {
+    for (i in names(ut1)) {
+      if (dimnames(ut1[[i]])[1:2] %=% dimnames(ut2[[i]])[1:2]) {
+        ny <- array(0, dim = dim(ut1[[i]]) + c(0, 0, dim(ut2[[i]])[3] - 1))
+        dimnames(ny) <- list(dimnames(ut1[[i]])[[1]],
+                             dimnames(ut1[[i]])[[2]],
+                             c("pred", 2:(dim(ny)[3]) - 1))
+        ny[, , 2:dim(ut1[[i]])[3]] <- ut1[[i]][, , 2:dim(ut1[[i]])[3]]
+        ny[, , dim(ut1[[i]])[3] - 1 +
+             2:dim(ut2[[i]])[3]] <- ut2[[i]][, , 2:dim(ut2[[i]])[3]]
+        for (j in 1:dim(ny)[1]) {
+          for (k in 1:dim(ny)[2]) {
+            ny[j, k, 1] <- median(ny[j, k, -1])
+          }
+        }
+        UT[[i]] <- ny
+      } else {
+        ok <- FALSE
+      }
+    }
+    if (ok) {
+      attr(UT, "parameter")     <- attr(ut1, "parameter")
+      attr(UT, "vannkategori")  <- attr(ut1, "vannkategori") %+% "," %+%
+        attr(ut2, "vannkategori")
+      attr(UT, "tidspunkt")     <- Sys.time()
+      attr(UT, "innstillinger") <- NULL
+      attr(UT, "beskjeder")     <- NULL
+    }
+  } else {
+    ok <- FALSE
+  }
+  if (ok) {
+    return(UT)
+  } else {
+    skriv("De to utmatingene var ikke kompatible og kunne ikke kombineres!",
+          pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
+    return(NULL)
+  }
 }
 
 
@@ -150,50 +223,5 @@ farge <- function(eqr, na.farge=0.84) {
                      ifelse(eqr < 0.8, eqr * 10 - 7, 1)))
   rgb(r,g,b)
 }
-
-
-
-# Variabler/konstanter som trengs
-
-
-bredde <- NULL
-
-
-Typologi <- c( # inneholder navnene på typologifaktorene
-  kat = "kategori",
-  reg = "økoregion",
-  son = "klimaregion",
-  stø = "størrelse",
-  alk = "alkalitet",
-  hum = "humusinnhold",
-  tur = "turbiditet",
-  dyp = "dybde",
-  kys = "kysttype",
-  sal = "salinitet",
-  tid = "tidevann",
-  bøl = "bølgeeksponering",
-  mix = "miksing",
-  opp = "oppholdstid",
-  str = "strøm"
-)
-
-
-Vanntyper <- list( # angir mulige verdier for alle typologifaktorer
-  kat = c("C", "L", "R"),
-  reg = c("B", "E", "F", "G", "H", "M", "N", "S", "W"),
-  son = c("L", "M", "H"),
-  stø = 1:5,
-  alk = 1:8,
-  hum = 0:4,
-  tur = 1:3,
-  dyp = 1:6,
-  kys = 1:8,
-  sal = 1:7,
-  tid = 1:2,
-  eks = 1:3,
-  mix = 1:3,
-  opp = 1:3,
-  str = 1:3
-)
 
 

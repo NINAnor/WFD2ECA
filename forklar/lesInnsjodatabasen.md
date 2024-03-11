@@ -16,7 +16,7 @@ lesInnsjodatabasen(filnavn = "Innsjo_Innsjo.dbf", filsti = "data", kolonnenavn =
 
 * `filnavn` (**tekst-skalar**) angir navnet på datasettet. Standardinnstillinga er å lese inn fila "Innsjo_Innsjo.dbf".
 * `filsti` (**tekst-skalar**) angir filstien for filer som trengs (`filnavn` med resten av formfila samt `kolonnenavn`).
-* `kolonnenavn` (**tekst-skalar**) angir navnet på en fil med kolonnenavn. Fila må være en semikolondelt tabell. Standardinnstillinga er å lese inn fila "[navnNVEl.csv](../data/navnNVEl.csv)".
+* `kolonnenavn` (**tekst-skalar**) angir navnet på en fil med kolonnenavn. Fila må være en semikolondelt tabell ([se detaljer](hjelpfil.md#innsjødatabasen-navnnvel.csv)). Standardinnstillinga er å lese inn fila "[navnNVEl.csv](../data/navnNVEl.csv)".
 
 
 ## Detaljer

@@ -1,7 +1,7 @@
 ---
 title: "Dataflyt fra vannforskriften til naturindeks"
 author: "Hanno Sandvik"
-date: "3 January 2024"
+date: "6 March 2024"
 output:
   md_document:
     toc: yes
@@ -59,7 +59,7 @@ Filer for de ulike vannkategoriene må lastes ned hver for seg:
 - Elvevannforekomster   med vanntypeparametere, påvirkninger, tilstand, potensial og miljømål
 - Kystvannforekomster   med vanntypeparametere, påvirkninger, tilstand, potensial og miljømål
 
-For at filene kan leses inn, må de ha følgende navn:
+For at filene kan leses inn, må de gis følgende navn:
 
 - "**V-L.csv**" for innsjøvannforekomstene
 - "**V-R.csv**" for elvevannforekomstene
@@ -70,9 +70,9 @@ Benytta vannkategorier må også spesifiseres ved innlesing (se under).
 
 I tillegg trenger man en tabell som forklarer kolonnenavne i fila fra vann-nett.
 Denne fila er nødvendig for å lese inn vannforekomstdataene, og den ligger i dette arkivet under navnet "[**navnVN.csv**](data/navnVN.csv)".
-Hvis vann-nett endrer kolonnenavnene i sin nedlastingsløsning, må denne fila oppdateres tilsvarende.
+Hvis vann-nett endrer kolonnenavnene i sin nedlastingsløsning, må denne fila [oppdateres tilsvarende](forklar/hjelpfil.md#vannforekomster-v-.csv-navnvn.csv).
 
-Filene er plassert i mappa "[data](data/)". De leses da inn i **R** på følgende måte:
+Filene er plassert i mappa "[data](data/)". De leses da inn i **R** ved hjelp av funksjonen [`lesVannforekomster`](forklar/lesVannforekomster.md) på følgende måte:
 ```{r}
 V <- lesVannforekomster(c("L", "R", "C"))
 ```
@@ -99,9 +99,9 @@ Datasettet man da får, heter "Innsjo_Innsjo".
 
 I tillegg trenger man en tabell som forklarer kolonnenavne i fila fra NVE.
 Denne fila er nødvendig for å lese inn innsjødataene, og den ligger i dette arkivet under navnet "[**navnNVEl.csv**](data/navnNVEl.csv)".
-Hvis NVE endrer kolonnenavnene i sin nedlastingsløsning, må denne fila oppdateres tilsvarende.
+Hvis NVE endrer kolonnenavnene i sin nedlastingsløsning, må denne fila [oppdateres tilsvarende](forklar/hjelpfil.md#innsjødatabasen-navnnvel.csv).
 
-Filnavnet oppgis som parameter når dataene leses inn i **R**:
+Filnavnet oppgis som parameter når dataene leses inn i **R** ved hjelp av funksjonen [`lesInnsjodatabasen`](forklar/lesInnsjodatabasen.md):
 ```{r, eval=FALSE, echo=TRUE}
 nve <- lesInnsjodatabasen("Innsjo_Innsjo.dbf")
 ```
@@ -139,7 +139,7 @@ I fanen "Søk i vannlokaliteter" må man
 - trykke "Eksporter til epost".
 
 Filer for de like vannkategoriene må lastes ned hver for seg. 
-For at filene kan leses inn, må de få følgende navn:
+For at filene kan leses inn, må de gis følgende navn:
 
 - "**VL-L.xlsx**" for innsjøvannlokaliteter
 - "**VL-R.xlsx**" for elvevannlokaliteter
@@ -150,9 +150,9 @@ Benytta vannkategorier må også spesifiseres ved innlesing (se under).
 
 I tillegg trenger man en tabell som forklarer kolonnenavne i fila fra vannmiljø.
 Denne fila er nødvendig for å lese inn vannforekomstdataene, og den ligger i dette arkivet under navnet "[**navnVL.csv**](data/navnVL.csv)".
-Hvis vannmiljø endrer kolonnenavnene i sin nedlastingsløsning, må denne fila oppdateres tilsvarende.
+Hvis vannmiljø endrer kolonnenavnene i sin nedlastingsløsning, må denne fila [oppdateres tilsvarende](forklar/hjelpfil.md#vannlokaliteter-vl-.xlsx-navnvl.csv).
 
-Filene er plassert i mappa "[data](data/)". De leses da inn i **R** på følgende måte:
+Filene er plassert i mappa "[data](data/)". De leses da inn i **R** ved hjelp av funksjonen [`lesVannlokaliteter`](forklar/lesVannlokaliteter.md) på følgende måte:
 ```{r}
 VL <- lesVannlokaliteter(c("L", "R", "C"))
 ```
@@ -165,7 +165,8 @@ I så fall hadde innlesinga blitt avbrutt med beskjeden "FEIL" og en forklaring.
 ### Kobling av informasjon
 
 Til slutt kan informasjonen om innsjøvannforekomster (fra vann-nett) utvides med informasjon fra innsjødatabasen (fra NVE).
-Samtidig testes det for en rekke mulige feilkilder.
+Dette besørges av funksjonen [`oppdaterVannforekomster`](forklar/oppdaterVannforekomster.md).
+Den tester samtidig for en rekke mulige feilkilder.
 Dette trinnet er bare nødvendig om de(n) aktuelle vannforskrift-parameteren (-parameterne) er relevant for innsjøer.
 ```{r}
 V <- oppdaterVannforekomster(V, nve)
@@ -178,25 +179,27 @@ Under antagelse av at innsjødatabasen er mer pålitelig enn vannforekomsttypifi
 
 ### Ytterligere datafiler
 
-Viktig informasjon om vannforskrift-parametere og -indekser er samla i et excel-regneark, som må leses inn.
+Til slutt trengs det lister over kommune- og fylkesnummer og -navn, vannforskriftsparametere og overvåkingsaktiviteter.
+Denne informasjonen leses inn automatisk, gitt at den er lagra i excel-regneark som heter henholdscis "**knr.xlsx**", "**fnr.xlsx**", "**VM-param.xlsx**" og "**VM-aktiv.xlsx" og at disse er plassert i mappa "data".
+Det tas forbehold om at enkelte målinger kan bli tilordna feil kommune, i tilfeller der målinger ble tatt i en sammenslått kommune og tilbakedateres til et tidspunkt før sammenslåinga.
+
+Strukturen på filene ser slik ut:
 ```{r}
+Fylker <- as.data.frame(read_xlsx("data/fnr.xlsx", col_types = "text"))
 Parametere <- as.data.frame(read_xlsx("data/VM-param.xlsx", na = "NA",
                                        col_types = c("text", "text", 
                                                      "numeric", "numeric")))
-head(Parametere)
-```
-
-Informasjon om de ulike overvåkingsaktivitetene som ligger til grunn for datainnsamlinga, er også vesentlig.
-Denne må også leses inn fra et excel-regneark:
-```{r}
 Aktiviteter <- as.data.frame(read_xlsx("data/VM-aktiv.xlsx", na = "NA",
                                        col_types = c("text", "text", "numeric")))
+
+head(Fylker)
+
+head(Parametere)
+
 head(Aktiviteter)
 ```
 
-Til slutt trengs det en liste over kommune- og fylkesnummer og -navn.
-Denne informasjonen leses inn automatisk, gitt at den er lagra i to excel-regneark som heter "**knr.xlsx**" og "**fnr.xlsx**", og at disse er plassert i mappa "data".
-Det tas forbehold om at enkelte målinger kan bli tilordna feil kommune, i tilfeller der målinger ble tatt i en sammenslått kommune og tilbakedateres til et tidspunkt før sammenslåinga.
+Filene bør bare [endres](forklar/hjelpfil.md) om bakgrunnsinformasjonen har blitt endra, og de bør ligge i mappa "data".
 
 
 ## Målinger fra vannmiljø-databasen
@@ -218,9 +221,9 @@ I fanen "Søk i registreringer" må man
 
 I tillegg trenger man en tabell som forklarer kolonnenavne i fila fra vannmiljø.
 Denne fila er nødvendig for å lese inn målingene, og den ligger i dette arkivet under navnet "[**navnVM.csv**](data/navnVM.csv)".
-Hvis vannmiljø endrer kolonnenavnene i sin nedlastingsløsning, må denne fila oppdateres tilsvarende.
+Hvis vannmiljø endrer kolonnenavnene i sin nedlastingsløsning, må denne fila [oppdateres tilsvarende](forklar/hjelpfil.md#vannmiljø-data-navnvm.csv).
 
-Filene er plassert i mappa "[data](data/)". De leses da inn i **R** på følgende måte:
+Filene er plassert i mappa "[data](data/)". De leses da inn i **R** ved hjelp av funksjonen [`lesMaalinger`](forklar/lesMaalinger.md) på følgende måte:
 ```{r}
 DATA <- lesMaalinger("ASPT.xlsx")
 ```
@@ -236,8 +239,8 @@ Som eksempel er ASPT valgt, en bunndyr-forsuringsindeks for elver.
 Analysen består av å
 
 - koble alle målinger til sine respektive vannforekomster naturindeks-rapporteringsår,
-- omregne (skalere) måleverdiene til mEQR-verdier,
-- tilpasse en modell som forklarer variasjonen i måleverdier med tidsperiode, typologifaktorer og overvåkingsaktivitet,
+- omregne (skalere) måleverdiene til [mEQR-verdier](forklar/asympEQR.md),
+- tilpasse en modell som forklarer variasjonen i måleverdier med tidsperiode, typologifaktorer og [overvåkingsaktivitet](forklar/aktiv.md),
 - ekstrapolere trolige verdier til vannforekomster som det ikke foreligger målinger fra,
 - simulere usikkerheten (sannsynlighetsfordelinga) for de sistnevnte og
 - aggregrere resultatene opp til de ønska administrative enhetene.
@@ -246,7 +249,7 @@ Dette trinnet kan ta sin tid.
 Utmatinger underveis viser progresjonen.
 Simuleringa kan ta spesielt mye tid, avhengig av antall iterasjoner.
 For illustrasjonen her er det valgt 1000 iterasjoner.
-For bruk i naturindeks bør man velge en større verdi (f.eks. 100000).
+For bruk i naturindeks bør man velge en større verdi (f.eks. 100&nbsp;000).
 
 Funksjonen som gjennomfører analysen, heter [`fraVFtilNI`](R/fraVFtilNI.R) ("fra vannforkrift til naturindeks").
 Den har mange flere parametere enn de som vises under, som tillater ulike justeringer som er [forklart her](forklar/VFtilNI.md).
@@ -263,8 +266,6 @@ utmating <- fraVFtilNI(
                        NI.aar = c(1990, 2000, 2010, 2014, 2019, 2024),
                        rapportenhet = c("kommune", "fylke", "landsdel", "norge"),
                        adminAar = 2010,
-                       ikkeInkluder = list(typ="tur", vrd=2),
-                       ignorerVariabel = "reg",
                        iterasjoner = 1000,
                       )
 ```
@@ -280,8 +281,6 @@ utmating <- fraVFtilNI(
                        NI.aar = c(1990, 2000, 2010, 2014, 2019, 2024),
                        rapportenhet = c("kommune", "fylke", "landsdel", "norge"),
                        adminAar = 2010,
-                       ikkeInkluder = list(typ="tur", vrd=2),
-                       ignorerVariabel = "reg",
                        iterasjoner = 1000,
                        bredde = 90,
                        tell = FALSE
@@ -306,6 +305,9 @@ hist(utmating$fylke["1900", "2019", ],
 De fylkesvise gjennomsnittsresultatene kan vises på kart:
 ```{r}
 load("data/norge.map")
+fylkeshistorikk  <- as.data.frame(read_xlsx("data/fnr.xlsx", col_types = "text"))
+rownames(fylkeshistorikk)  <-  fylkeshistorikk$nr
+fylke <- function(i) fylkeshistorikk[as.character(i), "navn"]
 plot(Norge.fylker, asp = 2.1)
 text(6, 70, "ASPT", cex = 2.4, font = 1.6)
 text(6, 69, "fylkesvis", cex = 0.96)
@@ -327,6 +329,10 @@ text(rep(26, 5), 59.8+0:4*1.6, c("SD", "D", "M", "G", "SG"), pos = 4, cex = 1.2)
 
 Det samme gjelder de kommunevise resultatene:
 ```{r}
+kommunehistorikk <- as.data.frame(read_xlsx("data/knr.xlsx", col_types = "text"))
+kommunehistorikk$Nummer[which(nchar(kommunehistorikk$Nummer) == 3)] <-
+  "0" %+% kommunehistorikk$Nummer[which(nchar(kommunehistorikk$Nummer) == 3)]
+rownames(kommunehistorikk) <- kommunehistorikk$Nummer
 plot(Norge.kontur, asp = 2.1, col = grey(0.84))
 text(6, 70, "ASPT", cex = 2.4, font = 1.6)
 text(6, 69, "kommunevis", cex = 0.96)
