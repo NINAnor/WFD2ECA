@@ -19,10 +19,7 @@ hentKlassegrenser(filKlasser)
 
 Funksjonen forutsetter at klassegrensene er tilgjengelig i det spesifiserte excel-regnearket.
 Tilgjengelige regneark er samla i mappa [klassegr](../klassegr/).
-Om et regneark må endres eller et nytt legges til, følg instruksjonene som er [bekrevet her](param.md).
-
-Funksjonen forutsetter også at fila [gamletyp.R](../R/gamletyp.R) er tilgjengelig.
-Denne brukes bare om excel-arket benytter nasjonale vanntyper.
+Om et regneark må endres eller et nytt legges til, følg instruksjonene som er [bekrevet her](param.md#hvordan-flere-vannforskriftsparametere-kan-gjøres-klar-til-bruk).
 
 
 ## Funksjonsverdi
