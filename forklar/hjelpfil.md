@@ -28,7 +28,7 @@ tilfelle det er nødvendig å oppdatere dem.
 -   <a href="#kommuner-knr.xlsx" id="toc-kommuner-knr.xlsx">Kommuner
     (knr.xlsx)</a>
 
-## Vannforekomster (V-\*.csv, navnVN.csv)
+## <a id="vannforekomster-v-.csv-navnvn.csv">Vannforekomster</a> (V-\*.csv, navnVN.csv)
 
 Før kjøring av analyser bør aktuelle filer over vannforekomster lastes
 ned fra [vann-nett](https://vann-nett.no/portal/) ([se detaljert
@@ -49,7 +49,7 @@ har nye kolonner, som ikke tidligere har vært med, må disse fylles med
 unike, men ellers vilkårlige tegnkombinasjoner også i kolonnen “nytt”,
 f.eks. med “n” etterfulgt av et tall).
 
-## Vannlokaliteter (VL-\*.xlsx, navnVL.csv)
+## <a id="vannlokaliteter-vl-.xlsx-navnvl.csv">Vannlokaliteter</a> (VL-\*.xlsx, navnVL.csv)
 
 Før kjøring av analyser bør aktuelle filer over vannlokaliteter lastes
 ned fra [vannmiljø](https://vannmiljo.miljodirektoratet.no/)-databasen
@@ -70,7 +70,7 @@ kolonner, som ikke tidligere har vært med, må disse fylles med unike,
 men ellers vilkårlige tegnkombinasjoner også i kolonnen “nytt”, f.eks.
 med “n” etterfulgt av et tall).
 
-## Innsjødatabasen (navnNVEl.csv)
+## <a id="innsjødatabasen-navnnvel.csv">Innsjødatabasen</a> (navnNVEl.csv)
 
 Før innsjødata analyseres, bør aktuelle filer over innsjøer lastes ned
 fra [NVEs
@@ -92,7 +92,7 @@ unntak: Om NVE-eksporten har nye kolonner, som ikke tidligere har vært
 med, må disse fylles med unike, men ellers vilkårlige tegnkombinasjoner
 også i kolonnen “nytt”, f.eks. med “n” etterfulgt av et tall).
 
-## Vannmiljø-data (navnVM.csv)
+## <a id="vannmiljø-data-navnvm.csv">Vannmiljø-data</a> (navnVM.csv)
 
 Målingene som ønskes analysert, må lastes ned fra
 [vannmiljø](https://vannmiljo.miljodirektoratet.no/)-databasen ([se
@@ -114,25 +114,25 @@ ikke tidligere har vært med, må disse fylles med unike, men ellers
 vilkårlige tegnkombinasjoner også i kolonnen “nytt”, f.eks. med “n”
 etterfulgt av et tall).
 
-## Vannforskriftsparametere (VM-param.xlsx)
+## <a id="vannforskriftsparametere-vm-param.xlsx">Vannforskriftsparametere</a> (VM-param.xlsx)
 
 Tilgjengelige vannforskriftsparametere er samla i excel-regnearket
 [VM-param.xlsx](../data/VM-param.xlsx). Om det er behov for å oppdatere
 eller endre denne, bør man følge [en spesifikk
 mal](param.md#hvordan-flere-vannforskriftsparametere-kan-gjøres-klar-til-bruk).
 
-## Måleenheter (VM-enhet.xlsx)
+## <a id="måleenheter-vm-enhet.xlsx">Måleenheter</a> (VM-enhet.xlsx)
 
 Tilgjengelige måleenheter er samla i excel-regnearket
 [VM-enhet.xlsx](../data/VM-enhet.xlsx). Den kan endres etter behov.
 
-## Overvåkingsaktiviteter (VM-aktiv.xlsx)
+## <a id="overvåkingsaktiviteter-vm-aktiv.xlsx">Overvåkingsaktiviteter</a> (VM-aktiv.xlsx)
 
 Tilgjengelige overvåkingsaktiviteter er samla i excel-regnearket
 [VM-aktiv.xlsx](../data/VM-aktiv.xlsx). Om det er behov for å oppdatere
 eller endre denne, bør man følge [en spesifikk mal](aktiv.md).
 
-## Fylker (fnr.xlsx)
+## <a id="fylker-fnr.xlsx">Fylker</a> (fnr.xlsx)
 
 For tilordning av vannforekomster til fylker trengs en oversikt over
 fylkeshistorikken. Denne fila heter [fnr.xlsx](../data/fnr.xlsx) og er
@@ -143,7 +143,7 @@ identisk. For eksisterende fylker er `til` vilkårlig satt til årstallet
 `9999`. Radene er sortert etter fylkesnummer, men rekkefølgen er ellers
 uten betydning.
 
-## Kommuner (knr.xlsx)
+## <a id="kommuner-knr.xlsx">Kommuner</a> (knr.xlsx)
 
 For tilordning av vannforekomster til kommuner trengs en oversikt over
 kommunehistorikken. Denne fila heter [knr.xlsx](../data/knr.xlsx) og er
