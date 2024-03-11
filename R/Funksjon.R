@@ -1,7 +1,7 @@
 ### Hjelpefunksjoner
 # Hjelpefunksjoner til NI_vannf
 # ved Hanno Sandvik
-# februar 2024
+# mars 2024
 # se https://github.com/NINAnor/NI_vannf
 ###
 
@@ -77,7 +77,14 @@ ln <- function(x) log(x)
 
 # Pen utmating av tekst
 skriv <- function(..., pre = "", linjer.over = 0, linjer.under = 0,
-                  Bredde = bredde, ut = FALSE) {
+                  Bredde, ut = FALSE) {
+  if (missing(Bredde)) {
+    if (exists("breddeUtmating")) {
+      Bredde <- breddeUtmating
+    } else {
+      Bredde <- NULL
+    }
+  }
   txt <- paste(c(...), collapse = "")
   cat(rep("\n", linjer.over),
       paste(strwrap(txt,
@@ -216,10 +223,5 @@ farge <- function(eqr, na.farge=0.84) {
                      ifelse(eqr < 0.8, eqr * 10 - 7, 1)))
   rgb(r,g,b)
 }
-
-
-
-# Bredde for utmatinger på skjermen
-bredde <- NULL
 
 

@@ -1,9 +1,3 @@
-# Illustrasjon av dataflyt fra vannforskrift til naturindeks
-
-Dette dokumentet viser gangen i å forberede og gjennomføre opplasting av
-data som har blitt samla inn i rammen av vannforskriften, til
-naturindeks-databasen.
-
 -   <a href="#forberedelser" id="toc-forberedelser">Forberedelser</a>
 -   <a href="#nødvendig-informasjon-om-vannforekomster"
     id="toc-nødvendig-informasjon-om-vannforekomster">Nødvendig informasjon
@@ -25,6 +19,9 @@ naturindeks-databasen.
     id="toc-opplasting-til-naturindeks-databasen">Opplasting til
     naturindeks-databasen</a>
 
+Dette dokumentet viser gangen i å forberede og gjennomføre opplasting av
+data som har blitt samla inn i rammen av vannforskriften, til
+naturindeks-databasen.
 
 ## Forberedelser
 
@@ -435,37 +432,38 @@ her](forklar/VFtilNI.md)).
     ## 
     ## Alle målinger ble tatt mellom 1984 og 2023.
     ## 
-    ## OBS: 13 målinger ligger utafor parameterens definisjonsområde! Deres verdier er større enn 10 (opp til
-    ##      608). I tillegg til disse 13 ble ytterligere 61 målinger ekskludert, fordi de hadde samme
-    ##      oppdragstaker (COWI, Akvaplan-niva AS) og prøvetakingsdato (25.09.2017, 28.08.2018).
+    ## OBS: 13 målinger ligger utafor parameterens definisjonsområde! Deres verdier er større
+    ##      enn 10 (opp til 608). I tillegg til disse 13 ble ytterligere 61 målinger ekskludert,
+    ##      fordi de hadde samme oppdragstaker (COWI, Akvaplan-niva AS) og prøvetakingsdato
+    ##      (25.09.2017, 28.08.2018).
     ## 
     ## Vennligst vent mens målingene kobles mot vannforekomster!
     ## Ferdig med 100 % av målingene.
     ## 
-    ## OBS: 71 målinger ble ekskludert fordi de ikke kunne knyttes til noen kjent vannlokalitet!
+    ## OBS: 71 målinger ble ekskludert fordi de ikke kunne knyttes til noen kjent vannlokalitet.
     ## 
-    ## OBS: 342 målinger ble ekskludert fordi deres vannlokaliteter ikke kunne knyttes til noen typifisert
-    ##      vannforekomst!
+    ## OBS: 342 målinger ble ekskludert fordi deres vannlokaliteter ikke kunne knyttes til noen
+    ##      typifisert vannforekomst.
     ## 
-    ## OBS: 68 målinger ble ekskludert fordi de ikke ble foretatt i en elvevannforekomst!
+    ## OBS: 68 målinger ble ekskludert fordi de ikke ble foretatt i en elvevannforekomst.
     ## 
     ## Alle målinger ble foretatt i de riktige vanntypene.
     ## 
-    ## OBS: 22 datapunkt måtte fjernes fra datasettet fordi de ikke oppfyller de spesifikke kravene som stilles
-    ##      til målinger av ASPT.
+    ## OBS: 22 datapunkt måtte fjernes fra datasettet fordi de ikke oppfyller de spesifikke
+    ##      kravene som stilles til målinger av ASPT.
     ## 
-    ## OBS: For rapportåret 1990 foreligger bare målinger fra 7 vannforekomster. Det er dessverre for få, og denne
-    ##      rapportperioden må derfor utgå.
+    ## OBS: For rapportåret 1990 foreligger bare målinger fra 7 vannforekomster. Det er
+    ##      dessverre for få, og denne rapportperioden må derfor utgå.
     ## 
-    ## OBS: For rapportåret 2000 foreligger bare målinger fra 15 vannforekomster. Det er dessverre for få, og
-    ##      denne rapportperioden må derfor utgå.
+    ## OBS: For rapportåret 2000 foreligger bare målinger fra 15 vannforekomster. Det er
+    ##      dessverre for få, og denne rapportperioden må derfor utgå.
     ## 
     ## Dataene som inngår i modelltilpasninga, inneholder dermed
-    ## - 15021 målinger fra
+    ## - 14999 målinger fra
     ## - 4813 vannlokaliteter i
     ## - 2900 vannforekomster i
     ## - 19 fylker
-    ## - mellom 2000 og 2023.
+    ## - mellom 2001 og 2023.
     ## 
     ## 
     ##    Skalering til mEQR-verdier
@@ -473,17 +471,18 @@ her](forklar/VFtilNI.md)).
     ## 
     ## Oppsummering av variabelverdier før skalering:
     ##  minimum  ned. kv.    median  gj.snitt  øvr. kv.  maksimum 
-    ##  0,00000   5,55556   6,15000   5,99808   6,60000   9,25000 
+    ##  0,00000   5,55556   6,15000   5,99923   6,60000   9,25000 
     ## 
     ## Oppsummering av variabelverdier etter skalering:
     ##  minimum  ned. kv.    median  gj.snitt  øvr. kv.  maksimum 
-    ##  0,00000   0,48889   0,63750   0,63882   0,75000   1,19914 
+    ##  0,00000   0,48889   0,63750   0,63900   0,75000   1,19914 
     ## 
     ## 
     ##    Modelltilpasning til målingene
     ##    ==============================
     ## 
-    ## OBS: 220 målinger ble ekskludert fordi typologifaktoren "c("4", "1", "2", "3")" ikke var kjent for dem!
+    ## OBS: 220 målinger ble ekskludert fordi typologifaktoren "humøsitet" ikke var kjent for
+    ##      dem.
     ## 
     ## 
     ## Modelltilpasning, runde 1:
@@ -491,87 +490,95 @@ her](forklar/VFtilNI.md)).
     ## * Aktivitet: KART og DRIK har blitt slått sammen pga. for lite data.
     ## * Aktivitet: ANLA og RELV har blitt slått sammen pga. for lite data.
     ## * Aktivitet: PASV og KAVE har blitt slått sammen pga. for lite data.
-    ## * Aktivitet: DEPO og ANNE har blitt slått sammen pga. for lite data.
-    ## * Aktivitet: KOMM og FORS har blitt slått sammen pga. for lite data.
-    ## * Aktivitet: ANNE+DEPO og JRBN har blitt slått sammen.
-    ## * Aktivitet: BARE og OEKF har blitt slått sammen.
-    ## * Aktivitet: BIOM og MYFO har blitt slått sammen.
-    ## * Aktivitet: BAPO og BARE+OEKF har blitt slått sammen.
-    ## * Aktivitet: KALL og PROB har blitt slått sammen.
-    ## * Aktivitet: ANNE+DEPO+JRBN og GRUV har blitt slått sammen.
-    ## * Aktivitet: AREA og INDU har blitt slått sammen.
-    ## * Aktivitet: ELVE og TILT har blitt slått sammen.
-    ## * Aktivitet: BAPO+BARE+OEKF og FORS+KOMM har blitt slått sammen.
+    ## * Aktivitet: DEPO og GRUV har blitt slått sammen pga. for lite data.
+    ## * Aktivitet: KOMM og BARE har blitt slått sammen pga. for lite data.
+    ## * Aktivitet: ANNE og JRBN har blitt slått sammen.
+    ## * Aktivitet: ELVE og PROB har blitt slått sammen.
+    ## * Aktivitet: AREA og BAPO har blitt slått sammen.
+    ## * Aktivitet: BIOM og KALL har blitt slått sammen.
+    ## * Aktivitet: ANNE+JRBN og DEPO+GRUV har blitt slått sammen.
+    ## * Aktivitet: AREA+BAPO og FORS har blitt slått sammen.
+    ## * Aktivitet: BARE+KOMM og OEKF har blitt slått sammen.
     ## * Aktivitet: ANLA+RELV og KAVE+PASV har blitt slått sammen.
-    ## * Aktivitet: ELVE+TILT og KALL+PROB har blitt slått sammen.
-    ## * Aktivitet: AREA+INDU og BAPO+BARE+FORS+KOMM+OEKF har blitt slått sammen.
+    ## * Aktivitet: AREA+BAPO+FORS og BARE+KOMM+OEKF har blitt slått sammen.
+    ## * Aktivitet: ELVE+PROB og TILT har blitt slått sammen.
+    ## * Aktivitet: BIOM+KALL og ELVE+PROB+TILT har blitt slått sammen.
+    ## * Aktivitet: AREA+BAPO+BARE+FORS+KOMM+OEKF og INDU har blitt slått sammen.
     ## * Aktivitet: ANNE+DEPO+GRUV+JRBN og VASS har blitt slått sammen.
-    ## * Turbiditet har blitt beholdt uendra (med 2 ulike verdier).
-    ## * Region: W og E har blitt slått sammen.
+    ## * Turbiditet: 1 og 3 har blitt slått sammen.
+    ## * Turbiditet har blitt droppa fordi det ikke var forskjell mellom klassene.
+    ## * Region har blitt beholdt uendra (med 6 ulike verdier).
     ## * Sone har blitt beholdt uendra (med 3 ulike verdier).
-    ## * Størrelse: 2 og 3 har blitt slått sammen.
-    ## * Størrelse: 4 og 5 har blitt slått sammen.
+    ## * Størrelse: 3 og 4 har blitt slått sammen.
+    ## * Størrelse: 2 og 3+4 har blitt slått sammen.
     ## * Alkalitet: 5 og 6 har blitt slått sammen pga. for lite data.
     ## * Alkalitet: 7 og 1 har blitt slått sammen pga. for lite data.
     ## * Humøsitet har blitt beholdt uendra (med 4 ulike verdier).
     ## 
     ## Modelltilpasning, runde 2:
     ## 
-    ## * Aktivitet har blitt beholdt uendra (med 8 ulike verdier).
-    ## * Turbiditet har blitt beholdt uendra (med 2 ulike verdier).
-    ## * Region har blitt beholdt uendra (med 5 ulike verdier).
+    ## * Aktivitet: ANLA+KAVE+PASV+RELV og MYFO har blitt slått sammen.
+    ## * Region har blitt beholdt uendra (med 6 ulike verdier).
+    ## * Sone har blitt beholdt uendra (med 3 ulike verdier).
+    ## * Størrelse har blitt beholdt uendra (med 3 ulike verdier).
+    ## * Alkalitet har blitt beholdt uendra (med 6 ulike verdier).
+    ## * Humøsitet har blitt beholdt uendra (med 4 ulike verdier).
+    ## 
+    ## Modelltilpasning, runde 3:
+    ## 
+    ## * Aktivitet har blitt beholdt uendra (med 7 ulike verdier).
+    ## * Region har blitt beholdt uendra (med 6 ulike verdier).
     ## * Sone har blitt beholdt uendra (med 3 ulike verdier).
     ## * Størrelse har blitt beholdt uendra (med 3 ulike verdier).
     ## * Alkalitet har blitt beholdt uendra (med 6 ulike verdier).
     ## * Humøsitet har blitt beholdt uendra (med 4 ulike verdier).
     ## 
     ## Call:
-    ## vrd ~ per * rar + akt + reg + son + stø + alk + hum + tur
+    ## vrd ~ per * rar + akt + reg + son + stø + alk + hum
     ## 
     ## Weighted Residuals:
     ##      Min       1Q   Median       3Q      Max 
-    ## -1.29908 -0.03883 -0.00525  0.02912  1.27299 
+    ## -1.32839 -0.04030 -0.00744  0.02666  1.52054 
     ## 
     ## Coefficients:
     ##                                        Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)                            1.264247   0.020833  60.684  < 2e-16 ***
-    ## per2014                               -0.413890   0.019795 -20.908  < 2e-16 ***
-    ## per2019                               -0.280337   0.012417 -22.577  < 2e-16 ***
-    ## per2024                               -0.445263   0.014147 -31.474  < 2e-16 ***
-    ## rar                                    0.012407   0.002589   4.793 1.66e-06 ***
-    ## aktANNE+DEPO+GRUV+JRBN+VASS           -0.090874   0.008873 -10.242  < 2e-16 ***
-    ## aktAREA+BAPO+BARE+FORS+INDU+KOMM+OEKF -0.212251   0.010681 -19.872  < 2e-16 ***
-    ## aktBIOM+MYFO                           0.078514   0.014003   5.607 2.10e-08 ***
-    ## aktDRIK+KART                          -0.307247   0.026890 -11.426  < 2e-16 ***
-    ## aktELVE+KALL+PROB+TILT                -0.050376   0.009608  -5.243 1.60e-07 ***
-    ## aktKALK                               -0.150448   0.013060 -11.520  < 2e-16 ***
-    ## aktLANG                                0.207545   0.012430  16.697  < 2e-16 ***
-    ## regM                                  -0.078866   0.012843  -6.141 8.42e-10 ***
-    ## regN                                  -0.113737   0.015744  -7.224 5.28e-13 ***
-    ## regS                                  -0.294677   0.014326 -20.569  < 2e-16 ***
-    ## regW+E                                -0.191743   0.012525 -15.309  < 2e-16 ***
-    ## sonL                                   0.042290   0.011886   3.558 0.000375 ***
-    ## sonM                                   0.082809   0.012031   6.883 6.10e-12 ***
-    ## stø2+3                                 0.027015   0.004403   6.136 8.68e-10 ***
-    ## stø4+5                                -0.001654   0.007454  -0.222 0.824435    
-    ## alk3                                  -0.091110   0.005167 -17.634  < 2e-16 ***
-    ## alk4                                  -0.234904   0.009591 -24.492  < 2e-16 ***
-    ## alk5+6                                 0.134732   0.013769   9.785  < 2e-16 ***
-    ## alk7+1                                 0.098169   0.008379  11.717  < 2e-16 ***
-    ## alk8                                   0.063862   0.006400   9.978  < 2e-16 ***
-    ## hum2                                  -0.044989   0.004704  -9.565  < 2e-16 ***
-    ## hum3                                  -0.227028   0.019463 -11.664  < 2e-16 ***
-    ## hum4                                  -0.034641   0.012297  -2.817 0.004855 ** 
-    ## tur3                                  -0.160166   0.014183 -11.293  < 2e-16 ***
-    ## per2014:rar                           -0.043573   0.006523  -6.680 2.48e-11 ***
-    ## per2019:rar                            0.006608   0.003862   1.711 0.087127 .  
-    ## per2024:rar                           -0.032880   0.003846  -8.549  < 2e-16 ***
+    ## (Intercept)                            0.968446   0.015957  60.692  < 2e-16 ***
+    ## per2014                               -0.277550   0.013268 -20.919  < 2e-16 ***
+    ## per2019                               -0.220626   0.008658 -25.481  < 2e-16 ***
+    ## per2024                               -0.355594   0.015921 -22.335  < 2e-16 ***
+    ## rar                                   -0.012443   0.002316  -5.372 7.92e-08 ***
+    ## aktANNE+DEPO+GRUV+JRBN+VASS           -0.102324   0.008530 -11.996  < 2e-16 ***
+    ## aktAREA+BAPO+BARE+FORS+INDU+KOMM+OEKF -0.230048   0.010419 -22.079  < 2e-16 ***
+    ## aktBIOM+ELVE+KALL+PROB+TILT           -0.060634   0.008873  -6.833 8.61e-12 ***
+    ## aktDRIK+KART                          -0.324483   0.027254 -11.906  < 2e-16 ***
+    ## aktKALK                               -0.174255   0.013004 -13.400  < 2e-16 ***
+    ## aktLANG                                0.192221   0.012365  15.545  < 2e-16 ***
+    ## regF                                   0.199195   0.012734  15.643  < 2e-16 ***
+    ## regM                                   0.120172   0.006264  19.185  < 2e-16 ***
+    ## regN                                   0.076769   0.011976   6.410 1.50e-10 ***
+    ## regS                                  -0.099450   0.008859 -11.225  < 2e-16 ***
+    ## regW                                   0.024222   0.007640   3.170 0.001526 ** 
+    ## sonL                                   0.041433   0.012025   3.446 0.000571 ***
+    ## sonM                                   0.088774   0.012186   7.285 3.38e-13 ***
+    ## stø2+3+4                               0.020212   0.004451   4.541 5.65e-06 ***
+    ## stø5                                  -0.007990   0.010848  -0.737 0.461406    
+    ## alk3                                  -0.080849   0.005303 -15.246  < 2e-16 ***
+    ## alk4                                  -0.247010   0.009786 -25.241  < 2e-16 ***
+    ## alk5+6                                 0.134639   0.014078   9.564  < 2e-16 ***
+    ## alk7+1                                 0.100310   0.008815  11.379  < 2e-16 ***
+    ## alk8                                   0.067971   0.006957   9.770  < 2e-16 ***
+    ## hum2                                  -0.049713   0.004918 -10.108  < 2e-16 ***
+    ## hum3                                  -0.283328   0.019660 -14.412  < 2e-16 ***
+    ## hum4                                  -0.040446   0.012509  -3.233 0.001226 ** 
+    ## per2014:rar                           -0.010926   0.005399  -2.024 0.043017 *  
+    ## per2019:rar                            0.010686   0.003584   2.981 0.002874 ** 
+    ## per2024:rar                           -0.011731   0.005150  -2.278 0.022755 *  
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 0.145 on 14769 degrees of freedom
-    ## Multiple R-squared:  0.3835, Adjusted R-squared:  0.3822 
-    ## F-statistic: 296.4 on 31 and 14769 DF,  p-value: < 2.2e-16
+    ## Residual standard error: 0.1468 on 14748 degrees of freedom
+    ## Multiple R-squared:  0.3682, Adjusted R-squared:  0.3669 
+    ## F-statistic: 286.5 on 30 and 14748 DF,  p-value: < 2.2e-16
     ## 
     ## 
     ##    Ekstrapolering til ikke-målte vannforekomster

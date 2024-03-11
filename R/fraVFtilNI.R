@@ -1,7 +1,7 @@
 ### fraVFtilNI
 # Dataflyt "fra vannforskriften til naturindeks"
 # ved Hanno Sandvik
-# februar 2024
+# mars 2024
 # se https://github.com/NINAnor/NI_vannf
 ###
 
@@ -46,9 +46,10 @@ fraVFtilNI <- function(
     tell = TRUE,
     ...
 ) {
+  
   ### fraVFtilNI [fra vannforskrift til naturindeks]
   # ved Hanno Sandvik
-  # februar 2024
+  # mars 2024
   # se https://github.com/NINAnor/NI_vannf
   ###
   
@@ -115,6 +116,7 @@ fraVFtilNI <- function(
   
   OK <- TRUE
   u  <- c()
+  breddeUtmating <<- bredde
   
   #########################################################################
   skriv("Innledende tester", pre = "   ", linjer.over  = 1)
@@ -253,6 +255,7 @@ fraVFtilNI <- function(
       } else {
         if (is.data.frame(Parametere) && 
             names(Parametere) %=% c("id", "navn", "min", "max")) {
+          Parametere <<- Parametere
           w <- which(Parametere$id == parameter)
           if (length(w) %=% 1) {
             if (any(is.na(Parametere[w, ]))) {
@@ -260,17 +263,6 @@ fraVFtilNI <- function(
               skriv("Tillatte verdier er ikke angitt for \"", parameter,
                     "\" i regnearket \"", paramFil, "!",
                     pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
-            } else {
-              parameterNavn <- function(id) {
-                rownames(Parametere) <- Parametere$id
-                navn <- Parametere[toupper(id), "navn"]
-                navn[which(is.na(navn))] <- "?"
-                return(navn)
-              }
-              tillatteVerdier <- function(id) {
-                rownames(Parametere) <- Parametere$id
-                as.numeric(unlist(Parametere[toupper(id), 3:4]))
-              }
             }
           } else {
             OK <- FALSE
@@ -426,7 +418,7 @@ fraVFtilNI <- function(
       }
     }
     if (!length(rapportenhet %A% c("kommune", "fylke", "landsdel", "norge"))) {
-      rapportenhet <- c("kommune", "fylke", "landsdel", "norge")
+      rapportenhet            <- c("kommune", "fylke", "landsdel", "norge")
     }
     if (!is.numeric(adminAar) || length(adminAar) != 1) {
       adminAar <- 9000
@@ -503,17 +495,16 @@ fraVFtilNI <- function(
     skriv("==============================", pre = "   ", linjer.under = 1)
 
     # Sjekk av år mot rapporteringsperioden
-    aar <- as.numeric(substr(DATA$tidpkt, 1, 4))
+    aar <- rappAar <- as.numeric(substr(DATA$tidpkt, 1, 4))
     NI.aar <- sort(NI.aar)
     startaar <- min(NI.aar) - rapportperiode + 1
     sluttaar <- max(NI.aar)
     er.med <- which(DATA$parid == parameter & !is.na(DATA$verdi) &
-                      aar >= startaar & aar <= sluttaar)
-    rappAar <- NA
-    rappAar[er.med] <- aar[er.med]
+                    aar >= startaar & aar <= sluttaar)
     for (i in rev(NI.aar)) {
-      rappAar[which(aar < i)] <- i
-    }
+      rappAar[which(aar <= i)] <- i 
+    } # frem til v. 1.1 sto det "<":
+      # rappAar[which(aar < i)] <- i
     relaar <- aar - rappAar
     u <- c(u, skriv("Det foreligger ", length(which(DATA$parid == parameter)), 
                     " målinger av parameteren ", parameter, " [", 
@@ -550,7 +541,7 @@ fraVFtilNI <- function(
       u <- c(u, skriv("Alle målinger ble tatt mellom ", min(aar[er.med]), " og ",
                       max(aar[er.med]), ".", linjer.under = 1, ut = TRUE))
     }
-    
+
     # Parameterens måleenhet
     enhet <- NULL
     if (unique(DATA$enhet[er.med]) %!=% "3" & file.exists("data/VM-enhet.xlsx") &
@@ -657,7 +648,7 @@ fraVFtilNI <- function(
       u <- c(u, skriv(length(skjev), ifelse(length(skjev) == 1, 
                                             " måling", " målinger"),
                       " bla samla inn i rammen av aktiviteter som er for lite ",
-                      "representative! Disse ble ekskludert.", 
+                      "representative. Disse ble ekskludert.", 
                       pre = "OBS: ", linjer.under = 1, ut = TRUE))
     } else {
       if (maksSkjevhet < 3) {
@@ -742,7 +733,7 @@ fraVFtilNI <- function(
       u <- c(u, skriv(length(uten.kode), ifelse(length(uten.kode) == 1,
                                            " måling ble ekskludert fordi den",
                                            " målinger ble ekskludert fordi de"),
-                      " ikke kunne knyttes til noen kjent vannlokalitet!", 
+                      " ikke kunne knyttes til noen kjent vannlokalitet.", 
                       pre = "OBS: ", linjer.under = 1, ut = TRUE))
     } else {
       u <- c(u, skriv("Alle målinger kunne knyttes til en vannlokalitet.", 
@@ -753,7 +744,7 @@ fraVFtilNI <- function(
                       ifelse(length(uten.id) == 1,
                         " måling ble ekskludert fordi dens vannlokalitet",
                         " målinger ble ekskludert fordi deres vannlokaliteter"),
-                      " ikke kunne knyttes til noen typifisert vannforekomst!",
+                      " ikke kunne knyttes til noen typifisert vannforekomst.",
                       pre = "OBS: ", linjer.under = 1, ut = TRUE))
     } else {
       u <- c(u, skriv("Alle vannlokaliteter kunne knyttes til en typifisert ",
@@ -777,7 +768,7 @@ fraVFtilNI <- function(
           ) %+% "vannforekomst"
         maaling <- maaling[-feil,]
         u <- c(u, skriv(txt1, " ble ekskludert fordi de", 
-                        ifelse(length(feil) %=% 1,"n",""), " ikke ble", txt2, "!", 
+                        ifelse(length(feil) %=% 1,"n",""), " ikke ble", txt2, ".", 
                         pre = "OBS: ", linjer.under = 1, ut = TRUE))
         rm(txt1, txt2, feil)
       } else {
@@ -851,7 +842,7 @@ fraVFtilNI <- function(
       sjekkPar <- "sjekk" %+% parameter
       if (exists(sjekkPar) && is.function(get(sjekkPar))) {
         sjekk <- get(sjekkPar)
-        slett <- sjekk(maaling, ...)
+        slett <- sjekk(maaling)
         if (length(slett)) {
           maaling <- maaling[-slett, ]
           u <- c(u, skriv(length(slett), " datapunkt måtte fjernes fra datasettet",
@@ -942,7 +933,7 @@ fraVFtilNI <- function(
     if (is.null(enhet)) {
       enhet <- ":"
     } else {
-      enhet <- " (malt i " %+% enhet %+% "):"
+      enhet <- " (målt i " %+% enhet %+% "):"
     }
     u <- c(u, skriv("Oppsummering av variabelverdier før skalering", enhet,
                     ut = TRUE))
@@ -1045,20 +1036,25 @@ fraVFtilNI <- function(
     for (i in 1:length(RF2a)) RF2a[[i]] <- character(0)
 
     # Fjern typologifaktorer som ikke er oppgitt
+    husk <- list()
     for (typ in Variabler %-% "akt") {
       w <- which(is.na(maaling[, typ]))
       if (length(w)) {
         if (length(w) > nrow(maaling) * 0.1) {
           Variabler <- Variabler %-% typ
-          u <- c(u, skriv("Typologifaktoren \"", Vanntyper[typ], 
+          u <- c(u, skriv("Typologifaktoren \"", tolower(Typologi[typ]), 
                           "\" mangla såpass ofte (", length(w), 
-                          " ganger) at den ignoreres!", 
+                          " ganger) at den ignoreres.", 
                           pre = "OBS: ", linjer.under = 1, ut = TRUE))
         } else {
-          maaling <- maaling[-w, ]
-          u <- c(u, skriv(length(w), " målinger ble ekskludert fordi typologifakt",
-                          "oren \"", Vanntyper[typ], "\" ikke var kjent for dem!", 
-                          pre = "OBS: ", linjer.under = 1, ut = TRUE))
+          if (length(unique(maaling[, typ])) > 2) {
+            husk[[typ]] <- maaling[+w, ]
+            maaling     <- maaling[-w, ]
+            u <- c(u, skriv(length(w), " målinger ble ekskludert fordi ",
+                            "typologifaktoren \"", tolower(Typologi[typ]), 
+                            "\" ikke var kjent for dem.", 
+                            pre = "OBS: ", linjer.under = 1, ut = TRUE))
+          }
         }
       }
     }
@@ -1066,11 +1062,16 @@ fraVFtilNI <- function(
     formel. <- character(0)
     if (length(unique(maaling$per)) > 1) formel. <- c(formel., "per")
     if (length(unique(maaling$rar)) > 2) formel. <- c(formel., "rar")
-    formel. <- paste(formel., collapse = " * ")
-    if (length(Variabler)) {
-      formel. <- paste(c(formel., Variabler), collapse = " + ")
+    if (length(formel.) < 1) {
+      OK <- FALSE
+      skriv("Det er totalt sett for få år med data til å tilpasse en modell!",
+            pre = "FEIL:", linjer.over = 1, linjer.under = 1)
     }
-    
+    formel. <- paste(c(formel., Variabler), collapse = " + ")
+    formel. <- erstatt(formel., "per + rar", "per * rar")
+  }
+  
+  if (OK) {
     if (any(maaling$dyp %in% 4:6)) {
       maaling$dyp[which(as.numeric(maaling$dyp) > 3)] <-
         as.character(as.numeric(maaling$dyp[which(as.numeric(maaling$dyp)>3)])-3)
@@ -1095,7 +1096,7 @@ fraVFtilNI <- function(
       u <- c(u, skriv("Modelltilpasning, runde ", runde, ":", 
                       linjer.over = 1, linjer.under = 1, ut = TRUE))
       
-      # tomme variabler
+      # tomme variabler ----------------------------------------------
       REKKEF <- RF1
       VNAVN  <- VN1
       formel <- formel. <- formel.. <- erstatt(formel., ".", "")
@@ -1114,6 +1115,7 @@ fraVFtilNI <- function(
         vnavn <- VNAVN[[vrb]]
         if (length(vrber) < 2) {
           formel. <- erstatt(formel., " + " %+% vrb %+% ".", "")
+          formel. <- erstatt(formel., vrb %+% "." %+% " + ", "")
           vrber <- character()
           endra <- TRUE
           if (vis) {
@@ -1123,6 +1125,7 @@ fraVFtilNI <- function(
         } else {
           if (length(which(vrb. %in% vrber)) < 2 * maalingTyp) {
             formel. <- erstatt(formel., " + " %+% vrb %+% ".", "")
+            formel. <- erstatt(formel., vrb %+% "." %+% " + ", "")
             vrber <- character()
             endra <- TRUE
             if (vis) {
@@ -1134,6 +1137,7 @@ fraVFtilNI <- function(
               natall <- length(which(!(vrb. %in% vrber)))
               if (natall > max(table(vrb.))) {
                 formel. <- erstatt(formel., " + " %+% vrb %+% ".", "")
+                formel. <- erstatt(formel., vrb %+% "." %+% " + ", "")
                 vrber <- character()
                 endra <- TRUE
                 if (vis) {
@@ -1173,6 +1177,7 @@ fraVFtilNI <- function(
         vnavn <- VNAVN[[vrb]]
         if (length(vrber) < 2) {
           formel. <- erstatt(formel., " + " %+% vrb %+% ".", "")
+          formel. <- erstatt(formel., vrb %+% "." %+% " + ", "")
           vrber <- character()
           endra <- TRUE
           if (vis) {
@@ -1182,6 +1187,7 @@ fraVFtilNI <- function(
         } else {
           if (length(which(vrb. %in% vrber)) < 2 * maalingTyp) {
             formel. <- erstatt(formel., " + " %+% vrb %+% ".", "")
+            formel. <- erstatt(formel., vrb %+% "." %+% " + ", "")
             vrber <- character()
             endra <- TRUE
             if (vis) {
@@ -1193,6 +1199,7 @@ fraVFtilNI <- function(
               natall <- length(which(!(vrb. %in% vrber)))
               if (natall > max(table(vrb.))) {
                 formel. <- erstatt(formel., " + " %+% vrb %+% ".", "")
+                formel. <- erstatt(formel., vrb %+% "." %+% " + ", "")
                 vrber <- character()
                 endra <- TRUE
                 if (vis) {
@@ -1215,7 +1222,7 @@ fraVFtilNI <- function(
         }
       }
       
-      # nominale variabler
+      # nominale variabler ------------------------------------------
       REKKEF <- RF1
       VNAVN  <- VN1
       formel <- formel. <- formel.. <- erstatt(formel., ".", "")
@@ -1241,9 +1248,8 @@ fraVFtilNI <- function(
         vnavn <- VNAVN[[vrb]]
         lengde <- length(vrber)
         if (lengde > 1 & sum(table(vrb.)) >= 2 * maalingTyp) {
-          while (sort(table(vrb.))[[1]] < maalingTyp) { # hvis det er få datapunkt, 
-                                                        # må det slås sammen
-            pm1 <- names(sort(table(vrb.)))[1]
+          while (sort(table(vrb.))[[1]] < maalingTyp) { # hvis det er få datapunkt,
+            pm1 <- names(sort(table(vrb.)))[1]          # må det slås sammen
             aic <- Inf
             VLI <- list(vrb.)
             tekst <- ""
@@ -1252,7 +1258,11 @@ fraVFtilNI <- function(
               vrb..[which(vrb.. == pm1 | vrb.. == pm2)] <- combine(pm1, pm2)
               VLI[[length(VLI) + 1]] <- vrb..
               assign(vrb %+% "..", vrb..)
-              aic <- c(aic, AIC(lm(f(formel..), data=maaling, weights=vkt)))
+              if (length(vrber) %=% 2) {
+                aic <- c(aic, -Inf)
+              } else {
+                aic <- c(aic, AIC(lm(f(formel..), data=maaling, weights=vkt)))
+              }
               tekst <- c(tekst, pm1 %+% " og " %+% pm2)
             }
             lav <- order(aic)[1]
@@ -1272,6 +1282,7 @@ fraVFtilNI <- function(
         }
         if (lengde > 1 & length(vrber) < 2) {
           formel. <- erstatt(formel., " + " %+% vrb %+% ".", "")
+          formel. <- erstatt(formel., vrb %+% "." %+% " + ", "")
           vrber <- character()
           endra <- TRUE
           if (vis) {
@@ -1280,9 +1291,9 @@ fraVFtilNI <- function(
           }
         }
         lengde <- length(unique(vrb.))
-        if (length(unique(vrb.)) > 1 & sum(table(vrb.)) >= 2 * maalingTyp) {
+        if (lengde > 1 & sum(table(vrb.)) >= 2 * maalingTyp) {
           L <- c(length(unique(vrb.)), Inf)
-          while(L[1] > 1 & L[2] > L[1]) {
+          while (L[1] > 1 & L[2] > L[1]) {
             VLI <- list(vrb.)
             assign(vrb %+% ".", vrb.)
             aic <- AIC(lm(f(formel.), data=maaling, weights=vkt))
@@ -1295,9 +1306,15 @@ fraVFtilNI <- function(
                 vrb..[which(vrb.. == pm1 | vrb.. == pm2)] <- combine(pm1, pm2)
                 VLI[[length(VLI) + 1]] <- vrb..
                 if (length(unique(vrb..)) == 1) {
-                  formel.. <- erstatt(formel.., " + " %+% vrb %+% "..", "")}
+                  formel.. <- erstatt(formel.., " + " %+% vrb %+% "..", "")
+                  formel.. <- erstatt(formel.., vrb %+% ".." %+% " + ", "")
+                }
                 assign(vrb %+% "..", vrb..)
-                aic <- c(aic, AIC(lm(f(formel..), data=maaling, weights=vkt)))
+                if (length(unique(vrb.)) %=% 2) {
+                  aic <- c(aic, -Inf)
+                } else {
+                  aic <- c(aic, AIC(lm(f(formel..), data=maaling, weights=vkt)))
+                }
                 tekst <- c(tekst, pm2 %+% " og " %+% pm1)
               }
             }
@@ -1323,8 +1340,12 @@ fraVFtilNI <- function(
         }
         if (length(unique(vrb.)) %=% 1 & lengde > 1) {
           formel. <- erstatt(formel., " + " %+% vrb %+% ".", "")
+          formel. <- erstatt(formel., vrb %+% "." %+% " + ", "")
           vrber <- character()
           endra <- TRUE
+          if (vrb %in% names(husk)) {
+            maaling     <- rbind(maaling, husk[[vrb]])
+          }
           if (vis) {
             u <- c(u, skriv(vnavn, " har blitt droppa fordi det ikke var ",
                             "forskjell mellom klassene.", pre = "* ", ut = TRUE))
@@ -1341,7 +1362,7 @@ fraVFtilNI <- function(
         RF1 <- REKKEF
       }
       
-      # ordinale variabler
+      # ordinale variabler ---------------------------------
       REKKEF <- RF2
       TALLV  <- TV2
       VNAVN  <- VN2
@@ -1368,9 +1389,9 @@ fraVFtilNI <- function(
         }
         vnavn <- VNAVN[[vrb]]
         lengde <- length(vrber)
-        if (length(vrber) > 1 & length(which(vrb. %in% vrber)) >= 2 * maalingTyp) {
-          while(length(which(vrb. == vrber[1])) < maalingTyp) { # her slås klasser 
-                                        # som har få lite data, sammen fra venstre
+        if (lengde > 1 & length(which(vrb. %in% vrber)) >= 2 * maalingTyp) {
+          while (length(which(vrb. == vrber[1])) < maalingTyp) { # her slås klasser 
+                                         # som har få lite data, sammen fra venstre
             vrb.[which(vrb. %in% vrber[1:2])] <- paste(vrber[1:2], collapse="+")
             endra <- TRUE
             if (vis) {
@@ -1381,8 +1402,8 @@ fraVFtilNI <- function(
             vrber[2] <- paste(vrber[1:2], collapse="+")
             vrber <- vrber[-1]
           }
-          while(length(which(vrb. == vrber[length(vrber)])) < maalingTyp) { # det 
-                                                                # samme fra høyre
+          while (length(which(vrb. == vrber[length(vrber)])) < maalingTyp) { # det 
+                                                                 # samme fra høyre
             vrb.[which(vrb. %in% vrber[length(vrber) - 1:0])] <-
               paste(vrber[length(vrber) - 1:0], collapse="+")
             endra <- TRUE
@@ -1397,14 +1418,13 @@ fraVFtilNI <- function(
             vrber <- vrber[-length(vrber)]
           }
         }
-        if (length(vrber) > 1 & length(which(vrb. %in% vrber)) >= 2 * maalingTyp) {
-                                                               # det samme i midten
-          while(any(table(vrb.) < maalingTyp)) {
-            w <- names(which(table(vrb.) < maalingTyp)[1])
+        if (length(which(vrb. %in% vrber)) >= 2 * maalingTyp) {
+          while (length(vrber) > 1 & any(table(vrb.) < maalingTyp)) { # det samme 
+            w <- names(which(table(vrb.) < maalingTyp)[1])            # i midten
             vrb.. <- vrb.
             hvilk1 <- which(vrber == w)
             en <- 1
-            while(length(which(vrb.. == w)) < maalingTyp) {
+            while (length(which(vrb.. == w)) < maalingTyp) {
               vrb..[which(vrb.. == vrber[which(vrber == w) - en])] <- w
               hvilk1 <- c(hvilk1[1] - en, hvilk1)
               en <- en + 1
@@ -1414,7 +1434,7 @@ fraVFtilNI <- function(
             vrb.. <- vrb.
             hvilk2 <- which(vrber == w)
             en <- 1
-            while(length(which(vrb.. == w)) < maalingTyp) {
+            while (length(which(vrb.. == w)) < maalingTyp) {
               vrb..[which(vrb.. == vrber[which(vrber == w) + en])] <- w
               hvilk2 <- c(hvilk2,  hvilk2[length(hvilk2)] + en)
               en <- en + 1
@@ -1448,6 +1468,7 @@ fraVFtilNI <- function(
         }
         if (lengde > 1 & length(vrber) < 2) {
           formel. <- erstatt(formel., " + " %+% vrb %+% ".", "")
+          formel. <- erstatt(formel., vrb %+% "." %+% " + ", "")
           vrber <- character()
           endra <- TRUE
           if (vis) {
@@ -1458,7 +1479,7 @@ fraVFtilNI <- function(
         lengde <- length(unique(vrb.))
         if (length(vrber) > 1 & length(which(vrb. %in% vrber)) >= 2 * maalingTyp) {
           L <- c(length(unique(vrb.)), Inf)
-          while(L[1] > 1 & L[2] > L[1]) {
+          while (L[1] > 1 & L[2] > L[1]) {
             VLI <- list(vrb.)
             assign(vrb %+% ".", vrb.)
             aic <- AIC(lm(f(formel.), data=maaling, weights=vkt))
@@ -1471,9 +1492,15 @@ fraVFtilNI <- function(
               VLI[[length(VLI) + 1]] <- vrb..
               if (length(unique(vrb..)) == 1) {
                 formel.. <- erstatt(formel.., " + " %+% vrb %+% "..", "")
+                formel.. <- erstatt(formel.., vrb %+% ".." %+% " + ", "")
               }
               assign(vrb %+% "..", vrb..)
-              aic <- c(aic, AIC(lm(f(formel..), data=maaling, weights=vkt)))
+              if (length(vrber) %=% 2) {
+                aic <- c(aic, -Inf)
+              } else {
+                aic <- c(aic, AIC(lm(f(formel..), data=maaling, weights=vkt)))
+              }
+              
               tekst <- c(tekst, i %+% " og " %+% j)
             }
             lav <- order(aic)[1]
@@ -1516,8 +1543,12 @@ fraVFtilNI <- function(
         }
         if (length(unique(vrb.)) %=% 1 & lengde > 1) {
           formel. <- erstatt(formel., " + " %+% vrb %+% ".", "")
+          formel. <- erstatt(formel., vrb %+% "." %+% " + ", "")
           vrber <- character()
           endra <- TRUE
+          if (vrb %in% names(husk)) {
+            maaling     <- rbind(maaling, husk[[vrb]])
+          }
           if (vis) {
             u <- c(u, skriv(vnavn, " har blitt droppa fordi det ikke var ",
                             "forskjell mellom klassene.",
@@ -1644,15 +1675,15 @@ fraVFtilNI <- function(
                 } else {
                   fjern <- c(fjern, which(nydata[, i] == j))
                   if (j %in% RF1.sik[[i]]) {
-                    beskjed[length(beskjed) + 1] <- length(which(nydata[,i]==j)) %+%
-                      " vannforekomster er av typen \""   %+%  tolower(VN1[[i]]) %+% 
-                      " = " %+% j %+% "\", som det ikke foreligger målinger av " %+%
+                    beskjed[length(beskjed)+1] <- length(which(nydata[,i]==j)) %+%
+                      " vannforekomster er av typen \""  %+% tolower(VN1[[i]]) %+% 
+                      " = "%+% j%+% "\", som det ikke foreligger målinger av " %+%
                       parameter %+% " fra"
                   } else {
-                    beskjed[length(beskjed) + 1] <- length(which(nydata[,i]==j)) %+%
-                      " vannforekomst"                                           %+% 
-                      ifelse(length(which(nydata[, i] == j)) == 1, "", "er")     %+%
-                      " har den ukjente vanntypen \"" %+% tolower(VN1[[i]])      %+% 
+                    beskjed[length(beskjed)+1] <- length(which(nydata[,i]==j)) %+%
+                      " vannforekomst"                                         %+% 
+                      ifelse(length(which(nydata[, i] == j)) == 1, "", "er")   %+%
+                      " har den ukjente vanntypen \"" %+% tolower(VN1[[i]])    %+% 
                       " = " %+% j %+% "\""
                   }
                 }
@@ -1698,7 +1729,7 @@ fraVFtilNI <- function(
                 beskjed[length(beskjed) + 1] <- length(which(Vf[utvalg,i]==j)) %+%
                   " vannforekomst"                                             %+% 
                   ifelse(length(which(Vf[utvalg, i] == j)) == 1, "", "er")     %+%
-                  " har den ukjente vanntypen \"" %+% tolower(VN1[[i]])        %+% 
+                  " har den ukjente vanntypen \"" %+% tolower(VN1[[i]])        %+%
                   " = " %+% j %+% "\""
               }
             }
@@ -1954,7 +1985,6 @@ fraVFtilNI <- function(
         nydata[,i] <- as.numeric(nydata[,i])
       }
     }
-    
     konfident <- which(rownames(nydata) %in% maaling$vfo)
     #BLAA
     #  konfident <- matrix(FALSE, nrow(nydata), length(NI.aar))
@@ -1993,7 +2023,6 @@ fraVFtilNI <- function(
     #    maalt.sd[hvilke] <- (yaa + stg * maalt.gs[hvilke]) * maalt.gs[hvilke]
     #    rm(cv, md, yaa, stg, hvilke)
     #  }
-
     df <- modell$df
   }
 
@@ -2109,8 +2138,7 @@ fraVFtilNI <- function(
           }
           rm(slumptall)
           gc(verbose = FALSE)
-          
-          
+
           # Oppskalering til rapporteringsenheter
           
           for (e in rapportenhet) {
@@ -2133,7 +2161,6 @@ fraVFtilNI <- function(
                 }
               }
             }
-            
             if ("kommuner" %begynner% e) {
               if (adminAar > 1976) {
                 for (k in KOM) {
@@ -2206,7 +2233,6 @@ fraVFtilNI <- function(
               #print(sdrag)}}
             }
           }
-          
           rm(simdata)
           gc(verbose = FALSE)
           s <- i
