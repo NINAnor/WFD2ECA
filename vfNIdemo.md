@@ -1,3 +1,9 @@
+# Illustrasjon av dataflyt fra vannforskrift til naturindeks
+
+Dette dokumentet viser gangen i å forberede og gjennomføre opplasting 
+av data som har blitt samla inn i rammen av vannforskriften, til 
+naturindeks-databasen.
+
 -   <a href="#forberedelser" id="toc-forberedelser">Forberedelser</a>
 -   <a href="#nødvendig-informasjon-om-vannforekomster"
     id="toc-nødvendig-informasjon-om-vannforekomster">Nødvendig informasjon
@@ -18,10 +24,6 @@
 -   <a href="#opplasting-til-naturindeks-databasen"
     id="toc-opplasting-til-naturindeks-databasen">Opplasting til
     naturindeks-databasen</a>
-
-Dette dokumentet viser gangen i å forberede og gjennomføre opplasting av
-data som har blitt samla inn i rammen av vannforskriften, til
-naturindeks-databasen.
 
 ## Forberedelser
 
