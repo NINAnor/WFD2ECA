@@ -91,8 +91,7 @@ I slike tilfeller bør den aktuelle verdien (dvs. "max" eller "min") settes vilk
 Funksjonen `fraVFtilNI` sjekker om målinger som er rapportert i vannmiljø-databasen, inneholder åpenbare måle- eller rapporteringsfeil (dvs. verdier som er uforenlige med parameterens definisjon). 
 I tillegg eksisterer imidlertid spesifikke krav til de fleste vannforskriftsparameterne. 
 Noen av disse kravene, men ikke alle, blir kontrollert av funksjonen `fraVFtilNI` (nærmere bestemt av hjelpefunksjonene [`sjekkXXX`](sjekkPar.md)).
-Nedenfor gis en liste over kjente krav og hvilke av disse som blir kontrollert.
-Merk at lista mest sannsynlig ikke er uttømmende.
+Nedenfor gis en liste over foreliggende krav og hvilke av disse som blir kontrollert (der lista over foreliggende krav ikke nødvendigvis er uttømmende).
 
 * **AIP** skal måles mellom juni og oktober. Målinger som ikke oppfyller dette kravet, blir ekskludert (se [`sjekkAIP`](sjekkPar.md)). Standardinnstillinga tillater et slingringsmonn på to uker. Hver AIP-måling bør dessuten være basert på minst tre arter. Dette kravet blir _ikke_ sjekket, siden antall arter som en AIP-verdi er basert på, ikke fremgår av vannmiljø-databasen.
 * **ASPT** skal ikke brukes for breelver. Målinger som ikke oppfyller dette kravet, blir ekskludert (se [`sjekkASPT`](sjekkPar.md)).
