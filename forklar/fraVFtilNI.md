@@ -30,7 +30,7 @@ fraVFtilNI(DATA, vannforekomster, vannlokaliteter, parameter, vannkategori,
 ## Argumenter
 
 - `DATA` (**tabell**). _Argumentet må angis_. Det skal være **R**-tabellen som inneholder de relevante målingene fra vannmiljø-databasen (som utmating av funksjonen [`lesMaalinger`](lesMaalinger.md)).
-- `vannforekomster` (**tabell**). _Argumentet må angis_. Det skal være **R**-tabellen som inneholder informasjonen om vannforekomster (som utmating av funksjonen [`lesVannforekomster`](lesVannforekomster.md)).
+- `vannforekomster` (**tabell**). _Argumentet må angis_. Det skal være **R**-tabellen som inneholder informasjonen om vannforekomster (som utmating av funksjonen [`lesVannforekomster`](lesVannforekomster.md) eller [`oppdaterVannforekomster`](oppdaterVannforekomster.md)).
 - `vannlokaliteter` (**tabell**). _Argumentet må angis_. Det skal være **R**-tabellen som inneholder informasjonen om vannlokaliteter (som utmating av funksjonen [`lesVannlokaliteter`](lesVannlokaliteter.md)).
 - `parameter` (**tekst-skalar**). _Argumentet må angis_. Det skal være forkortelsen på den relevante vannforskriftsparameteren. (Forkortelsen må følge vannmiljø-databasen. For eksempel er «planteplankton trofiindeks», som er kjent som PTI, i vannmiljø forkortet som «PPTI». Se [hvilke parametere som er klargjort for dataflyt](param.md).)
 - `vannkategori` (**tekst-skalar**). _Argumentet må angis_. Det skal være én av bokstavene "L", "R" eller "C", som står for henholdsvis innsjø, elv og kyst.
