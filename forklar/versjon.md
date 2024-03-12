@@ -10,6 +10,7 @@ _Oversikt over publiserte versjoner:_
 
 
 ## Versjon 1.2
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10809052.svg)](https://doi.org/10.5281/zenodo.10809052)  
 Publisert mars 2024. _Endringer:_
 
 - Funksjonen `mEQR` beregnes nå med asymptotisk begrensning ([detaljer](asympEQR.md)).
