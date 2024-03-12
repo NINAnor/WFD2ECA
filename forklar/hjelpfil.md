@@ -124,7 +124,8 @@ mal](param.md#hvordan-flere-vannforskriftsparametere-kan-gjøres-klar-til-bruk).
 ## <a id="måleenheter-vm-enhet.xlsx">Måleenheter</a> (VM-enhet.xlsx)
 
 Tilgjengelige måleenheter er samla i excel-regnearket
-[VM-enhet.xlsx](../data/VM-enhet.xlsx). Den kan endres etter behov.
+[VM-enhet.xlsx](../data/VM-enhet.xlsx). Den kan endres etter behov (og i 
+tråd med [vannmiljø-kodeverket](https://vannmiljokoder.miljodirektoratet.no/unit)).
 
 ## <a id="overvåkingsaktiviteter-vm-aktiv.xlsx">Overvåkingsaktiviteter</a> (VM-aktiv.xlsx)
 
