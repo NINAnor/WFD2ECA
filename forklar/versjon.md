@@ -10,7 +10,7 @@ _Oversikt over publiserte versjoner:_
 
 
 ## Versjon 1.2
-Publiseres mars 2024. _Endringer:_
+Publisert mars 2024. _Endringer:_
 
 - Funksjonen `mEQR` beregnes nå med asymptotisk begrensning ([detaljer](asympEQR.md)).
 - Parameterspesifikke krav til målinger blir sjekka ([detaljer](sjekkPar.md)).
