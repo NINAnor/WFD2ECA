@@ -24,7 +24,7 @@ oppdaterNImedVF(indikatorID, nyeData, avrunding = 6)
 Funksjonen leser inn de aktuelle indikatorverdiene fra naturindeks-databasen (ved hjelp av `NIcalc::getIndicatorValues`) og oppdaterer disse med indikatorverdiene som ligger i `nyeData`.
 Om prosessen forløp uten feil, får man tilbud om å skrive de oppdaterte verdiene til naturindeks-databasen.
 
-Funksjonen forutsetter at man er logga på naturindeks-databasen. (Dette skjer med `NIcalc::getToken`.)
+Funksjonen forutsetter at man er logga på naturindeks-databasen ved hjelp av **R**-pakka [NIcalc](https://github.com/NINAnor/NIcalc). (Dette skjer med `NIcalc::getToken`.)
 
 
 ## Funksjonsverdi
