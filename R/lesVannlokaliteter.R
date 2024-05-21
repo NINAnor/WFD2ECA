@@ -100,14 +100,15 @@ lesVannlokaliteter <- function(vannkategori = c("L", "R", "C"),
     VL$X     <- as.numeric(VL$X)
     VL$Y     <- as.numeric(VL$Y)
     # Fjern koordinater som ikke kan stemme
-    w <- which(VL$X < -80000 | VL$X > 1200000 | VL$Y < 6400000 | VL$Y > 9000000)
-    if (length(w)) {
-      skriv("For " %+% length(w) %+% " vannlokaliteter var det oppgitt ",
-            "koordinater som ligger utenfor Norge.\n",
-            "Disse koordinatene ble satt til <NA>.",
-            pre = "OBS: ", linjer.over = 1)
-      VL$X[w] <- VL$Y[w] <- NA
-    }
+    # Trengs ikke?!! (¤)
+    # w <- which(VL$X < -80000 | VL$X > 1200000 | VL$Y < 6400000 | VL$Y > 9000000)
+    # if (length(w)) {
+    #  skriv("For " %+% length(w) %+% " vannlokaliteter var det oppgitt ",
+    #        "koordinater som ligger utenfor Norge.\n",
+    #        "Disse koordinatene ble satt til <NA>.",
+    #        pre = "OBS: ", linjer.over = 1)
+    #  VL$X[w] <- VL$Y[w] <- NA
+    #}
   }
   return(VL)
 }

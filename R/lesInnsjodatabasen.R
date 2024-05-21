@@ -96,7 +96,7 @@ lesInnsjodatabasen <- function(filnavn = "Innsjo_Innsjo.dbf",
     }
   }
   if (OK) {
-    # Kolonnen for sterkt modifiserte vannforekomster gjøre om til en logisk variabel
+    # Kolonnen for sterkt modifiserte vannforekomster gjøres om til logisk variabel
     nveL$reg <- (nveL$reg %inneholder% "ulert")
     if (!any(nveL$reg)) {
       skriv("Det var ikke mulig å identifisere regulerte innsjøer i NVEs ",
