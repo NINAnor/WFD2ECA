@@ -43,7 +43,7 @@ Laste inn funksjoner:
 Før vannforskrift-parametere kan analyseres og forberedes for
 naturindeksen, må informasjon om vannforekomster og vannlokaliteter
 komme på plass. Det forutsetter inntil videre at man manuelt har lasta
-ned oppdaterte versjon av disse filene. Skal flere
+ned oppdaterte versjoner av disse filene. Skal flere
 vannforskrift-parametere “flyttes over” til naturindeks, trenger man
 bare å gjøre dette trinnet én gang. Eksempelkoden er basert på
 datafilene som ble lasta ned i juli 2023.
