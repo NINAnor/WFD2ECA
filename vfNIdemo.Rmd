@@ -1,5 +1,5 @@
 ---
-title: "Dataflyt fra vannforskriften til naturindeks"
+title: "Illustrasjon av dataflyt fra vannforskrift til naturindeks"
 author: "Hanno Sandvik"
 date: "16 May 2024"
 output:
