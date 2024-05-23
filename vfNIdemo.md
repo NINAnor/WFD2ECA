@@ -53,10 +53,10 @@ datafilene som ble lasta ned i juli 2023.
 Informasjon om vannforekomstenes (1) beliggenhet og deres (2) typologi
 må lastes ned separat.
 
-1.  Data over vannforekomstenes beliggenhet må lastes ned som formfil
-    (gdb) fra Miljødirektoratet
-    (<https://karteksport.miljodirektoratet.no/>). I menyen må man
-    foreta de følgende valg:
+(1) Data over vannforekomstenes beliggenhet må lastes ned som formfil 
+(gdb) fra Miljødirektoratet 
+(<https://karteksport.miljodirektoratet.no/>). I menyen må man 
+foreta de følgende valg:
 
 -   Produkt: “Vannforekomster”
 -   Definer område: “nasjonalt”
@@ -65,8 +65,8 @@ må lastes ned separat.
 Datasettet man da får tilsendt per e-post, må dekomprimeres og døpes om
 til “**VF.gdb**”.
 
-1.  Filer over vannforekomstenes typologi må lastes ned som excel-filer
-    (csv) fra [vann-nett](https://vann-nett.no/portal/):
+(2) Filer over vannforekomstenes typologi må lastes ned som excel-filer 
+(csv) fra [vann-nett](https://vann-nett.no/portal/):
 
 `https://vann-nett.no/portal/ > Rapporter > Vanntyper`
 
