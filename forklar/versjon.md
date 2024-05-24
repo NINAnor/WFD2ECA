@@ -10,6 +10,7 @@ _Oversikt over publiserte versjoner:_
 
 
 ## Versjon 1.3
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11274927.svg)](https://doi.org/10.5281/zenodo.11274927)  
 Publisert mai 2024. _Endringer:_
 
 - Også elve- og kystvannforekomster vektes nå med sin størrelse ([detaljer](arealvekt.md)).
