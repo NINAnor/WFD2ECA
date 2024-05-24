@@ -10,7 +10,7 @@ _Oversikt over publiserte versjoner:_
 
 
 ## Versjon 1.3
-Publiseres mai 2024. _Endringer:_
+Publisert mai 2024. _Endringer:_
 
 - Også elve- og kystvannforekomster vektes nå med sin størrelse ([detaljer](arealvekt.md)).
 - Sterkt modifiserte vannforekomster (SMVF) er tilføyd som forklaringsvariabel.
