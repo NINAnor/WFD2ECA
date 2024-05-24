@@ -1,6 +1,6 @@
 # Arealvekt
 
-Som siste trinn i [dataflyten](dataflyt.md) aggregerer funksjonen "[`fraNItilVF`](fraNItilVF.md)" [mEQR-verdiene](mEQR.md) som ble målt eller modellert for de ulike vannforekomstene, opp til kommune-, fylkes-, landsdelsnivå eller hele Norge ("rapportenhet").
+Som siste trinn i [dataflyten](dataflyt.md) aggregerer funksjonen "[`fraVFtilNI`](fraVFtilNI.md)" [mEQR-verdiene](mEQR.md) som ble målt eller modellert for de ulike vannforekomstene, opp til kommune-, fylkes-, landsdelsnivå eller hele Norge ("rapportenhet").
 Denne aggregeringa er basert på et gjennomsnitt av vannforekomstene, der gjennomsnittet kan være vekta eller uvekta.
 Valget styres av funksjonsargumentet `arealvekt`, som kan ha de følgende verdiene:
 

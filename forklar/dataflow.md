@@ -15,7 +15,8 @@ The dataflow is implemented in the [**R** code](../R/) of this GitHub repository
 As the relevant authorities have not made their data available in machine-readable format, several datasets need to be downloaded manually prior to the dataflow:
 
 * The **measurements** of WFD parameters and the information on **water localities** (_vannlokaliteter_) are available from the _[vannmiljø](https://vannmiljo.miljodirektoratet.no/)_ database.
-* The information (mainly typology) on the **water bodies** (_vannforekomster_) of Norway is available from the _[vann-nett](https://vann-nett.no/portal/)_ database.
+* Geographical information about **water bodies** (_vannforekomster_) of Norway is available from the [Norwegian Environment Agency](https://karteksport.miljodirektoratet.no/).
+* Information on the **typology** (characteristics) of the water bodies of Norway is available from the _[vann-nett](https://vann-nett.no/portal/)_ database.
 * More detailed characteristics of the **lakes** of Norway (if needed) are available from the _[innsjødatabase](https://www.nve.no/kart/kartdata/vassdragsdata/innsjodatabase/)_.
 
 These datasets and their websites are available in Norwegian only, and a full documentation of the dataflow in English has therefore not been prioritised.
@@ -35,7 +36,7 @@ However, the dataflow can be summarised in 16 steps ([Sandvik 2019](http://hdl.h
 12. _Averaging measurements taken in the same water body._ If more than one measurement has been taken in the same water body within the same reporting period, the unweighted mean of these measurements is used to represent the water body body.
 13. _Extrapolating mEQR values to water bodies that lack data._ If no measurement has been taken in a water body, the most likely indicator value is predicted for this water body, based on the model fitted in step 11.
 14. _Using simulations to estimate confidence and prediction intervals._ Based on the model fitted in step 11 and a re-sampling procedure, the uncertainty surrounding the estimates obtained in steps 12 and 13 is quantified using confidence intervals for water bodies that have been sampled, and prediction intervals for water bodies that have not been sampled.
-15. _Aggregating estimates geographically._ The values obtained for water bodies are aggregated for administrative units (municipalities, counties, regions and/or the whole country). For lake water bodies, aggregation takes the form of averages weighted by lake area (ensuring that different size classes contribute equally to the average; cf. [Sandvik 2019](http://hdl.handle.net/11250/2631056), pp. 21–23). For river and coastal water bodies, aggregation currently has to apply unweighted averageing. (When the lengths of river water bodies and the areas of coastal water bodies are made available in the respective databases in the future, their averages should be weighted as well.) This step is the last one carried out by the function [`fraVFtilNI`](../R/fraVFtilNI.R).
+15. _Aggregating estimates geographically._ The values obtained for water bodies are aggregated for administrative units (municipalities, counties, regions and/or the whole country). Aggregation takes the form of averages weighted by water-body area. This step is the last one carried out by the function [`fraVFtilNI`](../R/fraVFtilNI.R).
 16. _Averaging the aggregated values for different water body catgegories._ This step is only applicable to the few WFD indicators that are defined for both lakes and rivers, where the combined values are obtained by unweighted averages. This is accomplished by the function [`kombiner`](../R/kombiner.R) ("combine").
 
 Once these steps have been carried out, the values obtained can be uploaded to the NI database.
