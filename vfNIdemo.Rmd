@@ -1,7 +1,7 @@
 ---
-title: "Dataflyt fra vannforskriften til naturindeks"
+title: "Illustrasjon av dataflyt fra vannforskrift til naturindeks"
 author: "Hanno Sandvik"
-date: "6 March 2024"
+date: "16 May 2024"
 output:
   md_document:
     toc: yes
@@ -27,7 +27,7 @@ library(sf)
 library(readxl)
 library(raster)
 # library(NIcalc)
-# I eksempel-varianten kjøres ikke NIcalc-funksjonene, de vises bare
+# I demo-varianten kjøres ikke NIcalc-funksjonene, de vises bare
 ```
 
 Laste inn funksjoner:
@@ -42,14 +42,25 @@ for (filnavn in list.files("R", full.names = TRUE)) {
 ## Nødvendig informasjon om vannforekomster
 
 Før vannforskrift-parametere kan analyseres og forberedes for naturindeksen, må informasjon om vannforekomster og vannlokaliteter komme på plass. 
+Det forutsetter inntil videre at man manuelt har lasta ned oppdaterte versjoner av disse filene.
 Skal flere vannforskrift-parametere "flyttes over" til naturindeks, trenger man bare å gjøre dette trinnet én gang. 
-Det forutsetter at man har lastet ned oppdaterte versjon av disse filene.
 Eksempelkoden er basert på datafilene som ble lasta ned i juli 2023.
 
 
 ### Vannforekomster
 
-Fila over vannforekomster må lastes ned som en excel-fil (csv) fra [vann-nett](https://vann-nett.no/portal/):
+Informasjon om vannforekomstenes (1) beliggenhet og deres (2) typologi må lastes ned separat.
+
+(1) Data over vannforekomstenes beliggenhet må lastes ned som formfil (gdb) fra Miljødirektoratet ([https://karteksport.miljodirektoratet.no/](https://karteksport.miljodirektoratet.no/)).
+I menyen må man foreta de følgende valg:
+
+- Produkt: "Vannforekomster"
+- Definer område: "nasjonalt"
+- Format: "ESRI Filgeodatabase (ESPG:4326)"
+
+Datasettet man da får tilsendt per e-post, må dekomprimeres og døpes om til "**VF.gdb**".
+
+(2) Filer over vannforekomstenes typologi må lastes ned som excel-filer (csv) fra [vann-nett](https://vann-nett.no/portal/):
 
 `https://vann-nett.no/portal/ > Rapporter > Vanntyper`
 
@@ -72,9 +83,16 @@ I tillegg trenger man en tabell som forklarer kolonnenavne i fila fra vann-nett.
 Denne fila er nødvendig for å lese inn vannforekomstdataene, og den ligger i dette arkivet under navnet "[**navnVN.csv**](data/navnVN.csv)".
 Hvis vann-nett endrer kolonnenavnene i sin nedlastingsløsning, må denne fila [oppdateres tilsvarende](forklar/hjelpfil.md#vannforekomster-v-.csv-navnvn.csv).
 
-Filene er plassert i mappa "[data](data/)". De leses da inn i **R** ved hjelp av funksjonen [`lesVannforekomster`](forklar/lesVannforekomster.md) på følgende måte:
-```{r}
+De nødvendige filene er plassert i mappa "[data](data/)".
+De leses da inn i **R** ved hjelp av funksjonen [`lesVannforekomster`](forklar/lesVannforekomster.md) på følgende måte:
+
+```{r, eval=FALSE, echo=TRUE}
 V <- lesVannforekomster(c("L", "R", "C"))
+```
+```{r, eval=TRUE, echo=FALSE}
+# Formfila var for stor til å legges ut på GitHub.
+# Derfor må det her kjøres en modifisert versjon, som laster inn en dataramme som ble innlest tidligere:
+V <- lesVannforekomster(c("L", "R", "C"), CACHE = "VF.RData")
 ```
 
 Utmatinga forteller om mindre avvik fra det man kunne forvente.
@@ -84,7 +102,8 @@ I så fall hadde innlesinga blitt avbrutt med beskjeden "FEIL" og en forklaring.
 
 ### NVEs innsjødatabase
 
-Fila over Norges innsjøer må lastes ned som en formfil fra [NVE](http://nedlasting.nve.no/gis/):
+Dette trinnet er ikke nødvendig for elve- og kystvannforekomster. 
+Men for innsjøvannforekomster bør man laste ned en fil over Norges innsjøer fra [NVE](http://nedlasting.nve.no/gis/):
 
 `http://nedlasting.nve.no/gis/ > Innsjø > Innsjø`
 
@@ -95,7 +114,7 @@ I menyen må man foreta de følgende valg:
 - utvalgsmetode "Overlapper"
 - dekningsområde "Landsdekkende"
 
-Datasettet man da får, heter "Innsjo_Innsjo".
+Datasettet man da får, er en formfil som heter "Innsjo_Innsjo".
 
 I tillegg trenger man en tabell som forklarer kolonnenavne i fila fra NVE.
 Denne fila er nødvendig for å lese inn innsjødataene, og den ligger i dette arkivet under navnet "[**navnNVEl.csv**](data/navnNVEl.csv)".
@@ -180,7 +199,7 @@ Under antagelse av at innsjødatabasen er mer pålitelig enn vannforekomsttypifi
 ### Ytterligere datafiler
 
 Til slutt trengs det lister over kommune- og fylkesnummer og -navn, vannforskriftsparametere og overvåkingsaktiviteter.
-Denne informasjonen leses inn automatisk, gitt at den er lagra i excel-regneark som heter henholdscis "**knr.xlsx**", "**fnr.xlsx**", "**VM-param.xlsx**" og "**VM-aktiv.xlsx" og at disse er plassert i mappa "data".
+Denne informasjonen leses inn automatisk, gitt at den er lagra i excel-regneark som heter henholdscis "**knr.xlsx**", "**fnr.xlsx**", "**VM-param.xlsx**" og "**VM-aktiv.xlsx**" og at disse er plassert i mappa "data".
 Det tas forbehold om at enkelte målinger kan bli tilordna feil kommune, i tilfeller der målinger ble tatt i en sammenslått kommune og tilbakedateres til et tidspunkt før sammenslåinga.
 
 Strukturen på filene ser slik ut:
@@ -236,25 +255,24 @@ Den må gjøres separat for hver vannforskrift-parameter og for hver vannkategor
 Hvis en parameter f.eks. brukes i både innsjøer og elver, må disse analyseres separat.
 Som eksempel er ASPT valgt, en bunndyr-forsuringsindeks for elver. 
 
-Analysen består av å
+Analysen består i å
 
-- koble alle målinger til sine respektive vannforekomster naturindeks-rapporteringsår,
+- koble alle målinger til sine respektive vannforekomster,
 - omregne (skalere) måleverdiene til [mEQR-verdier](forklar/asympEQR.md),
 - tilpasse en modell som forklarer variasjonen i måleverdier med tidsperiode, typologifaktorer og [overvåkingsaktivitet](forklar/aktiv.md),
 - ekstrapolere trolige verdier til vannforekomster som det ikke foreligger målinger fra,
 - simulere usikkerheten (sannsynlighetsfordelinga) for de sistnevnte og
 - aggregrere resultatene opp til de ønska administrative enhetene.
 
-Dette trinnet kan ta sin tid.
+Dette trinnet tar sin tid.
 Utmatinger underveis viser progresjonen.
 Simuleringa kan ta spesielt mye tid, avhengig av antall iterasjoner.
 For illustrasjonen her er det valgt 1000 iterasjoner.
 For bruk i naturindeks bør man velge en større verdi (f.eks. 100&nbsp;000).
 
 Funksjonen som gjennomfører analysen, heter [`fraVFtilNI`](R/fraVFtilNI.R) ("fra vannforkrift til naturindeks").
-Den har mange flere parametere enn de som vises under, som tillater ulike justeringer som er [forklart her](forklar/VFtilNI.md).
-De første fem parametrene må alltid oppgis.
-Resten trenger man bare å oppgi om man ønsker å endre på standardinnstillingene (som også er [forklart her](forklar/VFtilNI.md)).
+De første fem funksjonsargumentene må alltid oppgis.
+De resterende argumentene, inkludert mange som ikke vises i eksempelkjøringa under, trenger man bare å oppgi om man ønsker å endre på standardinnstillingene (som er [forklart her](forklar/VFtilNI.md)).
 
 ```{r, eval=FALSE, echo=TRUE}
 utmating <- fraVFtilNI(
@@ -361,8 +379,7 @@ Når utmatinga fra modelleringa er klar og har blitt behørig testa, kan den las
 Disse trinnene er her bare _illustrert_, men ikke _utført_.
 
 ```{r, eval=FALSE, echo=TRUE}
-# For å logge seg inn til NI-databasen trenger man et brukernavn (epost-adressen) 
-# og passord.
+# For å logge seg inn til NI-databasen trenger man et brukernavn (epost-adressen) og passord.
 # Koden fungerer om disse er lagra som to variabler som heter henholdsvis 
 # "epost.adressen.min" og "passordet.mitt".
 NIcalc::getToken(username = epost.adressen.min, password = passordet.mitt)

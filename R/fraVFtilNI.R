@@ -1,55 +1,55 @@
 ### fraVFtilNI
 # Dataflyt "fra vannforskriften til naturindeks"
 # ved Hanno Sandvik
-# mars 2024
+# mai 2024
 # se https://github.com/NINAnor/NI_vannf
 ###
 
 
 
 fraVFtilNI <- function(
-    DATA,
-    vannforekomster,
-    vannlokaliteter,
-    parameter,
-    vannkategori,
-    filKlasser = NULL,
-    NI.aar = c(1990, 2000, 2010, 2014, 2019, 2024),
-    rapportenhet = c("kommune", "fylke", "landsdel", "norge"),
-    adminAar = 2010,
-    kommHist = "data/knr.xlsx",
-    fylkHist = "data/fnr.xlsx",
-    paramFil = "data/VM-param.xlsx",
-    aktivFil = "data/VM-aktiv.xlsx",
-    rapportperiode = 10,
-    vedMaalefeil = "dato",
-    maksSkjevhet = 3,
-    bareInkluder = NULL,
-    ikkeInkluder = NULL,
-    maalingPer = 25,
-    maalingTot = 100,
-    maalingTyp = 25,
-    EQR = "asymptotisk",
-    ignorerVariabel = NULL,
-    fastVariabel = NULL,
-    aktVekting = TRUE,
-    aktivitetsvekt = 5,
-    antallvekt = 0.5,
-    tidsvekt = 1,
-    arealvekt = 2,
-    DeltaAIC = 2,
-    ekstrapolering = "kjente",
-    iterasjoner = 100000,
-    SEED = NULL,
-    bredde = NULL,
-    vis = TRUE,
-    tell = TRUE,
-    ...
+  DATA,
+  vannforekomster,
+  vannlokaliteter,
+  parameter,
+  vannkategori,
+  filKlasser = NULL,
+  NI.aar = c(1990, 2000, 2010, 2014, 2019, 2024),
+  rapportenhet = c("kommune", "fylke", "landsdel", "norge"),
+  adminAar = 2010,
+  kommHist = "data/knr.xlsx",
+  fylkHist = "data/fnr.xlsx",
+  paramFil = "data/VM-param.xlsx",
+  aktivFil = "data/VM-aktiv.xlsx",
+  rapportperiode = 10,
+  vedMaalefeil = "dato",
+  maksSkjevhet = 3,
+  bareInkluder = NULL,
+  ikkeInkluder = NULL,
+  maalingPer = 25,
+  maalingTot = 100,
+  maalingTyp = 25,
+  EQR = "asymptotisk",
+  ignorerVariabel = NULL,
+  fastVariabel = NULL,
+  aktVekting = TRUE,
+  aktivitetsvekt = 5,
+  antallvekt = 0.5,
+  tidsvekt = 1,
+  arealvekt = 2,
+  DeltaAIC = 2,
+  ekstrapolering = "kjente",
+  iterasjoner = 100000,
+  SEED = NULL,
+  bredde = NULL,
+  vis = TRUE,
+  tell = TRUE,
+  ...
 ) {
   
   ### fraVFtilNI [fra vannforskrift til naturindeks]
   # ved Hanno Sandvik
-  # mars 2024
+  # mai 2024
   # se https://github.com/NINAnor/NI_vannf
   ###
   
@@ -111,7 +111,7 @@ fraVFtilNI <- function(
   if (vis) {
     cat("\n\n")
     cat("****** Fra vannforskrift til naturindeks ******\n")
-    cat("***************   versjon 1.2   ***************\n")
+    cat("***************   versjon 1.3   ***************\n")
   }
   
   OK <- TRUE
@@ -189,16 +189,26 @@ fraVFtilNI <- function(
     if (!(vedMaalefeil %in% c("måling", "dato", "oppdragstager"))) {
       vedMaalefeil <- "dato"
     }
-    txt <- 
     skriv("Variabelen \"vedMaalefeil\" ble satt til \"", vedMaalefeil, ".",
           pre = "OBS: ", linjer.under = 1)
+  }
+  if (vannkategori != "L" & !(arealvekt %in% c(0, 2))) {
+    skriv("Verdien ", arealvekt, " til variabelen \"arealvekt\" gir ikke mening ",
+          "for ", ifelse(vannkategori == "R", "elve", "kyst"), "vannforekomster.",
+          " Den ble derfor satt til 2.", pre = "OBS: ", linjer.under = 1)
+    arealvekt <- 2
+  }
+  if (!(arealvekt %in% 0:3)) {
+    u <- c(u, skriv("Å sette \"arealvekt = ", arealvekt, "\" er et overraskende ",
+                    "valg. Jeg håper at du vet hva du gjør!", 
+                    pre = "OBS: ", linjer.under = 1, ut = TRUE))
   }
 
   # Sjekke om nødvendig informasjon er tilgjengelig
   if (OK) {
     if (vannkategori == "C") {
       if (exists("TypologiC")) {
-        Variabler <- c("akt", TypologiC)
+        Variabler <- c("akt", "smvf", TypologiC)
       } else {
         OK <- FALSE
         skriv("Konstanten \"TypologiC\" fins ikke!", pre = "FEIL: ",
@@ -207,7 +217,7 @@ fraVFtilNI <- function(
     }
     if (vannkategori == "L") {
       if (exists("TypologiL")) {
-        Variabler <- c("akt", TypologiL)
+        Variabler <- c("akt", "smvf", TypologiL)
       } else {
         OK <- FALSE
         skriv("Konstanten \"TypologiL\" fins ikke!", pre = "FEIL: ",
@@ -216,7 +226,7 @@ fraVFtilNI <- function(
     }
     if (vannkategori == "R") {
       if (exists("TypologiR")) {
-        Variabler <- c("akt", TypologiR)
+        Variabler <- c("akt", "smvf", TypologiR)
       } else {
         OK <- FALSE
         skriv("Konstanten \"TypologiR\" fins ikke!", pre = "FEIL: ",
@@ -351,7 +361,7 @@ fraVFtilNI <- function(
           }
         } else {
           if (!("asymptotisk" %begynner% tolower(EQR))) {
-            u <- c(u, skriv("Parameteren \"mEQR\" har en ugyldig verdi. ",
+            u <- c(u, skriv("Argumentet \"mEQR\" har en ugyldig verdi. ",
                             "Det brukes mEQR-verdier med asymptotisk begrensning.", 
                             pre = "OBS: ", linjer.under = 1, ut = TRUE))
           }
@@ -366,7 +376,7 @@ fraVFtilNI <- function(
     }
     if (!( "alle"  %begynner% tolower(ekstrapolering) | 
           "kjente" %begynner% tolower(ekstrapolering))) {
-      u <- c(u, skriv("Parameteren \"ekstrapolering\" har en ugyldig verdi og ",
+      u <- c(u, skriv("Argumentet \"ekstrapolering\" har en ugyldig verdi og ",
                       "settes derfor til \"kjente\".", pre = "OBS: ",
                       linjer.under = 1, ut = TRUE))
       ekstrapolering <- "kjente"
@@ -481,9 +491,9 @@ fraVFtilNI <- function(
     skriv("De administrative enhetene er på plass. Per ", adminAar,
           ifelse(adminAar < as.numeric(format(Sys.Date(), "%Y")),
                  " fantes", " fins"),
-          " det ", length(unique(FYL)), " fylker ",
+          " det ", length(unique(FYL)), " fylker",
           ifelse("kommune" %in% rapportenhet,
-            "og " %+% length(unique(KOM)) %+% " kommuner.",
+            " og " %+% length(unique(KOM)) %+% " kommuner.",
             "."),
           linjer.under = 1)
   }
@@ -658,13 +668,18 @@ fraVFtilNI <- function(
     }
     
     # Kobling av målinger mot vannforekomster
-    maaling <- data.frame(vfo="", inn=0, lok=0, are=0, til=0, hoh=0, gbr=0, gle=0,
-                          aar=0, mnd=0, dag=0, per=0, rar=0, akt="",
-                          typ="", kat="", reg="", son="", 
-                          stø="", alk="", hum="", tur="", dyp="",
-                          kys="", sal="", tid="", eks="", mix="", opp="", str="",
-                          kom="", fyl="", ant=1, vkt=1, vrd=0,
+    maaling <- data.frame(vfo ="", inn = 0, lok = 0,
+                          areal=0, A_tot=0, lengd=0,
+                          tilsf=0, høyde=0, gbred=0, gleng=0,
+                          aar = 0, mnd = 0, dag = 0, per = 0, rar = 0, 
+                          akt ="", typ ="", kat ="", reg ="", son ="", 
+                          stø ="", alk ="", hum ="", tur ="", dyp ="", kys ="", 
+                          sal ="", tid ="", eks ="", mix ="", opp ="", str ="",
+                          kom ="", fyl ="", ant = 1, vkt = 1, vrd = 0,
+                          smvf="", CaCO3=0, P_tot=0, dybde=0, 
+                          kystt=0, saltk=0, ekspo=0, miksg=0, oppht=0, vknop=0,
                           stringsAsFactors = FALSE)
+    sam <- 17:32 # dette er typologifaktorene! forsiktig med å endre! (¤)
     uten.kode <- uten.id <- numeric()
     skriv("Vennligst vent mens målingene kobles mot vannforekomster!")
     for (i in er.med) {
@@ -682,33 +697,30 @@ fraVFtilNI <- function(
         if (length(vfk) %=% 1) {
           maaling <- rbind(maaling, maaling[1, ])
           L <- nrow(maaling)
-          maaling$vfo[L]   <- Vf$id  [vfk]
-          maaling$inn[L]   <- VL$sjøn[lok]
-          maaling$lok[L]   <- VL$loki[lok]
-          maaling$are[L]   <- Vf$area[vfk]
-          maaling$til[L]   <- Vf$tils[vfk]
-          maaling$hoh[L]   <- Vf$hoh [vfk]
-          maaling$gbr[L]   <- Vf$lat [vfk]
-          maaling$gle[L]   <- Vf$long[vfk]
-          maaling$aar[L]   <- aar    [i]
-          maaling$mnd[L]   <- as.numeric(substr(DATA$tidpkt[i], 6,  7))
-          maaling$dag[L]   <- as.numeric(substr(DATA$tidpkt[i], 9, 10))
-          maaling$per[L]   <- rappAar[i]
-          maaling$rar[L]   <- relaar [i]
-          maaling$akt[L]   <- DATA$ak[i]
-          maaling$kom[L]   <- Vf$komm[vfk]
-          maaling$fyl[L]   <- Vf$fylk[vfk]
-          maaling$vrd[L]   <- DATA$verdi[i]
-          maaling$ant[L]   <- DATA$antve[i]
-          for (j in colnames(maaling)[15:30]) { # typologifaktorene!
-            maaling[L,j]   <- Vf[vfk, j]
-          }
-          ### Beregning av geografiske koordinater: utsatt! (¤)
-          #if (is.na(maaling$gbr[L])) {
-          #  koord          <- as.deg(33, VL$X[lok], VL$Y[lok])
-          #  maaling$gbr[L] <- as.vector(koord[1])
-          #  maaling$gle[L] <- as.vector(koord[2])
-          #}
+          maaling$vfo[L]   <- Vf$id  [vfk]  # vannforekomst-id
+          maaling$inn[L]   <- VL$sjøn[lok]  # innsjønummer
+          maaling$lok[L]   <- VL$loki[lok]  # vannlokalitets-id
+          maaling$aar[L]   <- aar    [i]    # år, måned og dag
+          maaling$mnd[L]   <- as.numeric(     substr(DATA$tidpkt[i], 6,  7))
+          maaling$dag[L]   <- as.numeric(     substr(DATA$tidpkt[i], 9, 10))
+          maaling$per[L]   <- rappAar[i]    # rapporteringsår
+          maaling$rar[L]   <- relaar [i]    # relativt år (i rapporteringsperioden)
+          maaling$akt[L]   <- DATA$ak[i]    # overvåkingsaktivitets-id
+          maaling$kom[L]   <- Vf$komm[vfk]  # kommunenummer
+          maaling$fyl[L]   <- Vf$fylk[vfk]  # fylkesnummer
+          maaling$vrd[L]   <- DATA$verd[i]  # maleverdi
+          maaling$ant[L]   <- DATA$antv[i]  # antall verdier
+          for (j in colnames(maaling)[sam]) # typologifaktorene ("kat"-"str")
+              maaling[L,j] <- Vf     [vfk,    j]
+          maaling$areal[L] <- Vf$area[vfk]  # areal i Norge i km^2
+          maaling$A_tot[L] <- Vf$arto[vfk]  # totalt areal i km^2
+          maaling$tilsf[L] <- Vf$tils[vfk]  # tilsigsfelt i km^2
+          maaling$lengd[L] <- Vf$leng[vfk]  # lengde i km
+          maaling$høyde[L] <- Vf$hoh [vfk]  # høyde over havet i m
+          maaling$gbred[L] <- Vf$lat [vfk]  # geografisk bredde i grader nord
+          maaling$gleng[L] <- Vf$long[vfk]  # geografisk lengde i grader øst
+          maaling$smvf [L] <- if            # sterk modifisert vannforekomst?
+                             (Vf$smvf[vfk] %=% TRUE) "ja" else "nei"
         } else {
           uten.id <- c(uten.id, i)
         }
@@ -1019,17 +1031,37 @@ fraVFtilNI <- function(
                       pre = "OBS: ", linjer.under = 1, ut = TRUE))
     }
     
+    # Rydd opp i de ulike størrelsesmålene
+    if (vannkategori %=% "L") {
+      maaling$lengd <- maaling$areal
+      maaling$areal <- maaling$A_tot
+      Areal <- Vf$areal
+      Vf$areal <- Vf$A_tot
+    }
+    if (vannkategori %=% "R") {
+      Areal <- Vf$lengd
+    }
+    if (vannkategori %=% "C") {
+      maaling$lengd <- maaling$areal
+      Areal <- Vf$areal
+    }
+    # Heretter er størrelsesmålet (areal eller lengde) lagra som "lengd"!
+
+    # Tilpass "Vf" til endringene i "maaling"
+    Vf$smvf <- ifelse(Vf$smvf, "ja", "nei")
+    Vf$smvf[is.na(Vf$smvf)] <- "nei"
+
     maaling$vkt <- maaling$ant^antallvekt * tidsvekt^maaling$rar *
       as.vector(aktivitetsvekt^(-abs(Aktiviteter[maaling$akt, "skaar"])))
 
     Variabler <- Variabler %-% tolower(ignorerVariabel)
-    RF1 <- append(list(akt = sort(unique(maaling$akt))), 
+    RF1 <- append(list(akt = sort(unique(maaling$akt)), smvf = c("ja", "nei")),
                   Vanntyper.nominal)
     RF1 <- RF1.sik <- RF1a <- RF1[-which(!(names(RF1) %in% Variabler))]
     RF2 <- append(list(reg = Vanntyper.ordinal[["reg" %+% vannkategori]]), 
                   Vanntyper.ordinal)
     RF2 <- RF2.sik <- RF2a <- RF2[-which(!(names(RF2) %in% Variabler))]
-    VN1 <- c(akt = "Aktivitet", Typologi.nominal)
+    VN1 <- c(akt = "Aktivitet", smvf = "SMVF", Typologi.nominal)
     VN2 <- Typologi.ordinal
     TV2 <- Tallverdier
     for (i in 1:length(RF1a)) RF1a[[i]] <- character(0)
@@ -1072,10 +1104,6 @@ fraVFtilNI <- function(
   }
   
   if (OK) {
-    if (any(maaling$dyp %in% 4:6)) {
-      maaling$dyp[which(as.numeric(maaling$dyp) > 3)] <-
-        as.character(as.numeric(maaling$dyp[which(as.numeric(maaling$dyp)>3)])-3)
-    }
     f <- function(x) as.formula("vrd ~ " %+% x)
     combine <- function(x, y)
       paste(sort(c(unlist(strsplit(x, "[+]")), unlist(strsplit(y, "[+]")))), 
@@ -1520,26 +1548,8 @@ fraVFtilNI <- function(
                 }
               }
             }
-            L <- c(length(unique(vrb.)), L)}
-          ### Omgjøring til numerisk variabel: utsatt! (¤)
-          #if (length(unique(vrb.)) > 2) {
-          #  vrb.. <- rep(somtall[1], length(vrb.))
-          #  for (i in 2:length(rekke)) {
-          #    vrb..[which(vrbSIK == rekke[i])] <- somtall[i]
-          #  }
-          #  assign(vrb %+% ".", vrb.)
-          #  assign(vrb %+% "..", vrb..)
-          #  if (AIC(lm(f(formel..), data=maaling, weights=vkt)) < 
-          #      AIC(lm(f(formel.),  data=maaling, weights=vkt)) - DeltaAIC) {
-          #    vrb. <- vrb..
-          #    vrber <- as.numeric(somtall)
-          #      endra <- TRUE
-          #    if (vis) {
-          #      u <- c(u, skriv(vnavn, " har blitt omgjort til en numerisk ",
-          #                      "variabel.", pre = "* ", ut = TRUE))
-          #    }
-          #  }
-          #}
+            L <- c(length(unique(vrb.)), L)
+          }
         }
         if (length(unique(vrb.)) %=% 1 & lengde > 1) {
           formel. <- erstatt(formel., " + " %+% vrb %+% ".", "")
@@ -1638,12 +1648,6 @@ fraVFtilNI <- function(
     nydata <- as.data.frame(nydata, stringsAsFactors = FALSE)
     hvilke <- 1:length(explv) %-% which(explv %in% c("per", "rar", "akt"))
     nydata[, explv[hvilke]] <- Vf[utvalg, explv[hvilke]]
-    if ("dyp" %in% colnames(nydata)) {
-      if (any(nydata$dyp %in% 4:6)) {
-        nydata$dyp[which(as.numeric(nydata$dyp) > 3)] <-
-          as.character(as.numeric(nydata$dyp[which(as.numeric(nydata$dyp)>3)])-3)
-      }
-    }
     fjern <- numeric(0)
     beskjed <- NB <- c()
     for (i in names(RF1.sik) %-% "akt") { # nominale variabler
@@ -2065,16 +2069,22 @@ fraVFtilNI <- function(
 
     { # Simulering -----------------------------------------------
     
-      areal <- rep(1, nrow(nydata))
-      if (vannkategori %=% "L") {
-        areal <- Vf$areal[utvalg]
-        areal[which(areal < 0.5)] <- 0.5
-        w <- which(is.na(areal))
-        if (length(w)) {
-          areal[w] <- c(0.5, 1.58, 15.8, 158)[Vf$stø[utvalg[w]]]
-        }
-        areal <- areal^(arealvekt/2)
+      Areal <- Areal[utvalg]
+      if (length(which(is.na(Areal))) > length(utvalg) / 10) {
+        Areal <- rep(1, nrow(nydata))
       }
+      #Areal[which(Areal < 0.5)] <- 0.5 # ¤¤¤ ?!
+      w <- which(is.na(Areal))
+      if (length(w)) {
+        if (vannkategori %=% "L") {
+          Areal[w] <- c(0.5, 1.58, 15.8, 158)[Vf$stø[utvalg[w]]]
+          # dette er de geometriske middelverdiene for størrelsesklassene
+        } else {
+          Areal[w] <- mean(Areal[-w])
+        }
+      }
+      Areal <- Areal^(arealvekt / 2)
+      
       # BLAA
       # alle.maalt <- matrix(TRUE, length(KOM), length(NI.aar), 
       #                      dimnames=list(KOM, NI.aar))
@@ -2151,7 +2161,7 @@ fraVFtilNI <- function(
                     if (length(w) > 1) {
                       UT$fylke[f, j, 1:SIM + s + 1] <- apply(simdata[w, j, ], 2, 
                                                              weighted.mean,
-                                                             areal[w], na.rm = TRUE)
+                                                             Areal[w], na.rm = TRUE)
                     } else {
                       UT$fylke[f, j, 1:SIM + s + 1] <- simdata[w, j, ]
                     }
@@ -2171,7 +2181,7 @@ fraVFtilNI <- function(
                       for (j in as.character(NI.aar)) {
                         UT$kommune[k, j, 1:SIM + s + 1] <-
                           apply(simdata[w, j, ], 2, weighted.mean, 
-                                areal[w], na.rm = TRUE)
+                                Areal[w], na.rm = TRUE)
                         # BLAA
                         # alle.maalt[k,j] <- alle.maalt[k,j] & all(konfident[w,j])
                       }
@@ -2208,7 +2218,7 @@ fraVFtilNI <- function(
                     if (length(w) > 1) {
                       UT$landsdel[f, j, 1:SIM + s + 1] <- 
                         apply(simdata[w, j, ], 2, weighted.mean,
-                              areal[w], na.rm=TRUE)
+                              Areal[w], na.rm=TRUE)
                     } else {
                       UT$landsdel[f, j, 1:SIM + s + 1] <- simdata[w, j, ]
                     }
@@ -2226,7 +2236,7 @@ fraVFtilNI <- function(
             if ("norge" %begynner% e) {
               for (j in as.character(NI.aar)) {
                 UT$Norge[1, j, 1:SIM + s + 1] <- 
-                  apply(simdata[, j, ], 2, weighted.mean, areal, na.rm = TRUE)
+                  apply(simdata[, j, ], 2, weighted.mean, Areal, na.rm = TRUE)
               }
               #skriv("Norge:", linjer.over = 1)
               #sdrag <- UT$Norge[1,,1]
@@ -2252,7 +2262,7 @@ fraVFtilNI <- function(
     attr(UT, "parameter")     <- parameter
     attr(UT, "vannkategori")  <- vannkategori
     attr(UT, "tidspunkt")     <- Sys.time()
-    attr(UT, "versjon")       <- "fraVFtilNI v. 1.2"
+    attr(UT, "versjon")       <- "fraVFtilNI v. 1.3"
     innstillinger <- list(
       adminAar        =        adminAar,
       rapportperiode  =  rapportperiode,

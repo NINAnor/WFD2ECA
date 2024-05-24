@@ -1,7 +1,7 @@
 ### oppdaterVannforekomster
 # Funksjoner til NI_vannf
 # ved Hanno Sandvik
-# desember 2023
+# april 2024
 # se https://github.com/NINAnor/NI_vannf
 ###
 
@@ -12,6 +12,7 @@ oppdaterVannforekomster <- function(V,
                                     slingringsmonn = 0.1) {
   
   # Fyll på V med data fra nve:
+  Atot <- Anor <- numeric(nrow(V))
   for (i in which(V$kat == "L")) {
     ID <- as.numeric(unlist(strsplit(V$id[i], "-"))[2])
     if (is.na(ID)) cat(i, V$id[i], "\n")
@@ -19,40 +20,55 @@ oppdaterVannforekomster <- function(V,
     if (length(w)) {
       w <- w[1]
       V$hoh[i]    <- nve$hoh[w]
-      V$areal[i]  <- nve$areal[w]
       V$tilsig[i] <- nve$tilsig[w]
-      V$lat[i]    <- nve$lat[w]
-      V$long[i]   <- nve$lon[w]
+      #V$areal[i] <- nve$areal[w]
+      #V$artot[i] <- nve$areal
+      #V$lat[i]   <- nve$lat[w]
+      #V$long[i]  <- nve$lon[w]
+      Atot[i]     <- nve$areal[w]
+      Anor[i]     <- nve$arealn[w]
     }
   }
   
-  # Sjekk av størrelsesklasser mot faktiske arealer
-  slingringsmonn <- 0.1
-  bindestreker <- lengths(lengths(gregexec("-", V$id)))
-  forLiten <- forStor <- 0
-  w <- which(V$kat == "L" & is.na(V$areal))
-  if (length(w)) V$areal[w] <- 15 * 10^(as.numeric(V$stø[w]) - 3)
-  for (i in 1:3) {
-    w <- which(V$kat == "L" & V$stø == i & bindestreker == 2 &
-                 V$areal > (5 * 10^(i - 2) * (1 + slingringsmonn)))
-    forLiten <- forLiten + length(w)
-    if (length(w)) V$stø[w] <- i + 1
-  }
-  for (i in 4:2) {
-    w <- which(V$kat == "L" & V$stø == i &
-                 V$areal < (5 * 10^(i - 3) * (1 - slingringsmonn)))
-    forStor <- forStor + length(w)
-    if (length(w)) V$stø[w] <- i - 1
-  }
-  if (forLiten) {
-    skriv("For " %+% forLiten %+% " innsjøer ble størrelsesklassen " %+%
-            "justert opp basert på deres faktiske areal.",
-          pre = "OBS: ", linjer.over = 1)
-  }
-  if (forStor) {
-    skriv("For " %+% forStor %+% " innsjøer ble størrelsesklassen " %+%
-            "justert ned basert på deres faktiske areal.",
-          pre = "OBS: ", linjer.over = 1)
+  #  # Sjekk av størrelsesklasser mot faktiske arealer
+  #  # Dette gjøres nå av funksjonen "lesVannforekomster"!!!
+  #  bindestreker <- lengths(gregexec("-", V$id))
+  #  forLiten <- forStor <- 0
+  #  w <- which(V$kat == "L" & is.na(V$areal))
+  #  if (length(w)) V$areal[w] <- 16 * 10^(as.numeric(V$stø[w]) - 3)
+  #  for (i in 1:3) {
+  #    w <- which(V$kat == "L" & V$stø == i & bindestreker == 2 &
+  #                 V$areal > (5 * 10^(i - 2) * (1 + slingringsmonn)))
+  #    forLiten <- forLiten + length(w)
+  #    if (length(w)) V$stø[w] <- i + 1
+  #  }
+  #  for (i in 4:2) {
+  #    w <- which(V$kat == "L" & V$stø == i &
+  #                 V$areal < (5 * 10^(i - 3) * (1 - slingringsmonn)))
+  #    forStor <- forStor + length(w)
+  #    if (length(w)) V$stø[w] <- i - 1
+  #  }
+  #  if (forLiten) {
+  #    skriv("For " %+% forLiten %+% " innsjøer ble størrelsesklassen " %+%
+  #            "justert opp basert på deres faktiske areal.",
+  #          pre = "OBS: ", linjer.over = 1)
+  #  }
+  #  if (forStor) {
+  #    skriv("For " %+% forStor %+% " innsjøer ble størrelsesklassen " %+%
+  #            "justert ned basert på deres faktiske areal.",
+  #          pre = "OBS: ", linjer.over = 1)
+  #  }
+  
+  # Sjekk totalarealet for innsjøer ved grensen
+  w <- which(Atot > Anor & Atot > V$areal * (1 + slingringsmonn))
+  if (length(w)) {
+    V$artot[w] <- Atot[w]
+    nyttAreal  <- sapply(floor(lg(Atot[w] * 200)), max, 1)
+    endra      <- length(which(nyttAreal > V$stø[w]))
+    V$stø[w]   <- nyttAreal
+    skriv("Totalarealet har blitt tilføyd for ", length(w), " innsjøer som har ",
+          "en arealandel utenfor Norge. For ", endra,  " av disse medførte det ",
+          "en oppjustering av størrelsesklassen.", pre = "OBS: ", linjer.over = 1)
   }
   
   # Sjekk av høydesone mot faktiske høyder over havet

@@ -1,7 +1,7 @@
 ### Hjelpefunksjoner
 # Hjelpefunksjoner til NI_vannf
 # ved Hanno Sandvik
-# mars 2024
+# april 2024
 # se https://github.com/NINAnor/NI_vannf
 ###
 
@@ -75,6 +75,11 @@ ln <- function(x) log(x)
 
 
 
+# Dekadisk logaritme skal forkortes som "lg"!
+lg <- function(x) log10(x)
+
+
+
 # Pen utmating av tekst
 skriv <- function(..., pre = "", linjer.over = 0, linjer.under = 0,
                   Bredde, ut = FALSE) {
@@ -107,6 +112,24 @@ erstatt <- function(i, hva, med) gsub(hva, med, i, fixed = TRUE)
 
 # Erstatte desimalpunkt med desimalkomma
 komma <- function(x) erstatt(x, ".", ",")
+
+
+
+# Sjekker om og sørger for at systemets tegnsett er norsk
+UTF8 <- function() {
+  ctype <<- Sys.getlocale("LC_CTYPE")
+  if (!(tolower(ctype) %inneholder% "utf8" | tolower(ctype) %inneholder% "utf-8")) {
+    LC_CTYPE.backup <<- ctype
+    Sys.setlocale("LC_CTYPE", "nb_NO.utf8")
+    skriv("Det ble oppdaga at systeminnstillingene ikke er forenlige med norske ",
+          "tegnsett. Dette har nå blitt gjort om på. Den opprinnelige ",
+          "innstillinga har blitt tatt vare på som \"LC_TYPE.backup\" ",
+          "[og kan gjenskapes slik: Sys.setlocale(\"LC_CTYPE\", LC_TYPE.backup)].",
+          pre = "OBS: ")
+  }
+  invisible()
+}
+UTF8()
 
 
 

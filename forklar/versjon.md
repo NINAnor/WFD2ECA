@@ -9,6 +9,14 @@ I tillegg har alle arkiverte versjoner hver sin unike DOI.
 _Oversikt over publiserte versjoner:_
 
 
+## Versjon 1.3
+Publiseres mai 2024. _Endringer:_
+
+- Også elve- og kystvannforekomster vektes nå med sin størrelse ([detaljer](arealvekt.md)).
+- Sterkt modifiserte vannforekomster (SMVF) er tilføyd som forklaringsvariabel.
+- Før kjøring sikres det at tegnsettet er kompatibelt med datafilene.
+
+
 ## Versjon 1.2
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10809052.svg)](https://doi.org/10.5281/zenodo.10809052)  
 Publisert mars 2024. _Endringer:_

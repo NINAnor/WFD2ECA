@@ -1,7 +1,7 @@
 ### lesVannforekomster
 # Funksjoner til NI_vannf
 # ved Hanno Sandvik
-# februar 2024
+# april 2024
 # se https://github.com/NINAnor/NI_vannf
 ###
 
@@ -9,7 +9,13 @@
 
 lesVannforekomster <- function(vannkategori = c("L", "R", "C"),
                                filsti = "data",
-                               kolonnenavn = "navnVN.csv") {
+                               kolonnenavn = "navnVN.csv",
+                               NVEnavn = c("SHAPE",
+                                           "identifikasjon_lokalId",
+                                           "arealKvadratkilometer",
+                                           "lengdeKilometer"),
+                               slingringsmonn = 0.02,
+                               CACHE = NULL) {
   
   # Kolonner som datarammen V trenger for å fungere:
   nyeKolonner <- c( 
@@ -48,6 +54,8 @@ lesVannforekomster <- function(vannkategori = c("L", "R", "C"),
     "fylke",
     "hoh",
     "areal",
+    "artot",
+    "lengd",
     "dybde",
     "tilsig",
     "utmx",
@@ -55,6 +63,13 @@ lesVannforekomster <- function(vannkategori = c("L", "R", "C"),
     "lat",
     "long"
   )
+  
+  koord <- function(x) {
+    x <- unlist(x)
+    l <- mean(x[x < 48])
+    b <- mean(x[x > 48])
+    return(round(c(l, b), 4))
+  }
   
   OK <- TRUE
   V <- V. <- list()
@@ -92,7 +107,8 @@ lesVannforekomster <- function(vannkategori = c("L", "R", "C"),
       if (OK) {
         # leser inn separate tabeller for innsjø- (L), elve- (R) og
         # kystvannforekomster (C)
-        test <- try(readLines(filsti %+% "V-" %+% i %+% ".csv", 1))
+        test <- try(readLines(filsti %+% "V-" %+% i %+% ".csv", 1,
+                              encoding = "latin1"))
         if (inherits(test, "try-error")) {
           OK <- FALSE
           skriv("Dette skjedde en feil under innlesing av fila \"", filsti,
@@ -173,63 +189,128 @@ lesVannforekomster <- function(vannkategori = c("L", "R", "C"),
       }
     }
   }
-  if (OK) {
-    # Koding og overfladisk kontroll av vanntypologien
-    V$kat <- substr(V$typ, 1, 1)
-    if (all(V$kat %in% c("L", "R", "C"))) {
-      for (vkat in vannkategori) {
-        w <- which(V$kat == vkat)
-        hvilke <- get("Typologi" %+% vkat)
-        Vanntyper$reg <- Vanntyper[["reg" %+% vkat]]
-#        hvilke <- list(L = 2:8, R = 2:7, C = c(2, 9:15))[[vkat]]
-        for (i in 1:length(hvilke)) {
-          verdi <- substr(V$typ[w], i + 1, i + 1)
-          na <- which(!(verdi %in% Vanntyper[[hvilke[i]]]))
-          if (length(na)) {
-            skriv("Noen vannforekomster har ukjente verdier for " %+%
-                    tolower(Typologi[hvilke[i]]) %+% ":",
-                  pre = "OBS: ", linjer.over = 1)
-            for (j in 1:length(unique(verdi[na]))) {
-              ukjent <- sort(unique(verdi[na]))[j]
-              skriv(length(which(verdi[na] == ukjent)), " med \"",
-                    ukjent %+% "\" = \"", 
-                    V[w[which(verdi == ukjent)], hvilke[i]][1],
-                    "\"", pre = "* ")
-            }
-            skriv("Disse blir satt til <NA>!")
-            verdi[na] <- NA
+  
+  # Innlesing av formfila som har blitt lasta ned fra NVE
+  if (!is.null(CACHE)) {
+    if (file.exists(filsti %+% CACHE)) {
+      load(filsti %+% CACHE)
+      if (!exists("vf")) {
+        OK <- FALSE
+        skriv("Filen \"", filsti, CACHE, "\" inneholdt ikke variabelen \"vf\".",
+              pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
+      }
+    } else {
+      OK <- FALSE
+      skriv("Filen \"", filsti, CACHE, "\" ble ikke funnet.",
+            pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
+    }
+  }
+  if (OK & is.null(CACHE)) {
+    vf <- NULL
+    formfil <- filsti %+% "VF.gdb"
+    lag <- try(st_layers(formfil)$name)
+    if (inherits(lag, "try-error")) {
+      OK <- FALSE
+      skriv("Dette skjedde en feil under innlesing av filpakka \"", formfil,
+            "\". Sjekk om filpakka fins, og at det er oppgitt korrekt navn på den.",
+            pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
+    }
+  }
+  if (OK & is.null(CACHE)) {
+    for (i in tolower(lag)) {
+      if (("L" %in% vannkategori & i %inneholder% "innsj") |
+          ("R" %in% vannkategori & i %inneholder% "elv")   |
+          ("C" %in% vannkategori & i %inneholder% "kyst")) {
+        #skriv("Nå bearbeides \"", i, "\".")
+        lesinn <- suppressWarnings(try(st_read(formfil, i, quiet = TRUE)))
+        if (inherits(lesinn, "try-error")) {
+          OK <- FALSE
+          skriv("Dette skjedde dessverre en uventa feil under innlesing av ",
+                "filpakka \"", formfil, "\".",
+                pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
+        } else {
+          if (sum(NVEnavn %in% names(lesinn)) != 3) {
+            OK <- FALSE
+            skriv("Kolonnenavna i ", formfil, " var ikke i tråd med ",
+                  "forventninga (dvs. med argumentet \"NVEnavn\").",
+                  pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
           }
-          for (j in unique(verdi)) {
-            if (length(unique(V[w[which(verdi == j)], hvilke[i]])) > 1) {
-#              if (length(unique(V[w[which(verdi == j)], 
-#                                names(Vanntyper)[hvilke[i]]])) > 1) {
-              skriv("Verdien ", j, " av ", Typologi[hvilke[i]],
-                    " har ulike beskrivelser:", pre = "OBS: ")
-              skriv(paste(unique(V[w[which(verdi == j)], hvilke[i]]), 
-                          collapse = ", "))
-              skriv("Dette blir ignorert!")
-            }
-          }
-          V[w, hvilke[i]] <- verdi
         }
-        if (vkat %=% "L") {
-          # Estimert dybde likestilles med kjent dybde
-          for (d in 4:6) {
-            ww <- which(V$kat == vkat & V$dyp == d)
-            if (length(ww)) {
-              V$dyp[ww] <- d - 3
-              V$typ[ww] <- substr(V$typ[ww], 1, 7) %+% (d - 3)
-            }
+        if (OK) {
+          form <- lesinn[[NVEnavn[1]]]
+          lesinn <- as.data.frame(lesinn)[, colnames(lesinn) %A% NVEnavn[-1]]
+          colnames(lesinn) <- c("id", "str")
+          lesinn$lon <- lesinn$lat <- 0
+          for (j in 1:nrow(lesinn)) {
+            lesinn[j, 4:3] <- koord(form[[j]])
+          }
+          rm(form)
+          vf <- rbind(vf, lesinn)
+        }
+      }
+    }
+    if (any(duplicated(vf$id))) {
+      vf <- vf[-which(duplicated(vf$id)), ]
+    }
+    vf$str <- round(as.numeric(vf$str), 2)
+    vf$str[vf$str == 0] <- 0.01
+  }
+  
+  # Koding og overfladisk kontroll av vanntypologien
+  if (OK) {
+    V$kat <- substr(V$typ, 1, 1)
+    if ("L" %in% vannkategori) {
+      # Estimert dybde likestilles med kjent dybde
+      na <- which(substr(V$typ, 8, 8) %in% c("4", "5", "6"))
+      if (length(na)) {
+        skriv("Noen vannforekomsters dybde ble justert:", 
+              pre = "OBS: ", linjer.over = 1)
+        for (d in 4:6) {
+          w <- which(V$kat == "L" & substr(V$typ, 8, 8) == d)
+          if (length(w)) {
+            V$typ[w] <- substr(V$typ[w], 1, 7) %+% (d - 3)
+            skriv(length(w), ifelse(length(w) > 1, " ganger fra ", " gang fra "),
+                  d, " til ", (d - 3), pre = "* ")
           }
         }
       }
-    } else {
-      skriv("Det ble funnet ukjente vannkategorier (\"",
-            paste(sort(unique(V$kat %-% c("L", "R", "C"))), collapse = "\", \""),
-            "\")!", pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
+    }
+    for (vkat in vannkategori) {
+      w <- which(V$kat == vkat)
+      hvilke <- get("Typologi" %+% vkat)
+      Vanntyper$reg <- Vanntyper[["reg" %+% vkat]]
+      for (i in 1:length(hvilke)) {
+        verdi <- substr(V$typ[w], i + 1, i + 1)
+        na <- which(!(verdi %in% Vanntyper[[hvilke[i]]]))
+        if (length(na)) {
+          skriv("Noen vannforekomster har ukjente verdier for " %+%
+                  tolower(Typologi[hvilke[i]]) %+% ":",
+                pre = "OBS: ", linjer.over = 1)
+          for (j in 1:length(unique(verdi[na]))) {
+            ukjent <- sort(unique(verdi[na]))[j]
+            skriv(length(which(verdi[na] == ukjent)), " med \"",
+                  ukjent %+% "\" = \"", 
+                  V[w[which(verdi == ukjent)], hvilke[i]][1],
+                  "\"", pre = "* ")
+          }
+          skriv("Disse blir satt til <NA>!")
+          verdi[na] <- NA
+        }
+        for (j in unique(verdi)) {
+          if (length(unique(V[w[which(verdi == j)], hvilke[i]])) > 1) {
+            skriv("Verdien ", j, " av ", tolower(Typologi[hvilke[i]]),
+                  " har ulike beskrivelser:", pre = "OBS: ", linjer.over = 1)
+            for (k in unique(V[w[which(verdi == j)], hvilke[i]])) {
+              skriv(k, pre = "* ")
+            }
+            skriv("Dette blir ignorert!")
+          }
+        }
+        V[w, hvilke[i]] <- verdi
+      }
     }
     
-    # Kolonnen for sterkt modifiserte vannforekomster gjøre om til en logisk variabel
+    # Kolonnen for sterkt modifiserte vannforekomster gjøres om til logisk variabel
     V$smvf <- (V$smvf == "Sterkt modifisert")
     
     # Sjekk av kolonnene for økologisk og kjemisk tilstand, potensial og mål
@@ -290,6 +371,75 @@ lesVannforekomster <- function(vannkategori = c("L", "R", "C"),
       V[na, kolonne] <- NA
     }
   }
+  
+  # Kobling av vann-nett-data og NVE-data
+  if (OK) {
+    V  <-     V[order( V$id), ]
+    vf <-    vf[order(vf$id), ]
+    w <-    V$id[which(V$kat == "L"  &  V$id %in% vf$id)]
+    V$areal[V$id %in% w]     <- vf$str[vf$id %in% w]
+    w <-    V$id[which(V$kat == "R"  &  V$id %in% vf$id)]
+    V$lengd[V$id %in% w]     <- vf$str[vf$id %in% w]
+    w <-    V$id[which(V$kat == "C"  &  V$id %in% vf$id)]
+    V$areal[V$id %in% w]     <- vf$str[vf$id %in% w]
+    V$lat  [V$id %in% vf$id] <- vf$lat[vf$id %in% V$id]
+    V$long [V$id %in% vf$id] <- vf$lon[vf$id %in% V$id]
+    V$artot <- V$areal
+  }
+  
+  # Sjekk av størrelsesklasser mot faktiske arealer
+  forLiten <- forStor <- 0
+  w <- which(V$kat == "L" & is.na(V$areal))
+  if (length(w)) V$areal[w] <- 16 * 10^(as.numeric(V$stø[w]) - 3)
+  vorher <- hinterher <- character(0)
+  for (i in 1:3) {
+    w <- which(V$kat == "L" & V$stø == i &
+               V$areal > (5 * 10^(i - 2) * (1 + slingringsmonn)))
+    forLiten <- forLiten + length(w)
+    if (length(w)) {
+      vorher    <- c(vorher,       V$stø[w])
+      V$stø[w]  <- sapply(floor(lg(V$areal[w] * 200)), max, 1)
+      hinterher <- c(hinterher,    V$stø[w])
+    }
+  }
+  if (length(vorher)) {
+    skriv("Noen vannforekomsters størrelsesklasse ble justert opp:",
+          pre = "OBS: ", linjer.over = 1)
+    endra <- vorher %+% hinterher
+    for (i in sort(unique(endra))) {
+      skriv(length(which(endra == i)), 
+            ifelse(length(which(endra == i)) > 1, " ganger fra ", " gang fra "), 
+            substr(i, 1, 1), " til ", substr(i, 2, 2), pre = "* ")
+    }
+  }
+  vorher <- hinterher <- character(0)
+  for (i in 4:2) {
+    w <- which(V$kat == "L" & V$stø == i &
+               V$areal < (5 * 10^(i - 3) * (1 - slingringsmonn)))
+    forStor <- forStor + length(w)
+    if (length(w)) {
+      vorher    <- c(vorher,       V$stø[w])
+      V$stø[w]  <- sapply(floor(lg(V$areal[w] * 200)), max, 1)
+      hinterher <- c(hinterher,    V$stø[w])
+    }
+  }
+  if (length(vorher)) {
+    skriv("Noen vannforekomsters størrelsesklasse ble justert ned:",
+          pre = "OBS: ", linjer.over = 1)
+    endra <- vorher %+% hinterher
+    for (i in sort(unique(endra))) {
+      skriv(length(which(endra == i)), 
+            ifelse(length(which(endra == i)) > 1, " ganger fra ", " gang fra "), 
+            substr(i, 1, 1), " til ", substr(i, 2, 2), pre = "* ")
+    }
+  }
+
+  if (!all(V$kat %in% c("L", "R", "C"))) {
+    skriv("Det ble funnet ukjente vannkategorier (\"",
+          paste(sort(unique(V$kat %-% c("L", "R", "C"))), collapse = "\", \""),
+          "\")!", pre = "OBS: ", linjer.over = 1)
+  }
+  
   return(V)
 }
 
