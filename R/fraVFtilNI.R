@@ -2563,6 +2563,7 @@ fraVFtilNI <- function(
       maalingPer      =      maalingPer,
       maalingTot      =      maalingTot,
       maalingTyp      =      maalingTyp,
+      maalingInt      =      maalingInt,
       EQR             =             EQR,
       ignorerVariabel = ignorerVariabel,
       fastVariabel    =    fastVariabel,
@@ -2573,6 +2574,7 @@ fraVFtilNI <- function(
       arealvekt       =       arealvekt,
       logit           =           logit,
       DeltaAIC        =        DeltaAIC,
+      interaksjon     =     interaksjon,
       ekstrapolering  =  ekstrapolering,
       iterasjoner     =     iterasjoner,
       SEED            =            SEED
