@@ -69,14 +69,14 @@ Funksjonsverdien er en **tabell** (_dataframe_) med informasjon om alle vannfore
 - `nas` (**tekst**), nasjonal vanntype
 - `int` (**tekst**), interkalibreringstype
 - `kat` (**tekst**), vannkategori ("C", "L", "R")
-- `reg` (**tekst**), økoregion (se [klassifiseringsveileder 02:2018](https://www.vannportalen.no/veiledere/klassifiseringsveileder/), kap. 3.3, for denne og de følgende typologifaktorene)
+- `reg` (**tekst**), økoregion (se [klassifiseringsveileder 02:2018](https://www.vannportalen.no/veiledere/klassifiseringsveileder/), kap. 3.3, for denne og de følgende 6 typologifaktorene)
 - `son` (**tekst**), klimasone
 - `stø` (**tekst**), størrelsesklasse
 - `alk` (**tekst**), alkalitet
 - `hum` (**tekst**), humøsitet
 - `tur` (**tekst**), turbiditet
 - `dyp` (**tekst**), dybde
-- `kys` (**tekst**), kystvanntype (se [klassifiseringsveileder 02:2018](https://www.vannportalen.no/veiledere/klassifiseringsveileder/), kap. 3.4, for denne og de følgende typologifaktorene)
+- `kys` (**tekst**), kystvanntype (se [klassifiseringsveileder 02:2018](https://www.vannportalen.no/veiledere/klassifiseringsveileder/), kap. 3.4, for denne og de følgende 6 typologifaktorene)
 - `sal` (**tekst**), salinitet
 - `tid` (**tekst**), tidevann
 - `eks` (**tekst**), bølgeeksponering
