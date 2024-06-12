@@ -20,7 +20,7 @@ lesVannforekomster(vannkategori = c("L", "R", "C"), filsti = "data", kolonnenavn
 * `filsti`  (**tekst-skalar**) angir filstien for filer som trengs (`kolonnenavn` samt VF.gdb, V-L.csv, V-R.csv og V-C.csv).
 * `kolonnenavn` (**tekst-skalar**) angir navnet på en fil med kolonnenavn. Fila må være en semikolondelt tabell ([se detaljer](hjelpfil.md#vannforekomster-v-.csv-navnvn.csv)). Standardinnstillinga er å lese inn fila "[navnVN.csv](../data/navnVN.csv)".
 * `NVEnavn` (**tekst-vektor**) angir kolonnenavna i formfila. Standardinnstillinga er tilpassa det nåværende formatet på Miljødirektoratets karteksport.
-* `turbid` (**sannhetsverdi-skalar**) angir om hva som skal skje med vannforekomster hvis humøsitet er "satt til turbid". Standardinnstillinga (`TRUE`) innebærer at humøsitet endres til "klar" for brepåvirka vannforekomster og til "humøs" for leirpåvirka vannforekomster. Ved `turbid = FALSE` beholdes humøsitet uendra, som vil si at vannforekomster som er satt til turbid ikke inngår i de videre analysene.
+* `turbid` (**sannhetsverdi-skalar**) angir om hva som skal skje med vannforekomster hvis humøsitet er "satt til turbid". Standardinnstillinga (`TRUE`) innebærer at humøsitet endres til "klar" for brepåvirka vannforekomster og til "humøs" for leirpåvirka vannforekomster. Ved `turbid = FALSE` beholdes humøsitet uendra, som vil si at vannforekomster som er satt til turbid, ikke inngår i de videre analysene.
 * `slingringsmonn` (**numerisk skalar**) angir hvilket relativt avvik fra de reelle verdiene som godtas før opplysninger blir korrigert for en vannforekomst. Standardinnstillinga er 2&nbsp;%.
 * `CACHE` (**tekst-skalar**) skal vanligvis være `NULL`. Om den angir navnet til en eventuell RData-fil, brukes denne istedenfor formfila "VF.gdb".
 
