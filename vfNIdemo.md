@@ -56,38 +56,38 @@ må lastes ned separat.
     (<https://karteksport.miljodirektoratet.no/>). I menyen må man
     foreta de følgende valg:
 
--   Produkt: “Vannforekomster”
--   Definer område: “nasjonalt”
--   Format: “ESRI Filgeodatabase (ESPG:4326)”
+    -   Produkt: “Vannforekomster”
+    -   Definer område: “nasjonalt”
+    -   Format: “ESRI Filgeodatabase (ESPG:4326)”
 
-Datasettet man da får tilsendt per e-post, må dekomprimeres og døpes om
+    Datasettet man da får tilsendt per e-post, må dekomprimeres og døpes om
 til “**VF.gdb**”.
 
-1.  Filer over vannforekomstenes typologi må lastes ned som excel-filer
+2.  Filer over vannforekomstenes typologi må lastes ned som excel-filer
     (csv) fra [vann-nett](https://vann-nett.no/portal/):
 
-`https://vann-nett.no/portal/ > Rapporter > Vanntyper`
+    `https://vann-nett.no/portal/ > Rapporter > Vanntyper`
 
-Filer for de ulike vannkategoriene må lastes ned hver for seg:
+    Filer for de ulike vannkategoriene må lastes ned hver for seg:
 
--   Innsjøvannforekomster med vanntypeparametere, påvirkninger,
+    -   Innsjøvannforekomster med vanntypeparametere, påvirkninger,
     tilstand, potensial og miljømål
--   Elvevannforekomster med vanntypeparametere, påvirkninger, tilstand,
+    -   Elvevannforekomster med vanntypeparametere, påvirkninger, tilstand,
     potensial og miljømål
--   Kystvannforekomster med vanntypeparametere, påvirkninger, tilstand,
+    -   Kystvannforekomster med vanntypeparametere, påvirkninger, tilstand,
     potensial og miljømål
 
-For at filene kan leses inn, må de gis følgende navn:
+    For at filene kan leses inn, må de gis følgende navn:
 
--   “**V-L.csv**” for innsjøvannforekomstene
--   “**V-R.csv**” for elvevannforekomstene
--   “**V-C.csv**” for kystvannforekomstene
+    -   “**V-L.csv**” for innsjøvannforekomstene
+    -   “**V-R.csv**” for elvevannforekomstene
+    -   “**V-C.csv**” for kystvannforekomstene
 
-Man trenger ikke å laste ned alle tre. Det holder med den vannkategorien
+    Man trenger ikke å laste ned alle tre. Det holder med den vannkategorien
 som er relevant for vannforskrift-parameteren eller -parameterne.
 Benytta vannkategorier må også spesifiseres ved innlesing (se under).
 
-I tillegg trenger man en tabell som forklarer kolonnenavne i fila fra
+    I tillegg trenger man en tabell som forklarer kolonnenavne i fila fra
 vann-nett. Denne fila er nødvendig for å lese inn vannforekomstdataene,
 og den ligger i dette arkivet under navnet
 “[**navnVN.csv**](data/navnVN.csv)”. Hvis vann-nett endrer
@@ -341,8 +341,8 @@ vannforekomster.
 Til slutt trengs det lister over kommune- og fylkesnummer og -navn,
 vannforskriftsparametere og overvåkingsaktiviteter. Denne informasjonen
 leses inn automatisk, gitt at den er lagra i excel-regneark som heter
-henholdscis “**knr.xlsx**”, “**fnr.xlsx**”, “**VM-param.xlsx**” og
-“**VM-aktiv.xlsx**” og at disse er plassert i mappa “data”. Det tas
+henholdsvis “**knr.xlsx**”, “**fnr.xlsx**”, “**VM-param.xlsx**” og
+“**VM-aktiv.xlsx**”, og at disse er plassert i mappa “data”. Det tas
 forbehold om at enkelte målinger kan bli tilordna feil kommune, i
 tilfeller der målinger ble tatt i en sammenslått kommune og
 tilbakedateres til et tidspunkt før sammenslåinga.
@@ -437,14 +437,15 @@ Analysen består i å
 -   koble alle målinger til sine respektive vannforekomster,
 -   omregne (skalere) måleverdiene til
     [mEQR-verdier](forklar/asympEQR.md),
--   tilpasse en modell som forklarer variasjonen i måleverdier med
-    tidsperiode, typologifaktorer og
+-   [tilpasse en modell](modell.md) som forklarer variasjonen i
+    måleverdier med tidsperiode, typologifaktorer og
     [overvåkingsaktivitet](forklar/aktiv.md),
--   ekstrapolere trolige verdier til vannforekomster som det ikke
-    foreligger målinger fra,
+-   [ekstrapolere](extrapol.md) trolige verdier til vannforekomster 
+    som det ikke foreligger målinger fra,
 -   simulere usikkerheten (sannsynlighetsfordelinga) for de sistnevnte
     og
--   aggregrere resultatene opp til de ønska administrative enhetene.
+-   [aggregrere](arealvekt.md) resultatene opp til de ønska
+    administrative enhetene.
 
 Dette trinnet tar sin tid. Utmatinger underveis viser progresjonen.
 Simuleringa kan ta spesielt mye tid, avhengig av antall iterasjoner. For
