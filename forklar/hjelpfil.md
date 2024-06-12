@@ -34,7 +34,7 @@ Før kjøring av analyser bør aktuelle filer over vannforekomster lastes
 ned fra [vann-nett](https://vann-nett.no/portal/) og 
 [Miljødirektoratets karteksport](https://karteksport.miljodirektoratet.no/) 
 ([se detaljert forklaring](lesVannforekomster.md)). Det sistenevnte er 
-en formfil-folder som må omdøpes til "***VF.gdb***. Filene fra vann-nett 
+en formfil-folder som må omdøpes til "**VF.gdb**". Filene fra vann-nett 
 er tabulatordelte tekstfiler med filendelsen “.csv”. Filnavnene på disse 
 filene må endres til “**V-**” etterfulgt av “**C**”, “**L**” eller “**R**” 
 for henholdsvis kyst-, innsjø- og elvevannforekomster.
