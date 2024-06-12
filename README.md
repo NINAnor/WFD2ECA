@@ -13,10 +13,8 @@ På disse sidene blir
 - [de involverte funksjonene forklart](forklar/funksjon.md),
 - [parametrene som er klargjort for dataflyt, presentert](forklar/param.md).
 
-En detaljert forklaring av dataflyten fra vannforskriften til naturindeks er gitt i [NINA-rapport 1723](http://hdl.handle.net/11250/2631056). 
-
 Det er publisert [flere versjoner](https://github.com/NINAnor/NI_vannf/blob/main/forklar/versjon.md) av koden.
-Det er den nyeste som bør brukes (i skrivende stund versjon 1.3).
+Det er den nyeste som bør brukes (i skrivende stund versjon 1.4).
 
 ## Kontakt
 Denne sida vedlikeholdes av [Hanno Sandvik](mailto:hanno.sandvik@nina.no).
