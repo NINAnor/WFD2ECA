@@ -15,6 +15,8 @@ Publisert juni 2024. _Endringer:_
 - Modelleringa benytter en modifisert logit-link ([detaljer](modell.md)).
 - Ordinale forklaringsvariabler kan erstattes med numeriske ([detaljer](modell.md)).
 - Modelleringa tester interaksjoner med rapporteringsperiode ([detaljer](modell.md)).
+- Vannforekomster som er "satt til turbid", forkastes ikke lenger ([detaljer](lesVannforekomster.md)).
+- Beskjedene som [funksjonene](funksjon.md) gir underveis, er forbedra.
 
 
 ## Versjon 1.3
