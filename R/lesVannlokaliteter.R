@@ -1,7 +1,7 @@
 ### lesVannlokaliteter
 # Funksjoner til NI_vannf
 # ved Hanno Sandvik
-# desember 2023
+# juni 2024
 # se https://github.com/NINAnor/NI_vannf
 ###
 
@@ -25,7 +25,6 @@ lesVannlokaliteter <- function(vannkategori = c("L", "R", "C"),
   
   OK <- TRUE
   VL <- list()
-  
   vannkategori <- toupper(vannkategori) %A% c("L", "R", "C")
   if (length(vannkategori) %=% 0) {
     OK <- FALSE
@@ -99,17 +98,10 @@ lesVannlokaliteter <- function(vannkategori = c("L", "R", "C"),
     VL$sjønr <- as.numeric(VL$sjønr)
     VL$X     <- as.numeric(VL$X)
     VL$Y     <- as.numeric(VL$Y)
-    # Fjern koordinater som ikke kan stemme
-    # Trengs ikke?!! (¤)
-    # w <- which(VL$X < -80000 | VL$X > 1200000 | VL$Y < 6400000 | VL$Y > 9000000)
-    # if (length(w)) {
-    #  skriv("For " %+% length(w) %+% " vannlokaliteter var det oppgitt ",
-    #        "koordinater som ligger utenfor Norge.\n",
-    #        "Disse koordinatene ble satt til <NA>.",
-    #        pre = "OBS: ", linjer.over = 1)
-    #  VL$X[w] <- VL$Y[w] <- NA
-    #}
+  }
+  if (OK) {
+    skriv("Innlesing av ", nrow(VL), " vannlokaliteter var vellykka.", 
+          linjer.over = 1)
   }
   return(VL)
 }
-

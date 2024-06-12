@@ -1,7 +1,7 @@
 ### lesInnsjodatabasen
 # Funksjoner til NI_vannf
 # ved Hanno Sandvik
-# desember 2023
+# juni 2024
 # se https://github.com/NINAnor/NI_vannf
 ###
 
@@ -9,7 +9,8 @@
 
 lesInnsjodatabasen <- function(filnavn = "Innsjo_Innsjo.dbf",
                                filsti = "data",
-                               kolonnenavn = "navnNVEl.csv") {
+                               kolonnenavn = "navnNVEl.csv",
+                               CACHE = NULL) {
   
   # Kolonner som datarammen "nve" trenger for å fungere:
   nyeKolonner <- c( 
@@ -28,6 +29,7 @@ lesInnsjodatabasen <- function(filnavn = "Innsjo_Innsjo.dbf",
   )
   
   OK  <- TRUE
+  OBS <- FALSE
   nve <- nveL <- NULL
   
   if (nchar(filsti)) {
@@ -50,7 +52,21 @@ lesInnsjodatabasen <- function(filnavn = "Innsjo_Innsjo.dbf",
           "navn på den, og at den er formatert som semikolondelt tabell.",
           pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
   }
-  if (OK) {
+  if (!is.null(CACHE)) {
+    if (file.exists(filsti %+% CACHE)) {
+      load(filsti %+% CACHE)
+      if (!exists("nveL")) {
+        OK <- FALSE
+        skriv("Filen \"", filsti, CACHE, "\" inneholdt ikke variabelen \"nveL\".",
+              pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
+      }
+    } else {
+      OK <- FALSE
+      skriv("Filen \"", filsti, CACHE, "\" ble ikke funnet.",
+            pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
+    }
+  }
+  if (OK & is.null(CACHE)) {
     # Innlesing av dbf-delen av NVEs datasett
     nve <- try(read.dbf(filsti %+% filnavn, T))
     if (inherits(nve, "try-error")) {
@@ -61,7 +77,7 @@ lesInnsjodatabasen <- function(filnavn = "Innsjo_Innsjo.dbf",
             pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
     }
   }
-  if (OK) {
+  if (OK & is.null(CACHE)) {
     for (i in 1:ncol(nve)) {
       if (is.character(nve[, i])) {
         Encoding(nve[, i]) <- "latin1"
@@ -79,7 +95,7 @@ lesInnsjodatabasen <- function(filnavn = "Innsjo_Innsjo.dbf",
             pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
     }
   }
-  if (OK) {
+  if (OK & is.null(CACHE)) {
     if (all(nyeKolonner %in% navnNVE$nytt)) {
       nveL <- data.frame(lnr = nve$lnr)
       for (j in 2:length(nyeKolonner)) {
@@ -103,6 +119,7 @@ lesInnsjodatabasen <- function(filnavn = "Innsjo_Innsjo.dbf",
             "innsjødatabase, fordi betegnelsen ser ut til å være endra. ",
             "Variabelen er satt til <NA>.", 
             pre = "OBS: ", linjer.over = 1)
+      OBS <- TRUE
       nveL$reg <- NA
     }
     
@@ -115,6 +132,7 @@ lesInnsjodatabasen <- function(filnavn = "Innsjo_Innsjo.dbf",
                   "det norske arealet", "tilsigsfeltet")[i] %+%
                 " angitt å være negativ. Disse ble satt til <NA>.",
               pre = "OBS: ", linjer.over = 1)
+        OBS <- TRUE
         nveL[w, i] <- NA
       }
     }
@@ -123,6 +141,7 @@ lesInnsjodatabasen <- function(filnavn = "Innsjo_Innsjo.dbf",
       skriv("For " %+% length(w) %+% " innsjøer var det norske arealet angitt, ",
             "men ikke det totale. For disse ble totalarealet satt til det ",
             "norske arealet.", pre = "OBS: ", linjer.over = 1)
+      OBS <- TRUE
       nveL$areal[w] <- nveL$arealn[w]
     }
     w <- which(nveL$areal < nveL$arealn)
@@ -130,6 +149,7 @@ lesInnsjodatabasen <- function(filnavn = "Innsjo_Innsjo.dbf",
       skriv("For " %+% length(w) %+% " innsjøer var det totale arealet angitt å ",
             "være mindre enn det norske. For disse ble totalarealet satt til det ",
             "norske arealet.", pre = "OBS: ", linjer.over = 1)
+      OBS <- TRUE
       nveL$areal[w] <- nveL$arealn[w]
     }
     w <- which(nveL$tilsig < nveL$arealn)
@@ -137,17 +157,17 @@ lesInnsjodatabasen <- function(filnavn = "Innsjo_Innsjo.dbf",
       skriv("For " %+% length(w) %+% " innsjøer var deres tilsigsfelt angitt å ",
             "være mindre enn deres areal. For disse ble tilsigsfeltet satt til ",
             "arealet.", pre = "OBS: ", linjer.over = 1)
+      OBS <- TRUE
       nveL$tilsig[w] <- nveL$areal[w]
     }
-    
-    # Innlesing av formfila av NVEs datasett ¤¤¤ dette er utsatt!
-    #koord <- st_read("innsjo_innsjo.shp") # , layer_options="ENCODING=latin1")
-    #Sys.setlocale("LC_ALL", "")
-    #for (i in 1:nrow(nveL)) {
-    #  nveL$lat[i] <- mean(koord$geometry[[i]][[1]][[1]][, 2])
-    #  nveL$lon[i] <- mean(koord$geometry[[i]][[1]][[1]][, 1])
-    #}
+  }
+  if (OK) {
+    skriv("Innlesing av innsjødatabasen var vellykka.", ifelse(OBS, 
+          " (Men legg merke til beskjedene over!)", ""), linjer.over = 1)
   }
   return(nveL)
 }
+
+
+
 

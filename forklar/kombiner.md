@@ -26,12 +26,7 @@ Dette trinnet er kun aktuell for få [parametere](param.md), f.eks. Raddum forsu
 
 ## Funksjonsverdi
 
-Funksjonsverdien er en **numerisk matrise** som inneholder klassegrenser.
-Med klassegrense menes terskelverdiene mellom økologiske tilstandsklasser (svært dårlig, dårlig, moderat, god og svært god).
-Matrisens kolonner og rader har de følgende navn:
-
-- Kolonnenavnene er `c("min", "SD_nedre", "SD_D", "D_M", "M_G", "G_SG", "SG_øvre", "max")`, som identifiserer klassegrensene samt den dårligste og beste verdien som er teknisk mulig.
-- Radnavnene er forkorta vanntyper ("LEL11011" osv.).
+Funksjonsverdien er en liste som i sine listeelementer tilsvarer utmatinga av funksjonen [`fraVFtilNI`](fraVFtilNI.md).
 
 
 ## Kode

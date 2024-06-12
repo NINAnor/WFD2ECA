@@ -21,7 +21,7 @@ lesVannlokaliteter(vannkategori = c("L", "R", "C"), filsti = "data", kolonnenavn
 
 ## Detaljer
 
-Funksjonen forutsetter at filer over vannlokaliteter er lasta fra [vannmiljø](https://vannmiljo.miljodirektoratet.no/)-databasen:
+Funksjonen forutsetter at filer over vannlokaliteter er lasta ned fra [vannmiljø](https://vannmiljo.miljodirektoratet.no/)-databasen:
 
 `https://vannmiljo.miljodirektoratet.no/ > Jeg vil > Søke > Søk i vannlokaliteter`
 

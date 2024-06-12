@@ -1,7 +1,7 @@
 ### lesVannforekomster
 # Funksjoner til NI_vannf
 # ved Hanno Sandvik
-# april 2024
+# juni 2024
 # se https://github.com/NINAnor/NI_vannf
 ###
 
@@ -10,6 +10,7 @@
 lesVannforekomster <- function(vannkategori = c("L", "R", "C"),
                                filsti = "data",
                                kolonnenavn = "navnVN.csv",
+                               turbid = TRUE,
                                NVEnavn = c("SHAPE",
                                            "identifikasjon_lokalId",
                                            "arealKvadratkilometer",
@@ -72,6 +73,7 @@ lesVannforekomster <- function(vannkategori = c("L", "R", "C"),
   }
   
   OK <- TRUE
+  OBS <- FALSE
   V <- V. <- list()
   
   vannkategori <- toupper(vannkategori) %A% c("L", "R", "C")
@@ -265,6 +267,7 @@ lesVannforekomster <- function(vannkategori = c("L", "R", "C"),
       if (length(na)) {
         skriv("Noen vannforekomsters dybde ble justert:", 
               pre = "OBS: ", linjer.over = 1)
+        OBS <- TRUE
         for (d in 4:6) {
           w <- which(V$kat == "L" & substr(V$typ, 8, 8) == d)
           if (length(w)) {
@@ -272,6 +275,33 @@ lesVannforekomster <- function(vannkategori = c("L", "R", "C"),
             skriv(length(w), ifelse(length(w) > 1, " ganger fra ", " gang fra "),
                   d, " til ", (d - 3), pre = "* ")
           }
+        }
+      }
+    }
+    if (turbid) {
+      txt <- character(0)
+      w <- which(V$kat != "C" & 
+                 substr(V$typ, 6, 6) == "0" & substr(V$typ, 7, 7) == "2")
+      if (length(w)) {
+        V$typ[w] <- substr(V$typ[w], 1, 5) %+% 1 %+% 
+                    substr(V$typ[w], 7, nchar(V$typ[w]))
+        txt <- c(txt, length(w) %+% 
+                 " turbide brepåvirka vannforekomster ble satt til \"klar\"")
+      }
+      w <- which(V$kat != "C" & 
+                   substr(V$typ, 6, 6) == "0" & substr(V$typ, 7, 7) == "3")
+      if (length(w)) {
+        V$typ[w] <- substr(V$typ[w], 1, 5) %+% 2 %+% 
+                    substr(V$typ[w], 7, nchar(V$typ[w]))
+        txt <- c(txt, length(w) %+% 
+                 " turbide leirpåvirka vannforekomster ble satt til \"humøs\"")
+      }
+      if (length(txt)) {
+        skriv("Noen vannforekomsters humøsitet ble justert:", pre = "OBS: ",
+              linjer.over = 1)
+        OBS <- TRUE
+        for (i in txt) {
+          skriv(i, pre = "* ")
         }
       }
     }
@@ -286,6 +316,7 @@ lesVannforekomster <- function(vannkategori = c("L", "R", "C"),
           skriv("Noen vannforekomster har ukjente verdier for " %+%
                   tolower(Typologi[hvilke[i]]) %+% ":",
                 pre = "OBS: ", linjer.over = 1)
+          OBS <- TRUE
           for (j in 1:length(unique(verdi[na]))) {
             ukjent <- sort(unique(verdi[na]))[j]
             skriv(length(which(verdi[na] == ukjent)), " med \"",
@@ -300,6 +331,7 @@ lesVannforekomster <- function(vannkategori = c("L", "R", "C"),
           if (length(unique(V[w[which(verdi == j)], hvilke[i]])) > 1) {
             skriv("Verdien ", j, " av ", tolower(Typologi[hvilke[i]]),
                   " har ulike beskrivelser:", pre = "OBS: ", linjer.over = 1)
+            OBS <- TRUE
             for (k in unique(V[w[which(verdi == j)], hvilke[i]])) {
               skriv(k, pre = "* ")
             }
@@ -325,6 +357,7 @@ lesVannforekomster <- function(vannkategori = c("L", "R", "C"),
         skriv("Noen vannforekomster har ukjente verdier for økologisk " %+% 
                 c("tilstand", "miljømål")[i] %+% ":", 
               pre = "OBS: ", linjer.over = 1)
+        OBS <- TRUE
         for (j in ukjent) {
           skriv(length(which(V[na, kolonne] == j)) %+%
                   " med \"" %+% j %+% "\"", pre = "* ")
@@ -344,6 +377,7 @@ lesVannforekomster <- function(vannkategori = c("L", "R", "C"),
         skriv("Noen vannforekomster har ukjente verdier for økologisk " %+% 
                 c("potensial", "potensial miljømål")[i] %+% ":",
               pre = "OBS: ", linjer.over = 1)
+        OBS <- TRUE
         for (j in ukjent) {
           skriv(length(which(V[na, kolonne] == j)) %+% 
                   " med \"" %+% j %+% "\"", pre = "* ")
@@ -362,6 +396,7 @@ lesVannforekomster <- function(vannkategori = c("L", "R", "C"),
         skriv("Noen vannforekomster har ukjente verdier for kjemisk " %+% 
                 c("tilstand", "miljømål")[i] %+% ":", 
               pre = "OBS: ", linjer.over = 1)
+        OBS <- TRUE
         for (j in ukjent) {
           skriv(length(which(V[na, kolonne] == j)) %+%
                   " med \"" %+% j %+% "\"", pre = "* ")
@@ -405,6 +440,7 @@ lesVannforekomster <- function(vannkategori = c("L", "R", "C"),
   if (length(vorher)) {
     skriv("Noen vannforekomsters størrelsesklasse ble justert opp:",
           pre = "OBS: ", linjer.over = 1)
+    OBS <- TRUE
     endra <- vorher %+% hinterher
     for (i in sort(unique(endra))) {
       skriv(length(which(endra == i)), 
@@ -426,6 +462,7 @@ lesVannforekomster <- function(vannkategori = c("L", "R", "C"),
   if (length(vorher)) {
     skriv("Noen vannforekomsters størrelsesklasse ble justert ned:",
           pre = "OBS: ", linjer.over = 1)
+    OBS <- TRUE
     endra <- vorher %+% hinterher
     for (i in sort(unique(endra))) {
       skriv(length(which(endra == i)), 
@@ -433,13 +470,16 @@ lesVannforekomster <- function(vannkategori = c("L", "R", "C"),
             substr(i, 1, 1), " til ", substr(i, 2, 2), pre = "* ")
     }
   }
-
   if (!all(V$kat %in% c("L", "R", "C"))) {
     skriv("Det ble funnet ukjente vannkategorier (\"",
           paste(sort(unique(V$kat %-% c("L", "R", "C"))), collapse = "\", \""),
           "\")!", pre = "OBS: ", linjer.over = 1)
+    OBS <- TRUE
   }
   
+  if (OK) {
+    skriv("Innlesing av ", nrow(V), " vannforekomster var vellykka.", ifelse(OBS, 
+          " (Men legg merke til beskjedene over!)", ""), linjer.over = 1)
+  }
   return(V)
 }
-

@@ -9,6 +9,16 @@ I tillegg har alle arkiverte versjoner hver sin unike DOI.
 _Oversikt over publiserte versjoner:_
 
 
+## Versjon 1.4
+Publisert juni 2024. _Endringer:_
+
+- Modelleringa benytter en modifisert logit-link ([detaljer](modell.md)).
+- Ordinale forklaringsvariabler kan erstattes med numeriske ([detaljer](modell.md)).
+- Modelleringa tester interaksjoner med rapporteringsperiode ([detaljer](modell.md)).
+- Vannforekomster som er "satt til turbid", forkastes ikke lenger ([detaljer](lesVannforekomster.md)).
+- Beskjedene som [funksjonene](funksjon.md) gir underveis, er forbedra.
+
+
 ## Versjon 1.3
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11274927.svg)](https://doi.org/10.5281/zenodo.11274927)  
 Publisert mai 2024. _Endringer:_

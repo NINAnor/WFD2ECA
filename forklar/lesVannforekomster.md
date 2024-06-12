@@ -8,7 +8,7 @@ _Innhold:_ [syntaks](#syntaks) – [argumenter](#argumenter) – [detaljer](#det
 ## Syntaks
 
 ```{r}
-lesVannforekomster(vannkategori = c("L", "R", "C"), filsti = "data", kolonnenavn = "navnVN.csv",
+lesVannforekomster(vannkategori = c("L", "R", "C"), filsti = "data", kolonnenavn = "navnVN.csv", turbid = TRUE,
                    NVEnavn = c("SHAPE", "identifikasjon_lokalId", "arealKvadratkilometer", "lengdeKilometer"),
                    slingringsmonn = 0.02, CACHE = NULL)
 ```
@@ -20,6 +20,7 @@ lesVannforekomster(vannkategori = c("L", "R", "C"), filsti = "data", kolonnenavn
 * `filsti`  (**tekst-skalar**) angir filstien for filer som trengs (`kolonnenavn` samt VF.gdb, V-L.csv, V-R.csv og V-C.csv).
 * `kolonnenavn` (**tekst-skalar**) angir navnet på en fil med kolonnenavn. Fila må være en semikolondelt tabell ([se detaljer](hjelpfil.md#vannforekomster-v-.csv-navnvn.csv)). Standardinnstillinga er å lese inn fila "[navnVN.csv](../data/navnVN.csv)".
 * `NVEnavn` (**tekst-vektor**) angir kolonnenavna i formfila. Standardinnstillinga er tilpassa det nåværende formatet på Miljødirektoratets karteksport.
+* `turbid` (**sannhetsverdi-skalar**) angir hva som skal skje med vannforekomster hvis humøsitet er "satt til turbid". Standardinnstillinga (`TRUE`) innebærer at humøsitet endres til "klar" for brepåvirka vannforekomster og til "humøs" for leirpåvirka vannforekomster. Ved `turbid = FALSE` beholdes humøsitet uendra, som vil si at vannforekomster som er satt til turbid, ikke inngår i de videre analysene (slik det var frem til versjon 1.3).
 * `slingringsmonn` (**numerisk skalar**) angir hvilket relativt avvik fra de reelle verdiene som godtas før opplysninger blir korrigert for en vannforekomst. Standardinnstillinga er 2&nbsp;%.
 * `CACHE` (**tekst-skalar**) skal vanligvis være `NULL`. Om den angir navnet til en eventuell RData-fil, brukes denne istedenfor formfila "VF.gdb".
 
@@ -68,14 +69,14 @@ Funksjonsverdien er en **tabell** (_dataframe_) med informasjon om alle vannfore
 - `nas` (**tekst**), nasjonal vanntype
 - `int` (**tekst**), interkalibreringstype
 - `kat` (**tekst**), vannkategori ("C", "L", "R")
-- `reg` (**tekst**), økoregion (se [klassifiseringsveileder 02:2018](https://www.vannportalen.no/veiledere/klassifiseringsveileder/), kap. 3.3, for denne og de følgende typologifaktorene)
+- `reg` (**tekst**), økoregion (se [klassifiseringsveileder 02:2018](https://www.vannportalen.no/veiledere/klassifiseringsveileder/), kap. 3.3, for denne og de følgende 6 typologifaktorene)
 - `son` (**tekst**), klimasone
 - `stø` (**tekst**), størrelsesklasse
 - `alk` (**tekst**), alkalitet
 - `hum` (**tekst**), humøsitet
 - `tur` (**tekst**), turbiditet
 - `dyp` (**tekst**), dybde
-- `kys` (**tekst**), kystvanntype (se [klassifiseringsveileder 02:2018](https://www.vannportalen.no/veiledere/klassifiseringsveileder/), kap. 3.4, for denne og de følgende typologifaktorene)
+- `kys` (**tekst**), kystvanntype (se [klassifiseringsveileder 02:2018](https://www.vannportalen.no/veiledere/klassifiseringsveileder/), kap. 3.4, for denne og de følgende 6 typologifaktorene)
 - `sal` (**tekst**), salinitet
 - `tid` (**tekst**), tidevann
 - `eks` (**tekst**), bølgeeksponering

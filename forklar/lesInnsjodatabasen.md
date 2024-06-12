@@ -8,7 +8,7 @@ _Innhold:_ [syntaks](#syntaks) – [argumenter](#argumenter) – [detaljer](#det
 ## Syntaks
 
 ```{r}
-lesInnsjodatabasen(filnavn = "Innsjo_Innsjo.dbf", filsti = "data", kolonnenavn = "navnNVEl.csv")
+lesInnsjodatabasen(filnavn = "Innsjo_Innsjo.dbf", filsti = "data", kolonnenavn = "navnNVEl.csv", CACHE = NULL)
 ```
 
 
@@ -17,6 +17,7 @@ lesInnsjodatabasen(filnavn = "Innsjo_Innsjo.dbf", filsti = "data", kolonnenavn =
 * `filnavn` (**tekst-skalar**) angir navnet på datasettet. Standardinnstillinga er å lese inn fila "Innsjo_Innsjo.dbf".
 * `filsti` (**tekst-skalar**) angir filstien for filer som trengs (`filnavn` med resten av formfila samt `kolonnenavn`).
 * `kolonnenavn` (**tekst-skalar**) angir navnet på en fil med kolonnenavn. Fila må være en semikolondelt tabell ([se detaljer](hjelpfil.md#innsjødatabasen-navnnvel.csv)). Standardinnstillinga er å lese inn fila "[navnNVEl.csv](../data/navnNVEl.csv)".
+* `CACHE` (**tekst-skalar**) skal vanligvis være `NULL`. Om den angir navnet til en eventuell RData-fil, brukes denne istedenfor formfila "Innsjo_Innsjo.dbf".
 
 
 ## Detaljer
