@@ -126,16 +126,8 @@ nve <- lesInnsjodatabasen("Innsjo_Innsjo.dbf")
 ```
 ```{r, eval=TRUE, echo=FALSE}
 # Eksporten fra innsjødatabasen var for stor til å legges ut på GitHub.
-# Derfor må det her kjøres en annen versjon, som rett og slett laster inn datarammen som ble innlest tidligere:
-{
-  load("data/nve.RData")
-  # Så gjengis beskjedene som ble generert under denne tidligere innlesinga:
-  cat("\nOBS: For 3 innsjøer var høyden over havet angitt å være negativ. Disse ble satt til <NA>.\n")
-  cat("\nOBS: For 4 innsjøer var det norske arealet angitt å være negativ. Disse ble satt til <NA>.\n")
-  cat("\nOBS: For 1 innsjøer var tilsigsfeltet angitt å være negativ. Disse ble satt til <NA>.\n")
-  cat("\nOBS: For 589 innsjøer var deres tilsigsfelt angitt å være mindre enn deres areal. For disse ble tilsigsfeltet")
-  cat("\n     satt til arealet.\n")
-}
+#  Derfor må det her kjøres en modifisert versjon, som laster inn en dataramme som ble innlest tidligere:
+nve <- lesInnsjodatabasen("Innsjo_Innsjo.dbf", CACHE = "NVE.RData")
 ```
 
 Utmatinga forteller om mindre avvik fra det man kunne forvente.
@@ -176,9 +168,8 @@ Filene er plassert i mappa "[data](data/)". De leses da inn i **R** ved hjelp av
 VL <- lesVannlokaliteter(c("L", "R", "C"))
 ```
 
-Utmatinga forteller om mindre avvik fra det man kunne forvente.
-Men ingen av dem var kritisk for den videre analysen.
-I så fall hadde innlesinga blitt avbrutt med beskjeden "FEIL" og en forklaring.
+Alt i orden.
+Ved feil hadde innlesinga blitt avbrutt med beskjeden "FEIL" og en forklaring.
 
 
 ### Kobling av informasjon
@@ -284,6 +275,7 @@ utmating <- fraVFtilNI(
                        NI.aar = c(1990, 2000, 2010, 2014, 2019, 2024),
                        rapportenhet = c("kommune", "fylke", "landsdel", "norge"),
                        adminAar = 2010,
+                       interaksjon = FALSE,
                        iterasjoner = 1000,
                       )
 ```
@@ -299,6 +291,7 @@ utmating <- fraVFtilNI(
                        NI.aar = c(1990, 2000, 2010, 2014, 2019, 2024),
                        rapportenhet = c("kommune", "fylke", "landsdel", "norge"),
                        adminAar = 2010,
+                       interaksjon = FALSE,
                        iterasjoner = 1000,
                        bredde = 90,
                        tell = FALSE
@@ -311,7 +304,7 @@ utmating <- fraVFtilNI(
 Her kommer noen eksempler på visualiseringer av resultatene.
 For det første kan man plotte den simulerte sannsynlighetsfordelinga som et histogram, f.eks. slik:
 ```{r}
-hist(utmating$fylke["1900", "2019", ], 
+hist(utmating$fylke["1200", "2019", ], 
      breaks=36, 
      main="ASPT i Troms i 2019", 
      xlab="nEQR-verdi", 

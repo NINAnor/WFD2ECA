@@ -1,7 +1,7 @@
 ### lesMaalinger
 # Funksjoner til NI_vannf
 # ved Hanno Sandvik
-# desember 2023
+# mai 2024
 # se https://github.com/NINAnor/NI_vannf
 ###
 
@@ -39,7 +39,8 @@ lesMaalinger <- function(filnavn,
   )
   
   OK <- TRUE
-  
+  ut <- NULL
+
   # Innlesing av "tolkningstabellen": 
   # Hvilke kolonner i vannmiljø-tabellen svarer til hvilke kolonner i DATA
   if (nchar(filsti)) {
@@ -80,14 +81,21 @@ lesMaalinger <- function(filnavn,
         DATA$antverdi <- as.numeric(DATA$antverdi)
         DATA$antverdi[which(is.na(DATA$antverdi))] <- 1
       } else {
+        OK <- FALSE
         skriv("Kolonnenavnene i \"", kolonnenavn, "\" er ikke som forventa!",
               pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
       }
     } else {
+      OK <- FALSE
       skriv("Kolonnenavnene i den innleste datafila fra \"vannmiljø\" er ikke " %+%
               "som forventa!", pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
     }
-    return(DATA)
   }
+  if (OK) {
+    skriv("Innlesing av ", nrow(DATA), " vannmålinger var vellykka.", 
+          linjer.over = 1)
+    ut <- DATA
+  }
+  return(ut)
 }
 

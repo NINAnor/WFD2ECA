@@ -1,7 +1,7 @@
 ### Vanntyper
 # Hjelpefil til NI_vannf
 # ved Hanno Sandvik
-# februar 2024
+# mai 2024
 # se https://github.com/NINAnor/NI_vannf
 ###
 
@@ -33,8 +33,37 @@ Typologi.ordinal <- c(
 
 
 
+# Navn på numeriske typologifaktorer
+Typologi.numerisk <- c(
+  gbred = "Geografisk bredde",
+  høyde = "Høyde over havet",
+  areal = "Innsjøareal", 
+  tilsf = "Tilsigsfelt",
+  CaCO3 = "Kalkinnhold", 
+  P_tot = "Totalfosfor", 
+  dybde = "Innsjødybde",
+  kystt = "Kysttype",
+  saltk = "Saltkonsentrasjon",
+  ekspo = "Eksponering",
+  miksg = "Miksing",
+  oppht = "Oppholdstid",
+  vknop = "Strømhastighet"
+)
+
+
+
 # Navn på alle typologfaktorer
 Typologi <- c(Typologi.ordinal, Typologi.nominal)
+
+
+
+# Samsvar mellom ordinale og numeriske typologifaktorer
+ord2numC <- c(reg = "gbred", kys = "kystt", sal = "saltk", eks = "ekspo", 
+              mix = "miksg", opp = "oppht", str = "vknop")
+ord2numL <- c(reg = "gbred", son = "høyde", stø = "areal", 
+              alk = "CaCO3", hum = "P_tot", dyp = "dybde")
+ord2numR <- c(reg = "gbred", son = "høyde", stø = "tilsf", 
+              alk = "CaCO3", hum = "P_tot")
 
 
 
@@ -268,4 +297,3 @@ gamleTyper <- list(
   R308  = RH %&% "321",
   R311  = RH %&% 1:8 %&% c(1,4) %&% "2"
 )
-  

@@ -1,7 +1,7 @@
 ### Hjelpefunksjoner
 # Hjelpefunksjoner til NI_vannf
 # ved Hanno Sandvik
-# april 2024
+# juni 2024
 # se https://github.com/NINAnor/NI_vannf
 ###
 
@@ -67,6 +67,13 @@
 
 # Sjekker om begynnelsen av ordet er lik
 "%begynner%" <- function(a, b) substr(a, 1, nchar(b)) %=% b
+
+
+
+# Kombinerer ulike forklaringsvariabler til én tekststreng
+"%pluss%" <- function(x, y)
+  paste(sort(c(unlist(strsplit(x, "[+]")), unlist(strsplit(y, "[+]")))), 
+        collapse = "+")
 
 
 
@@ -151,6 +158,38 @@ tillatteVerdier <- function(id) {
 
 
 
+# Oppsummerer en vektor 
+oppsummer <- function(x) {
+  x <- as.vector(summary(x))
+  N <- nchar(trunc(abs(x))) + (x < 0)
+  L <- max(floor(log10(max(abs(x)))), 0)
+  x <- ("        ") %+% ifelse(x < 0, "-", "") %+% trunc(abs(x)) %+% "," %+%
+    substr(round(abs(x), 5 - L) - trunc(abs(x)), 3, 9) %+% "000000"
+  x <- substr(x, 7 + N - L, 14 + N - L)
+  n <- c(" minimum", "ned. kv.", "  median", "gj.snitt", "øvr. kv.", "maksimum")
+  return(c(paste(n, collapse = "  "), paste(x, collapse = "  ")))
+}
+
+
+
+# Modifisert logit-transformasjon (fra mEQR)
+skaler <- function(x, l, h, m = 0.001) {
+  x <- (x - l) / (h - l) * (1 - 2 * m) + m
+  return(log(x / (1 - x)))
+}
+
+
+
+# Invers modifisert logit-transformasjon (til mEQR)
+reskaler <- function(x, l, h, m = 0.001) {
+  x <- exp(x) / (1 + exp(x))
+  x <- (x - m) * (h - l) / (1 - 2 * m) + l
+  x <- pmin(pmax(x, -0.2), 1.2)
+  return(round(x, 9))
+}
+
+
+
 # Regner om en dato til dagen i året
 somDag <- function(d, m, y) as.POSIXlt(y %+% "-" %+% m %+% "-" %+% d)$yday
 
@@ -158,6 +197,60 @@ somDag <- function(d, m, y) as.POSIXlt(y %+% "-" %+% m %+% "-" %+% d)$yday
 
 # Hjelpefunksjon til funksjonen "mEQR"
 iNv <- function(mx) optimise(function(i) (i / atan(i) - mx)^2, c(0, 1000))$minimum
+
+
+
+# Tabulerer koeffisienter fra et modellsammendrag (x <- summary(lm(...))
+tabulerKoeffisienter <- function (x, digits = 3L, dig.tst = 2L, 
+                                  cs.ind = 1:2, tst.ind = 3L) {
+  # basert på funksjonen "printCoefmat" skrevet av Martin Maechler
+  d <- dim(x)
+  nc <- d[2L]
+  xm <- data.matrix(x)
+  k <- nc - 2
+  Cf <- array("", dim = d, dimnames = dimnames(xm))
+  ok <- !(ina <- is.na(xm))
+  acs <- abs(coef.se <- xm[, cs.ind, drop = FALSE])
+  if (any(ia <- is.finite(acs))) {
+    digmin <- 1 + if (length(acs <- acs[ia & acs != 0])) 
+      floor(log10(range(acs[acs != 0], finite = TRUE)))
+    else 0
+    Cf[, cs.ind] <- format(round(coef.se, max(1L, digits - digmin)), 
+                           digits = digits)
+  }
+  Cf[, tst.ind] <- format(round(xm[, tst.ind], digits = dig.tst), digits = digits)
+  if (any(r.ind <- !((1L:nc) %in% c(cs.ind, tst.ind, nc)))) 
+    for (i in which(r.ind)) Cf[, i] <- format(xm[, i], digits = digits)
+  ok[, tst.ind] <- FALSE
+  okP <- ok[, -nc]
+  x1 <- Cf[okP]
+  x0 <- (xm[okP] == 0) != (as.numeric(x1) == 0)
+  if (length(not.both.0 <- which(x0 & !is.na(x0)))) {
+    Cf[okP][not.both.0] <- format(xm[okP][not.both.0], 
+                                  digits = max(1L, digits - 1L))
+  }
+  if (any(ina)) 
+    Cf[ina] <- "NA"
+  if (any(inan <- is.nan(xm))) 
+    Cf[inan] <- "NaN"
+  if (any(okP <- ok[, nc])) {
+    pv <- as.vector(xm[, nc])
+    Cf[okP, nc] <- format.pval(pv[okP], digits = dig.tst, eps = 1e-12, nsmall = 5L)
+    signif.stars <- any(pv[okP] < 0.1)
+    Signif <- symnum(pv, corr = FALSE, na = FALSE, 
+                     cutpoints = c(0, 0.001, 0.01, 0.05, 0.1, 1), 
+                     symbols = c("***", "**", "*", ".", " "))
+    Cf <- cbind(Cf, format(Signif))
+  }
+  Cf[!is.na(Cf)] <- chartr("e", "E", Cf[!is.na(Cf)])
+  Cf[!is.na(Cf)] <- chartr(".", ",", Cf[!is.na(Cf)])
+  Cf[, ncol(Cf)] <- chartr(",", ".", Cf[, ncol(Cf)])
+  print.default(Cf, quote = FALSE, right = TRUE, na.print = "NA")
+  if (signif.stars) {
+    cat("---\nSignifikansnivåer:  0 *** 0,001 ** 0,01 * 0,05 . 0,1\n")
+  }
+  invisible(x)
+}
 
 
 
@@ -246,5 +339,3 @@ farge <- function(eqr, na.farge=0.84) {
                      ifelse(eqr < 0.8, eqr * 10 - 7, 1)))
   rgb(r,g,b)
 }
-
-
