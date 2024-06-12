@@ -1,7 +1,7 @@
 # Modelltilpasning
 
 Funksjonen [`fraVFtilNI`](fraVFtilNI.md) ekstrapolerer [mEQR-verdier](mEQR.md) til vannforekomster som det ikke foreligger målinger fra.
-Denne [ekstrapoleringa](extrapol.md) er basert på en modell som blir tilpassa til de foreliggende målingene.
+Denne [ekstrapoleringa](extrapol.md) er basert på en modell som blir tilpassa til de foreliggende målingene (trinn 11 i [dataflyten](dataflyt.md)).
 Modelltilpasninga gjøres slik:
 
 
@@ -79,4 +79,6 @@ Om to modeller har samme antall parametere, foretrekkes den med lavere AIC.
 
 Parametere som er droppa fra modellen, tas ikke inn igjen.
 Rapporteringsperiode, relativt år og interaksjonen mellom disse droppes ikke fra modellen.
+
+Funksjonen `fraVFtilNI` oppsummerer den tilpassa (beste) modellen.
 
