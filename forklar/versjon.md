@@ -10,6 +10,7 @@ _Oversikt over publiserte versjoner:_
 
 
 ## Versjon 1.4
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11625234.svg)](https://doi.org/10.5281/zenodo.11625234)  
 Publisert juni 2024. _Endringer:_
 
 - Modelleringa benytter en modifisert logit-link ([detaljer](modell.md)).
