@@ -137,15 +137,13 @@ I så fall hadde innlesinga blitt avbrutt med beskjeden "FEIL" og en forklaring.
 
 Fila over vannlokaliteter må lastes ned som en excel-fil (xlsx) fra [vannmiljø](https://vannmiljo.miljodirektoratet.no/)-databasen:
 
-`https://vannmiljo.miljodirektoratet.no/ > Jeg vil > Søke > Søk i vannlokaliteter`
+`https://vannmiljo.miljodirektoratet.no/ > Søk > Søk i målestasjoner`
 
-I fanen "Søk i vannlokaliteter" må man
+I fanen "Søk med kriterier" må man
 
 - velge riktig "Vannkategori",
 - trykke "Søk",
-- trykke "Eksporter",
-- velge eksporttype "Excel",
-- trykke "Eksporter til epost".
+- trykke "Eksport til Excel".
 
 Filer for de like vannkategoriene må lastes ned hver for seg. 
 For at filene kan leses inn, må de gis følgende navn:
