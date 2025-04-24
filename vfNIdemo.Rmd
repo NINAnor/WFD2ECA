@@ -19,6 +19,7 @@ library(foreign)
 library(sf)
 library(readxl)
 library(raster)
+library(magrittr)
 library(NIcalc)
 ```
 ```{r, eval=TRUE, echo=FALSE}
@@ -26,6 +27,7 @@ library(foreign)
 library(sf)
 library(readxl)
 library(raster)
+# library(magrittr)
 # library(NIcalc)
 # I demo-varianten kjøres ikke NIcalc-funksjonene, de vises bare
 ```
@@ -44,7 +46,7 @@ for (filnavn in list.files("R", full.names = TRUE)) {
 Før vannforskrift-parametere kan analyseres og forberedes for naturindeksen, må informasjon om vannforekomster og vannlokaliteter komme på plass. 
 Det forutsetter inntil videre at man manuelt har lasta ned oppdaterte versjoner av disse filene.
 Skal flere vannforskrift-parametere "flyttes over" til naturindeks, trenger man bare å gjøre dette trinnet én gang. 
-Eksempelkoden er basert på datafilene som ble lasta ned i juli 2023.
+Eksempelkoden er basert på datafilene som ble lasta ned i mars 2025.
 
 
 ### Vannforekomster
@@ -214,16 +216,15 @@ Målingene fra [vannmiljø](https://vannmiljo.miljodirektoratet.no/)-databasen m
 Det enkleste er å laste ned én parameter av gangen, og å oppkalle fila etter parameteren.
 Det gjøres slik:
 
-`https://vannmiljo.miljodirektoratet.no/ > Jeg vil > Søke > Søk i vannregistreringer og miljøgifter`
+`https://vannmiljo.miljodirektoratet.no/ > Søk > Søk i data`
 
-I fanen "Søk i registreringer" må man
+I fanen "Søk i vannrelaterte data" må man
 
 - velge riktig "Parameter",
 - eventuelt avgrense med andre kriterier (f.eks. "Prøvedato")
 - trykke "Søk",
 - trykke "Eksport",
-- velge eksporttype "Redigeringsformat",
-- trykke "Eksporter til epost".
+- velge eksporttype "Redigeringsformat".
 
 I tillegg trenger man en tabell som forklarer kolonnenavne i fila fra vannmiljø.
 Denne fila er nødvendig for å lese inn målingene, og den ligger i dette arkivet under navnet "[**navnVM.csv**](data/navnVM.csv)".
@@ -255,7 +256,7 @@ Dette trinnet tar sin tid.
 Utmatinger underveis viser progresjonen.
 Simuleringa kan ta spesielt mye tid, avhengig av antall iterasjoner.
 For illustrasjonen her er det valgt 1000 iterasjoner.
-For bruk i naturindeks bør man velge en større verdi (f.eks. 100&nbsp;000).
+For bruk i naturindeks bør man velge en større verdi (minst 10&nbsp;000).
 
 Funksjonen som gjennomfører analysen, heter [`fraVFtilNI`](R/fraVFtilNI.R) ("fra vannforkrift til naturindeks").
 De første fem funksjonsargumentene må alltid oppgis.
@@ -273,6 +274,7 @@ utmating <- fraVFtilNI(
                        adminAar = 2010,
                        interaksjon = FALSE,
                        iterasjoner = 1000,
+                       SEED = 12
                       )
 ```
 ```{r, eval=TRUE, echo=FALSE}
@@ -289,6 +291,7 @@ utmating <- fraVFtilNI(
                        adminAar = 2010,
                        interaksjon = FALSE,
                        iterasjoner = 1000,
+                       SEED = 12,
                        bredde = 90,
                        tell = FALSE
                       )
@@ -377,13 +380,59 @@ NIcalc::getToken(username = epost.adressen.min, password = passordet.mitt)
 NIindikatorer <- NIcalc::getIndicators()
 # Utmatinga viser indikator-id-en(e) som må benyttes i neste trinn.
 # Indikator-id-ens verdi antas å være lagret i variabelen "indikatorID".
+# Det eksisterende naturindeks-datasettet leses inn:
+NIdata <- NIcalc::getIndicatorValues(indikatorID)
+
+# Kommunenavn må være identiske i naturindeks og i vannmiljø. Det sjekkes slik:
+sort(unique(NIdata[[1]]$areaName[which(!(NIdata[[1]]$areaName %in% 
+                                           dimnames(utmating$kommune)$kommune))]))
+
+# Eventuelt avvikende kommunenavne må korrigeres, f.eks. slik: 
+dimnames(utmating$kommune)$kommune <- 
+  erstatt(dimnames(utmating$kommune)$kommune, "Bø i Nordland", "Bø (No)")
+dimnames(utmating$kommune)$kommune <- 
+  erstatt(dimnames(utmating$kommune)$kommune, "Bø i Telemark", "Bø (Te)")
+dimnames(utmating$kommune)$kommune <- 
+  erstatt(dimnames(utmating$kommune)$kommune, "Herøy i Møre og Romsdal", "Herøy (MR)")
+dimnames(utmating$kommune)$kommune <- 
+  erstatt(dimnames(utmating$kommune)$kommune, "Herøy i Nordland", "Herøy (No)")
+dimnames(utmating$kommune)$kommune <- 
+  erstatt(dimnames(utmating$kommune)$kommune, "Nes i Akershus", "Nes (Ak)")
+dimnames(utmating$kommune)$kommune <- 
+  erstatt(dimnames(utmating$kommune)$kommune, "Nes i Buskerud", "Nes (Bu)")
+dimnames(utmating$kommune)$kommune <- 
+  erstatt(dimnames(utmating$kommune)$kommune, "Os i Hedmark", "Os (He)")
+dimnames(utmating$kommune)$kommune <- 
+  erstatt(dimnames(utmating$kommune)$kommune, "Os i Hordaland", "Os (Ho)")
+dimnames(utmating$kommune)$kommune <- 
+  erstatt(dimnames(utmating$kommune)$kommune, "Porsáŋgu", "Porsángu")
+dimnames(utmating$kommune)$kommune <- 
+  erstatt(dimnames(utmating$kommune)$kommune, "Sande i Møre og Romsdal", "Sande (MR)")
+dimnames(utmating$kommune)$kommune <- 
+  erstatt(dimnames(utmating$kommune)$kommune, "Sande i Vestfold", "Sande (Vf)")
+dimnames(utmating$kommune)$kommune <- 
+  erstatt(dimnames(utmating$kommune)$kommune, "Våler i Hedmark", "Våler (He)")
+dimnames(utmating$kommune)$kommune <- 
+  erstatt(dimnames(utmating$kommune)$kommune, "Våler i Østfold", "Våler (Øf)")
+
+# Dobbeltsjekke at alt stemmer nå:
+sort(unique(NIdata[[1]]$areaName[which(!(NIdata[[1]]$areaName %in% 
+                                           dimnames(utmating$kommune)$kommune))]))
+
+# Er noen kommuner uten vannforskrifts-data (og hvilke)?
+unique(dimnames(utmating$kommune)$kommune[which(is.na(utmating$kommune), arr.ind = TRUE)[, 1]])
+
+# Så flettes de modellerte vannforskrifts-dataene inn i de dataene i naturindeksbasen:
+NIdata <- oppdaterNImedVF(NIdata, utmating, avrunding = 4)
+
+# Sjekk nøye hvilke beskjeder som har blitt utmata i det forrige trinnet!
+# Bare hvis alt ser bra ut, kan man gå videre.
 
 # Siste trinn er selve opplastinga:
-oppdaterteIndikatorverdier <- oppdaterNImedVF(indikatorID, utmating)
+NIcalc::writeIndicatorValues(NIdata)
 ```
 
-Før en opplasting sjekkes det oppdaterte datasettet (`utmating`) for eventuelle inkompatibiliteter med NI-databasen. 
-Slike vises i så fall som feilmeldinger.
-Om det derimot ikke skjer noen feil, har man mulighet til å fullføre opplastinga.
-Velger man å avbryte før opplasting, lagres det oppdaterte datasettet som variabel i stedet (i eksempelet over som `oppdaterteIndikatorverdier`).
+Før en opplasting må det oppdaterte datasettet (`utmating`) sjekkes grundig for eventuelle inkompatibiliteter med NI-databasen. 
+Noen relevante tester gjennomføres av funksjonen `oppdaterNImedVF`. 
+Om denne ikke rapporterer noen feil, har man mulighet til å fullføre opplastinga.
 

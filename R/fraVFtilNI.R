@@ -1,7 +1,7 @@
 ### fraVFtilNI
 # Dataflyt "fra vannforskriften til naturindeks"
 # ved Hanno Sandvik
-# juni 2024
+# april 2025
 # se https://github.com/NINAnor/NI_vannf
 ###
 
@@ -34,14 +34,15 @@ fraVFtilNI <- function(
   ignorerVariabel = NULL,
   fastVariabel = NULL,
   aktVekting = TRUE,
-  aktivitetsvekt = 5,
+  aktivitetsvekt = 3,
   antallvekt = 0.5,
-  tidsvekt = 1,
+  tidsvekt = 0.9,
   arealvekt = 2,
   logit = TRUE,
   DeltaAIC = 2,
   interaksjon = TRUE,
   ekstrapolering = "kjente",
+  beggeEnder = FALSE,
   iterasjoner = 100000,
   SEED = NULL,
   bredde = NULL,
@@ -52,7 +53,7 @@ fraVFtilNI <- function(
   
   ### fraVFtilNI [fra vannforskrift til naturindeks]
   # ved Hanno Sandvik
-  # mai 2024
+  # april 2025
   # se https://github.com/NINAnor/NI_vannf
   ###
   
@@ -105,6 +106,7 @@ fraVFtilNI <- function(
   # DeltaAIC: hvor mye lavere AIC skal en mer kompleks modell ha for å bli valgt
   # interaksjon: skal modellseleksjonen teste interaksjoner med rapporteringsperiode
   # ekstrapolering: skal det ekstrapoleres til "alle" eller til "kjente" vanntyper
+  # beggeEnder: skal starten av den første perioden estimeres fra denne?
   # iterasjoner: antall iterasjoner som skal brukes i simuleringa
   # SEED: frø for slumptallgeneratoren
   # bredde: bredden til beskjeder i antall tegn
@@ -117,7 +119,7 @@ fraVFtilNI <- function(
   if (vis) {
     cat("\n\n")
     cat("****** Fra vannforskrift til naturindeks ******\n")
-    cat("***************   versjon 1.4   ***************\n")
+    cat("***************   versjon 1.5   ***************\n")
   }
   
   OK <- TRUE
@@ -730,7 +732,7 @@ fraVFtilNI <- function(
           maaling$mnd[L]   <- as.numeric(     substr(DATA$tidpkt[i], 6,  7))
           maaling$dag[L]   <- as.numeric(     substr(DATA$tidpkt[i], 9, 10))
           maaling$per[L]   <- rappAar[i]    # rapporteringsår
-          maaling$rar[L]   <- relaar [i]    # relativt år (i rapporteringsperioden)
+          maaling$rar[L]   <- -relaar[i]    # relativt år (i rapporteringsperioden)
           maaling$akt[L]   <- DATA$ak[i]    # overvåkingsaktivitets-id
           maaling$kom[L]   <- Vf$komm[vfk]  # kommunenummer
           maaling$fyl[L]   <- Vf$fylk[vfk]  # fylkesnummer
@@ -909,7 +911,8 @@ fraVFtilNI <- function(
     
     # Sjekk av antall målinger per rapporteringsperiode
     if (nrow(maaling)) {
-      fjernAar <- c()
+      fjernAar  <- c()
+      ekstraAar <- bakAar <- c()
       for (i in NI.aar) {
         w <- length(unique(maaling$vfo[which(maaling$per == i)]))
         if (w < maalingPer) {
@@ -921,6 +924,21 @@ fraVFtilNI <- function(
                           " vannforekomster. Det er dessverre for få, og denne",
                           " rapportperioden må derfor utgå.", 
                           pre = "OBS: ", linjer.under = 1, ut = TRUE))
+        }
+      }
+      if (beggeEnder && length(fjernAar)) {
+        for (i in fjernAar) {
+          if (any(NI.aar > i)) {
+            w <- NI.aar[which(NI.aar == i) + 1]
+            if (!(w %in% fjernAar)) {
+              ekstraAar <- c(ekstraAar, i)
+              bakAar    <- c(   bakAar, w)
+              u <- c(u, skriv("Kontrabeskjed - verdier for rapportåret ", i, 
+                              " estimeres \"bakfra\" (dvs. med data fra perioden ",
+                              i+1, "-", w, ").", pre = "OBS: ", 
+                              linjer.under = 1, ut = TRUE))
+            }
+          }
         }
       }
       rappAar <- rappAar %-% fjernAar
@@ -1858,8 +1876,8 @@ fraVFtilNI <- function(
                       " vannforekomster en vanntype som parameteren ",
                       parameter, " er definert for.", ut = TRUE))
     }
-    nydata <- matrix("", length(utvalg), length(explv), TRUE, 
-                     list(Vf$id[utvalg], explv))
+    nydata <- matrix("", length(utvalg), length(explv), 
+                     dimnames = list(Vf$id[utvalg], explv))
     nydata <- as.data.frame(nydata, stringsAsFactors = FALSE)
     hvilke <- 1:length(explv) %-% which(explv %in% c("per", "rar", "akt"))
     nydata[, explv[hvilke]] <- Vf[utvalg, explv[hvilke]]
@@ -2236,6 +2254,7 @@ fraVFtilNI <- function(
 
     set.seed(SEED, "Mersenne-Twister", "Inversion", "Rejection")
     
+    df <- modell$df
     if (any(names(nydata) == "akt")) {
       alist <- sort(unique(maaling$akt))
       akter <- unlist(strsplit(alist, "[+]"))
@@ -2282,45 +2301,42 @@ fraVFtilNI <- function(
         nydata[,i] <- as.numeric(nydata[,i])
       }
     }
-    konfident <- which(rownames(nydata) %in% maaling$vfo)
-    #BLAA
-    #  konfident <- matrix(FALSE, nrow(nydata), length(NI.aar))
-    #  maalt.gs <- maalt.sd <- matrix(NA, nrow(nydata), length(NI.aar))
-    #  colnames(konfident) <- colnames(maalt.gs) <- colnames(maalt.sd) <- NI.aar
-    #  rownames(konfident) <- rownames(maalt.gs) <- rownames(maalt.sd) <- 
-    #                         rownames(nydata)
-    #  for (i in rownames(nydata)) {
-    #    for (j in as.character(NI.aar)) {
-    #      hvilke <- which(maaling$vfo == i & as.character(maaling$per) == j)
-    #      if (length(hvilke)) {
-    #        konfident[i,j] <- TRUE
-    #        maalt.gs[i,j] <- weighted.mean(maaling$vrd[hvilke],maaling$ant[hvilke])
-    #        maalt.sd[i,j] <- -1
-    #        if (length(hvilke) > 2) {
-    #          maalt.sd[i,j] <- sd(maaling$vrd[hvilke])
-    #          if (length(hvilke) < 50) {
-    #            maalt.sd[i,j] <- sd(maaling$vrd[hvilke]) / 
-    #              c(NA, 0.80, 0.89, 0.92, 0.94, 0.95, 0.96, 0.97, 0.97, 0.97, 
-    #                rep(0.98, 7), rep(0.99, 48))[length(hvilke)]
-    #          }
-    #        }
-    #      }
-    #    }
-    #  }
-    #  if (!any(maalt.sd >= 0)) {
-    #    cat("HVA NÅ???\n")
-    #  } #¤ ?!
-    #  if (any(maalt.sd < 0)) {
-    #    cv <- as.vector(maalt.sd / (maalt.gs + 1e-6))
-    #    md <- lm(cv ~ as.vector(maalt.gs), 
-    #             subset = which(as.vector(maalt.sd) >= 0))
-    #    yaa <- md$coeff[1]
-    #    stg <- md$coeff[2]
-    #    hvilke <- (maalt.sd < 0 & !is.na(maalt.sd))
-    #    maalt.sd[hvilke] <- (yaa + stg * maalt.gs[hvilke]) * maalt.gs[hvilke]
-    #    rm(cv, md, yaa, stg, hvilke)
-    #  }
-    df <- modell$df
+    alleAar <- sort(c(ekstraAar, NI.aar))
+    names(alleAar) <- alleAar
+    konfident <- matrix(FALSE,              nrow(nydata), length(alleAar),
+                        dimnames = list(rownames(nydata),        alleAar))
+    maalt.gs <- maalt.sd <- matrix(NA,      nrow(nydata), length(alleAar),
+                        dimnames = list(rownames(nydata),        alleAar))
+    for (i in rownames(nydata)) {
+      for (j in names(alleAar)) {
+        if (j %in% NI.aar) {
+          AAR <- j
+        } else {
+          AAR <- alleAar[as.character(alleAar[which(names(alleAar) == j) + 1])]
+        }
+        hvilke <- which(maaling$vfo == i & maaling$per == AAR)
+        if (length(hvilke)) {
+          konfident[i, j] <- TRUE
+          if (length(hvilke) > 1) {
+            if (j %in% NI.aar) {
+              vekt <- maaling$ant * tidsvekt^maaling$rar
+              intervall <- "confidence"
+            } else {
+              vekt <- maaling$ant * tidsvekt^(AAR + maaling$rar - alleAar[j])
+              intervall <- "prediction"
+            }
+            lokmod <- lm(vrd ~ 1, weights = vekt, data = maaling, subset = hvilke)
+            pred <- predict(lokmod, data.frame(vrd = 1), TRUE, 
+                            interval = intervall, level = 0.5, weights = 1)
+            maalt.gs[i, j] <- pred$fit[1]
+            maalt.sd[i, j]<- 0.5 * (pred$fit[3] - pred$fit[2]) / qt(0.75, lokmod$df)
+          } else {
+            maalt.gs[i, j] <- maaling$vrd[hvilke]
+            maalt.sd[i, j] <- 0
+          }
+        }
+      }
+    }
   }
 
   if (OK) {
@@ -2335,27 +2351,27 @@ fraVFtilNI <- function(
       UT[e] <- NA
       if ("fylker" %begynner% e) {
         names(UT)[length(UT)] <- "fylke"
-        UT$fylke <- array(0, c(length(FYL), length(NI.aar), nsim + 1),
-                          list(fylke=FNR, aar=NI.aar, 
+        UT$fylke <- array(0, c(length(FYL), length(alleAar), nsim + 1),
+                          list(fylke=FNR, aar=alleAar, 
                                simuleringer=c("pred", 1:nsim)))
       }
       if ("kommuner" %begynner% e) {
         names(UT)[length(UT)] <- "kommune"
-        UT$kommune <- array(0, c(length(KOM), length(NI.aar), nsim + 1),
-                            list(kommune=KOM, aar=NI.aar, 
+        UT$kommune <- array(0, c(length(KOM), length(alleAar), nsim + 1),
+                            list(kommune=KOM, aar=alleAar, 
                                  simuleringer=c("pred", 1:nsim)))
       }
       if ("landsdeler" %begynner% e) {
         names(UT)[length(UT)] <- "landsdel"
-        UT$landsdel <- array(0, c(5, length(NI.aar), nsim + 1),
+        UT$landsdel <- array(0, c(5, length(alleAar), nsim + 1),
                              list(landsdel=c("Østlandet", "Sørlandet", "Vestlandet", 
                                              "Midt-Norge", "Nord-Norge"),
-                                  aar=NI.aar, simuleringer=c("pred", 1:nsim)))
+                                  aar=alleAar, simuleringer=c("pred", 1:nsim)))
       }
       if ("norge" %begynner% e) {
         names(UT)[length(UT)] <- "Norge"
-        UT$Norge <- array(0, c(1, length(NI.aar), nsim + 1),
-                          list(rike="Norge", aar=NI.aar, 
+        UT$Norge <- array(0, c(1, length(alleAar), nsim + 1),
+                          list(rike="Norge", aar=alleAar, 
                                simuleringer=c("pred", 1:nsim)))
       }
     }
@@ -2366,7 +2382,7 @@ fraVFtilNI <- function(
       if (length(which(is.na(Areal))) > length(utvalg) / 10) {
         Areal <- rep(1, nrow(nydata))
       }
-      #Areal[which(Areal < 0.5)] <- 0.5 # Dette var foreslått i NINA-rapport 1723,
+      # Areal[which(Areal < 0.5)] <- 0.5 # Dette var foreslått i NINA-rapport 1723,
       # men det er strengt tatt ikke forenlig med naturindeksens arealvekting
       w <- which(is.na(Areal))
       if (length(w)) {
@@ -2379,57 +2395,83 @@ fraVFtilNI <- function(
       }
       Areal <- Areal^(arealvekt / 2)
       
-      # BLAA
-      # alle.maalt <- matrix(TRUE, length(KOM), length(NI.aar), 
-      #                      dimnames=list(KOM, NI.aar))
-      if (nsim < 1) {
+      alle.maalt <- matrix(TRUE, length(KOM), length(alleAar), 
+                           dimnames = list(KOM, alleAar))
+      if (nsim < 1) { # bare predikert verdi, ingen simuleringer
         simdata   <- array(0, c(nrow(nydata), length(NI.aar), 1),
-                           list(vannforekomst=rownames(nydata), aar=NI.aar, 
-                                simuleringer="pred"))
-        for (j in 1:length(NI.aar)) {
-          if ("per" %in% names(nydata)) {
-            nydata$per <- factor(NI.aar[i], levels=levels(maaling$per))
+                           list(vannforekomst = rownames(nydata), 
+                                aar = NI.aar, 
+                                simuleringer = "pred"))
+        for (j in 1:length(alleAar)) {
+          if (alleAar[j] %in% NI.aar) {
+            if ("per" %in% names(nydata)) {
+              nydata$per <- factor(alleAar[j],   levels = levels(maaling$per))
+            }
+          } else {
+            if ("per" %in% names(nydata)) {
+              nydata$per <- factor(alleAar[j+1], levels = levels(maaling$per))
+            }
+            if ("rar" %in% names(nydata)) {
+              nydata$rar <- alleAar[j + 1] - alleAar[j]
+            }
           }
-          pred <- predict(modell, nydata, TRUE, interval = "pred", level = 0.5,
-                          weights = 1)
-          simdata[,i,1] <- pred$fit[,1]
+          pred <- predict(modell, nydata, TRUE, interval = "pred", 
+                          level = 0.5, weights = 1)$fit[, 1]
+          pred[konfident[, j]] <- maalt.gs[konfident[, j], j]
+          simdata[, j, 1] <- pred
+          if (alleAar[j] %in% ekstraAar) {
+            if ("rar" %in% names(nydata)) {
+              nydata$rar <- 0
+            }
+          }
         }
-      } else {
+      } else { # simuleringer
         skriv("Nå begynner simuleringa. Det er valgt ", 
               format(nsim, scientific=FALSE, big.mark=ifelse(nsim < 1e4, ""," ")), 
               " iterasjoner.", ifelse(nsim > 1000, " Dette vil ta sin tid.", ""))
         s <- 0
         while (s < nsim) {
           SIM <- min(1000, nsim - s)
-          simdata   <- array(0, c(nrow(nydata), length(NI.aar), SIM),
-                             list(vannforekomst = rownames(nydata), aar = NI.aar, 
+          simdata   <- array(0, c(nrow(nydata), length(alleAar), SIM),
+                             list(vannforekomst = rownames(nydata), 
+                                  aar = alleAar,
                                   simuleringer = 1:SIM))
           for (i in (1:SIM + s)) {
             slumptall <- rt(nrow(nydata), df)
             names(slumptall) <- rownames(nydata)
             if (any(names(nydata) == "akt")) {
               nydata$akt <- sample(alist, nrow(nydata), TRUE, avekt)
-              # BLAA
-              # for (j in which(apply(konfident, 1, any))) {
-              #   nydata$akt[j] <- sample(unique(maaling$akt[which(maaling$vfo ==
-              #     rownames(nydata)[j])]), 1)
-              # }
+              for (j in which(apply(konfident, 1, any))) {
+                nydata$akt[j] <- sample(unique(maaling$akt[which(maaling$vfo ==
+                  rownames(nydata)[j])]), 1)
+              }
             }
-            for (j in 1:length(NI.aar)) {
-              if ("per" %in% names(nydata)) {
-                nydata$per <- factor(NI.aar[j], levels=levels(maaling$per))
+            for (j in length(alleAar):1) {
+              if (alleAar[j] %in% NI.aar) {
+                if ("per" %in% names(nydata)) {
+                  nydata$per <- factor(alleAar[j],   levels = levels(maaling$per))
+                }
+              } else {
+                if ("per" %in% names(nydata)) {
+                  nydata$per <- factor(alleAar[j+1], levels = levels(maaling$per))
+                }
+                if ("rar" %in% names(nydata)) {
+                  nydata$rar <- alleAar[j + 1] - alleAar[j]
+                }
               }
               pred <- predict(modell, nydata, TRUE, 
                               interval = "pred", level = 0.5, weights = 1)
-              conf <- predict(modell, nydata[konfident, ], TRUE, 
-                              interval = "conf", level = 0.5, weights = 1) # !BLAA
-              pred$fit[,2] <- 0.5 * (pred$fit[,3] - pred$fit[,2]) / qt(0.75, df)
-              pred <- pred$fit[,1:2]
-              # BLAA
-              # pred[konfident[,j],1] <- maalt.gs[konfident[,j],j]
-              # pred[konfident[,j],2] <- maalt.sd[konfident[,j],j]
+              pred$fit[, 2] <- 0.5 * (pred$fit[, 3] - pred$fit[, 2]) / qt(0.75, df)
+              pred <- pred$fit[, 1:2]
+              pred[konfident[, j], 1] <- maalt.gs[konfident[, j], j]
+              pred[konfident[, j], 2] <- maalt.sd[konfident[, j], j]
               colnames(pred)[2] <- "SD"
-              simdata[, j, i - s] <- pred[,1] + pred[,2] * slumptall
+              simdata[, j, i - s] <- pred[, 1] + pred[, 2] * slumptall
+              if (alleAar[j] %in% ekstraAar) {
+                if ("rar" %in% names(nydata)) {
+                  nydata$rar <- 0
+                }
+              }
             }
             if (tell) {
               cat("Ferdig med " %+% floor(100*i/nsim) %+% " % av simuleringene.\r")
@@ -2438,7 +2480,7 @@ fraVFtilNI <- function(
           if (tell) {
             cat("\n")
           } else {
-            cat("Ferdig med 100% av simuleringene.\n")
+            cat("Ferdig med 100 % av simuleringene.\n")
           }
           rm(slumptall)
           gc(verbose = FALSE)
@@ -2447,7 +2489,7 @@ fraVFtilNI <- function(
           
           for (e in rapportenhet) {
             if ("fylker" %begynner% e) {
-              for (j in as.character(NI.aar)) {
+              for (j in as.character(alleAar)) {
                 for (f in FNR) {
                   w <- which(Vf$fylke %inneholder% f)
                   w <- which(rownames(nydata) %in% Vf$id[w])
@@ -2472,17 +2514,15 @@ fraVFtilNI <- function(
                   w <- which(rownames(nydata) %in% Vf$id[w])
                   if (length(w)) {
                     if (length(w) > 1) {
-                      for (j in as.character(NI.aar)) {
-                        UT$kommune[k, j, 1:SIM + s + 1] <-
-                          apply(simdata[w, j, ], 2, weighted.mean, 
-                                Areal[w], na.rm = TRUE)
-                        # BLAA
-                        # alle.maalt[k,j] <- alle.maalt[k,j] & all(konfident[w,j])
-                      }
+                    for (j in as.character(alleAar)) {
+                      UT$kommune[k, j, 1:SIM + s + 1] <-
+                        apply(simdata[w, j, ], 2, weighted.mean, 
+                              Areal[w], na.rm = TRUE)
+                      alle.maalt[k, j] <- alle.maalt[k, j] & all(konfident[w, j])
+                    }
                     } else {
-                      UT$kommune[k, , 1:SIM + s + 1] <- simdata[w,,]
-                      # BLAA
-                      # alle.maalt[k,] <- alle.maalt[k,] & konfident[w,]
+                      UT$kommune[k, , 1:SIM + s + 1] <- simdata[w, , ]
+                      alle.maalt[k, ] <- alle.maalt[k, ] & konfident[w, ]
                     }
                   } else {
                     UT$kommune[k, , 1:SIM + s + 1] <- NA
@@ -2498,10 +2538,11 @@ fraVFtilNI <- function(
                   cat("Ferdig med " %+% length(KOM) %+% " av " %+% 
                         length(KOM) %+% " kommuner.\n")
                 }
+                attr(UT$kommune, "maalt") <- alle.maalt
               }
             }
             if ("landsdeler" %begynner% e) {
-              for (j in as.character(NI.aar)) {
+              for (j in as.character(alleAar)) {
                 for (f in 1:5) {
                   w <- c()
                   for (k in 1:length(WF[[f]])) {
@@ -2523,7 +2564,7 @@ fraVFtilNI <- function(
               }
             }
             if ("norge" %begynner% e) {
-              for (j in as.character(NI.aar)) {
+              for (j in as.character(alleAar)) {
                 UT$Norge[1, j, 1:SIM + s + 1] <- 
                   apply(simdata[, j, ], 2, weighted.mean, Areal, na.rm = TRUE)
               }
@@ -2538,7 +2579,7 @@ fraVFtilNI <- function(
         if (logit) {
           UT[[i]] <- reskaler(UT[[i]], minV, maxV)
         }
-        for (j in 1:length(NI.aar)) {
+        for (j in 1:length(alleAar)) {
           for (k in 1:dim(UT[[i]])[1]) {
             UT[[i]][k, j, 1] <- median(UT[[i]][k, j, -1], na.rm = TRUE)
           }
@@ -2552,7 +2593,7 @@ fraVFtilNI <- function(
     attr(UT, "parameter")     <- parameter
     attr(UT, "vannkategori")  <- vannkategori
     attr(UT, "tidspunkt")     <- Sys.time()
-    attr(UT, "versjon")       <- "fraVFtilNI v. 1.4"
+    attr(UT, "versjon")       <- "fraVFtilNI v. 1.5"
     innstillinger <- list(
       adminAar        =        adminAar,
       rapportperiode  =  rapportperiode,
@@ -2576,6 +2617,7 @@ fraVFtilNI <- function(
       DeltaAIC        =        DeltaAIC,
       interaksjon     =     interaksjon,
       ekstrapolering  =  ekstrapolering,
+      beggeEnder      =      beggeEnder,
       iterasjoner     =     iterasjoner,
       SEED            =            SEED
     )
@@ -2590,10 +2632,12 @@ fraVFtilNI <- function(
     attr(UT, "innstillinger") <- innstillinger
     attr(UT, "beskjeder") <- u
     sisteTekst <- parameter %+% "s " %+% E %+% "verdier har medianen " %+% 
-      komma(signif(median(unlist(UT), na.rm = TRUE), 3)) %+% 
-                                               " og strekker seg fra " %+%
-      komma(signif(   min(unlist(UT), na.rm = TRUE), 3)) %+%   " til " %+%
-      komma(signif(   max(unlist(UT), na.rm = TRUE), 3)) %+%   "."
+      komma(format(round(median(unlist(UT), na.rm=TRUE), 3), nsm=3, sci=FALSE)) %+% 
+      " og strekker seg fra " %+%
+      komma(format(round(   min(unlist(UT), na.rm=TRUE), 3), nsm=3, sci=FALSE)) %+%
+      " til " %+%
+      komma(format(round(   max(unlist(UT), na.rm=TRUE), 3), nsm=3, sci=FALSE)) %+%
+      "."
     skriv("Sånn. Da har vi omsider kommet i mål.", linjer.over = 1)
     skriv(sisteTekst, linjer.under = 1)
   } else {
@@ -2601,5 +2645,7 @@ fraVFtilNI <- function(
   }
   return(UT)
 }
+
+
 
 
