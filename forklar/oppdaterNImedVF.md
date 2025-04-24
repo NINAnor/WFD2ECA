@@ -1,6 +1,6 @@
 # Forklaringer for funksjonen `oppdaterNImedVF`
 
-Funksjonen skriver de oppdaterte indikatorverdiene til naturindeks-databasen.
+Funksjonen forbereder og tester de oppdaterte indikatorverdiene for skriving til naturindeks-databasen.
 
 _Innhold:_ [syntaks](#syntaks) – [argumenter](#argumenter) – [detaljer](#detaljer) – [funksjonsverdi](#funksjonsverdi) – [kode](#kode)
 
