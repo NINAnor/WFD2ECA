@@ -805,5 +805,5 @@ bare *illustrert*, men ikke *utført*.
 
 Før en opplasting må det oppdaterte datasettet (`utmating`) sjekkes
 grundig for eventuelle inkompatibiliteter med NI-databasen. Noen
-relevante tester gjennomføres av funksjonen `oppdaterNImedVF`. Om denne
-ikke rapporterer noen feil, har man mulighet til å fullføre opplastinga.
+relevante tester gjennomføres av funksjonen [`oppdaterNImedVF`](R/oppdaterNImedVF.R). 
+Om denne ikke rapporterer noen feil, har man mulighet til å fullføre opplastinga.
