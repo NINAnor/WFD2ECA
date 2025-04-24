@@ -10,6 +10,7 @@ _Oversikt over publiserte versjoner:_
 
 
 ## Versjon 1.5
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15276139.svg)](https://doi.org/10.5281/zenodo.15276139)  
 Publisert april 2025. _Endringer:_
 
 - Argumentet `beggeEnder` er tilføyd til funksjonen `fraVFtilNI` ([detaljer](fraVFtilNI.md)).
