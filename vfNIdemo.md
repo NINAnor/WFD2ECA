@@ -1,3 +1,9 @@
+# Illustrasjon av dataflyt fra vannforskrift til naturindeks
+
+Dette dokumentet viser gangen i å forberede og gjennomføre opplasting av
+data som har blitt samla inn i rammen av vannforskriften, til
+naturindeks-databasen.
+
 -   [Forberedelser](#forberedelser)
 -   [Nødvendig informasjon om
     vannforekomster](#nødvendig-informasjon-om-vannforekomster)
@@ -12,10 +18,6 @@
 -   [Visualisering](#visualisering)
 -   [Opplasting til
     naturindeks-databasen](#opplasting-til-naturindeks-databasen)
-
-Dette dokumentet viser gangen i å forberede og gjennomføre opplasting av
-data som har blitt samla inn i rammen av vannforskriften, til
-naturindeks-databasen.
 
 ## Forberedelser
 
@@ -55,14 +57,14 @@ må lastes ned separat.
     (<https://karteksport.miljodirektoratet.no/>). I menyen må man
     foreta de følgende valg:
 
--   Produkt: “Vannforekomster”
--   Definer område: “nasjonalt”
--   Format: “ESRI Filgeodatabase (ESPG:4326)”
+  -   Produkt: “Vannforekomster”
+  -   Definer område: “nasjonalt”
+  -   Format: “ESRI Filgeodatabase (ESPG:4326)”
 
 Datasettet man da får tilsendt per e-post, må dekomprimeres og døpes om
 til “**VF.gdb**”.
 
-1.  Filer over vannforekomstenes typologi må lastes ned som excel-filer
+2.  Filer over vannforekomstenes typologi må lastes ned som excel-filer
     (csv) fra [vann-nett](https://vann-nett.no/portal/):
 
 `https://vann-nett.no/portal/ > Rapporter > Vanntyper`
@@ -265,15 +267,13 @@ innlesinga blitt avbrutt med beskjeden “FEIL” og en forklaring.
 Fila over vannlokaliteter må lastes ned som en excel-fil (xlsx) fra
 [vannmiljø](https://vannmiljo.miljodirektoratet.no/)-databasen:
 
-`https://vannmiljo.miljodirektoratet.no/ > Jeg vil > Søke > Søk i vannlokaliteter`
+`https://vannmiljo.miljodirektoratet.no/ > Søk > Søk i målestasjoner`
 
-I fanen “Søk i vannlokaliteter” må man
+I fanen “Søk med kriterier” må man
 
 -   velge riktig “Vannkategori”,
 -   trykke “Søk”,
--   trykke “Eksporter”,
--   velge eksporttype “Excel”,
--   trykke “Eksporter til epost”.
+-   trykke “Eksport til Excel”.
 
 Filer for de like vannkategoriene må lastes ned hver for seg. For at
 filene kan leses inn, må de gis følgende navn:
@@ -682,7 +682,7 @@ histogram, f.eks. slik:
          ylab="Trolighet", 
          cex.lab=1.2, cex.main=1.8)
 
-![](/data/Egenutvikling/61308-01_fu_intern_hanno_sandvik/NI_vannf/fig/fig1.png)
+![](/fig/fig1.png)
 
 De fylkesvise gjennomsnittsresultatene kan vises på kart:
 
@@ -707,7 +707,7 @@ De fylkesvise gjennomsnittsresultatene kan vises på kart:
          pos = 2, cex = 0.96)
     text(rep(26, 5), 59.8+0:4*1.6, c("SD", "D", "M", "G", "SG"), pos = 4, cex = 1.2)
 
-![](/data/Egenutvikling/61308-01_fu_intern_hanno_sandvik/NI_vannf/fig/fig2.png)
+![](/fig/fig2.png)
 
 Det samme gjelder de kommunevise resultatene:
 
@@ -735,7 +735,7 @@ Det samme gjelder de kommunevise resultatene:
          pos = 2, cex = 0.96)
     text(rep(26, 5), 59.8+0:4*1.6, c("SD", "D", "M", "G", "SG"), pos = 4, cex = 1.2)
 
-![](/data/Egenutvikling/61308-01_fu_intern_hanno_sandvik/NI_vannf/fig/fig3.png)
+![](/fig/fig3.png)
 
 ## Opplasting til naturindeks-databasen
 
@@ -805,5 +805,5 @@ bare *illustrert*, men ikke *utført*.
 
 Før en opplasting må det oppdaterte datasettet (`utmating`) sjekkes
 grundig for eventuelle inkompatibiliteter med NI-databasen. Noen
-relevante tester gjennomføres av funksjonen `oppdaterNImedVF`. Om denne
-ikke rapporterer noen feil, har man mulighet til å fullføre opplastinga.
+relevante tester gjennomføres av funksjonen [`oppdaterNImedVF`](R/oppdaterNImedVF.R). 
+Om denne ikke rapporterer noen feil, har man mulighet til å fullføre opplastinga.
