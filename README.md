@@ -14,7 +14,7 @@ På disse sidene blir
 - [parametrene som er klargjort for dataflyt, presentert](forklar/param.md).
 
 Det er publisert [flere versjoner](https://github.com/NINAnor/NI_vannf/blob/main/forklar/versjon.md) av koden.
-Det er den nyeste som bør brukes (i skrivende stund versjon 1.4).
+Det er den nyeste som bør brukes (i skrivende stund versjon 1.5).
 
 ## Kontakt
 Denne sida vedlikeholdes av [Hanno Sandvik](mailto:hanno.sandvik@nina.no).
