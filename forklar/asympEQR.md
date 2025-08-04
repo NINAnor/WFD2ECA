@@ -1,14 +1,14 @@
 # Beregning av mEQR-verdier
 
 En rekke vannforskriftsparametere kan få måleverdier som er _bedre_ enn **referanseverdien** eller _dårligere_ enn "**nullverdien**" (der referanseverdien er øvre/beste klassegrense for svært god tilstand og "nullverdi" er nedre/dårligste klassegrense for svært dårlig tilstand, og anførselstegnene brukes fordi "nullverdien" ikke trenger å være lik null).
-Standardprosedyren ifølge vannforskriften ([veileder 02:2018](https://www.vannportalen.no/veiledere/klassifiseringsveileder/), s. 37) er å trunkere slike måleverdier, slik at de førstnevnte får en nEQR-verdi på 1 og de sistnevnte en nEQR-verdi på 0.
+Standardprosedyren ifølge vannforskriften (se [klassifiseringsveilederen](https://www.vannportalen.no/veiledere/klassifiseringsveileder/)) er å trunkere slike måleverdier, slik at de førstnevnte får en nEQR-verdi på 1 og de sistnevnte en nEQR-verdi på 0.
 For å estimere usikkerhet i naturindeksen er det derimot viktig å ikke skjule denne variabiliteten i måleverdier.
 Derfor har Sandvik ([2019](http://hdl.handle.net/11250/2631056), s. 13&ndash;15) foreslått å beregne "mEQR-verdier", som bare skiller seg fra nEQR-verdier i at de ikke blir trunkert.
 
 Imidlertid forutsetter denne løsninga at man besvarer et oppfølgingsspørsmål:
 Hvilken transformering skal man bruke på de overskytende verdiene (bedre enn referanseverdi eller dårligere enn "nullverdi") for å skalere dem til mEQR-skala?
 Svaret er ikke gitt i vannforskriften (som jo unngår spørsmålet ved trunkering), og det er heller ikke trivielt.
-Løsninga som nå er implementert i funksjonen [`mEQR`](mEQR.md), tar utgangspunkt i formelen for nEQR (jf. [veileder 02:2018](https://www.vannportalen.no/veiledere/klassifiseringsveileder/), s. 37):
+Løsninga som nå er implementert i funksjonen [`mEQR`](mEQR.md), tar utgangspunkt i formelen for nEQR (jf. [klassifiseringsveilederen](https://www.vannportalen.no/veiledere/klassifiseringsveileder/)):
 
 $$\mathrm{nEQR} = S_{\mathrm{n}} + \mathrm{0,2} \cdot \displaystyle \frac{x - V_{\mathrm{n}}}{V_{\mathrm{ø}} - V_{\mathrm{n}}} $$
 
@@ -53,7 +53,7 @@ Den følgende figuren bruker PTI ("PPTI" ifølge vannmiljø) for å illustrere u
 Tallverdien 1,2 som maksimumsverdi for mEQR ble av Sandvik ([2019](http://hdl.handle.net/11250/2631056), s. 14) begrunna slik:
 "Avstanden på 0,2 mellom maksimumsverdien og referansetilstanden tilsvarer avstanden mellom de øvrige klassegrensene.
 Siden referanseverdien på 1 dermed havner midt mellom den nedre grensa for svært god tilstand og maksimumsverdien, passer dette godt med at noen indikatorer har definert referanseverdien som mediantilstanden ('midtpunktet') av referansevannforekomster"
-(f.eks. indikatorer for planteplankton, se [veileder 02:2018](https://www.vannportalen.no/veiledere/klassifiseringsveileder/), s. 48).
+(f.eks. indikatorer for planteplankton, se [klassifiseringsveilederen](https://www.vannportalen.no/veiledere/klassifiseringsveileder/)).
 Med tanke på at måleverdier fra referanse*vannforekomster* i så fall forventes å ligge i hele intervallet fra nedre grense for svært god tilstand til maksimumsverdien (som tilsvarer mEQR-verdier i intervallet mellom 0,8 og 1,2), bør transformingensfunksjonens stigningstall ikke endre seg sprangvis ved referanse*verdien* (1,0).
 Dette er ivaretatt gjennom den asymptotiske tilnærminga som nå er implementert.
 For tilstander som er dårligere enn "nullverdien", er det nærliggende å følge samme prosedyre.

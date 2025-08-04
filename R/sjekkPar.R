@@ -22,6 +22,43 @@ sjekkPIT <-
 
 
 
+sjekkANC <- 
+sjekkPH  <- 
+  function(maaling) {
+    # Funksjonen fjerner data fra vannforekomster der det ikke er foretatt
+    # målinger minst én gang per årstid
+    antall <- 4
+    fjern <- c()
+    ID <- maaling$aar %+% maaling$vfo
+    for (i in unique(ID)) {
+      w <- which(ID == i)
+      m <- maaling[w, ]
+      y <- m$aar[1]
+      DAG <- somDag(m$dag, m$mnd, y)
+      if (length(w) < antall) {
+        fjern <- c(fjern, w)
+      } else {
+        if       (any(DAG %mellom% c(somDag(1, 4, y), somDag(30,  6, y)))) {
+          if     (any(DAG %mellom% c(somDag(1, 6, y), somDag(31,  8, y)))) {
+            if   (any(DAG %mellom% c(somDag(1, 9, y), somDag(30, 11, y)))) {
+              if (any(DAG %utafor% c(somDag(1, 5, y), somDag(31, 10, y)))) {
+                # alt i skjønneste orden!
+              } else {
+                if ((m$reg[1] %in% c("N", "F") | m$son[1] %in% c("M", "H")) &
+                    any(DAG %utafor% c(somDag(1, 6, y), somDag(30, 9, y)))) {
+                  # også helt toppers!
+                } else fjern <- c(fjern, w)
+              }
+            } else fjern <- c(fjern, w)
+          } else fjern <- c(fjern, w)
+        } else fjern <- c(fjern, w)
+      }
+    }
+    return(unique(fjern))
+  }
+
+
+
 sjekkASPT <- 
   function(maaling) {
   # Funksjonen fjerner målinger som er tatt i brepåvirka vannforekomster
@@ -59,8 +96,11 @@ sjekkHBI2 <-
   
   
   
+sjekkKLFA <-
+sjekkNTOT <- 
 sjekkPPBIOMTOVO <- 
 sjekkPPTI <- 
+sjekkPTOT <- 
   function(maaling, slingring, fraMaaned, tilMaaned, antallSyd, antallNor) {
   # Funksjonen fjerner data fra vannforekomster der det ikke er foretatt
   # målinger (omtrent) månedlig gjennom hele vekstsesongen
@@ -97,6 +137,42 @@ sjekkPPTI <-
   }
   return(unique(fjern))
 }
+
+
+
+sjekkLAL <- 
+  function(maaling) {
+    # Funksjonen fjerner data fra vannforekomster der det ikke er foretatt
+    # målinger minst én gang per årstid og sparer kun på den som har størst verdi
+    antall <- 4
+    fjern <- c()
+    ID <- maaling$aar %+% maaling$vfo
+    for (i in unique(ID)) {
+      w <- which(ID == i)
+      m <- maaling[w, ]
+      y <- m$aar[1]
+      DAG <- somDag(m$dag, m$mnd, y)
+      if (length(w) < antall) {
+        fjern <- c(fjern, w)
+      } else {
+        if       (any(DAG %mellom% c(somDag(1, 4, y), somDag(30,  6, y)))) {
+          if     (any(DAG %mellom% c(somDag(1, 6, y), somDag(31,  8, y)))) {
+            if   (any(DAG %mellom% c(somDag(1, 9, y), somDag(30, 11, y)))) {
+              if (any(DAG %utafor% c(somDag(1, 5, y), somDag(31, 10, y)))) {
+                fjern <- c(fjern, w[-order(m$vrd, decreasing = TRUE)[1]])
+              } else {
+                if ((m$reg[1] %in% c("N", "F") | m$son[1] %in% c("M", "H")) &
+                    any(DAG %utafor% c(somDag(1, 6, y), somDag(30, 9, y)))) {
+                  fjern <- c(fjern, w[-order(m$vrd, decreasing = TRUE)[1]])
+                } else fjern <- c(fjern, w)
+              }
+            } else fjern <- c(fjern, w)
+          } else fjern <- c(fjern, w)
+        } else fjern <- c(fjern, w)
+      }
+    }
+    return(unique(fjern))
+  }
 
 
 

@@ -1,7 +1,7 @@
 ### Hjelpefunksjoner
 # Hjelpefunksjoner til NI_vannf
 # ved Hanno Sandvik
-# juni 2024
+# juni 2025
 # se https://github.com/NINAnor/NI_vannf
 ###
 
@@ -87,9 +87,14 @@ lg <- function(x) log10(x)
 
 
 
+# Erstatte tegn i en tekststreng
+erstatt <- function(i, hva, med) gsub(hva, med, i, fixed = TRUE)
+
+
+
 # Pen utmating av tekst
 skriv <- function(..., pre = "", linjer.over = 0, linjer.under = 0,
-                  Bredde, ut = FALSE) {
+                  Bredde, Ut = FALSE, Skjerm = TRUE) {
   if (missing(Bredde)) {
     if (exists("breddeUtmating")) {
       Bredde <- breddeUtmating
@@ -98,22 +103,35 @@ skriv <- function(..., pre = "", linjer.over = 0, linjer.under = 0,
     }
   }
   txt <- paste(c(...), collapse = "")
-  cat(rep("\n", linjer.over),
-      paste(strwrap(txt,
-                    width = if (is.null(Bredde))
-                      0.84 * getOption("width") else Bredde,
-                    initial = pre,
-                    exdent = nchar(pre)),
-            collapse = "\n"), 
-      rep("\n", linjer.under + 1), 
-      sep="")
-  if (ut) return(txt)
+  if (Skjerm) {
+    cat(rep("\n", linjer.over),
+        paste(erstatt(strwrap(txt,
+                              width = if (is.null(Bredde))
+                                0.84 * getOption("width") else Bredde,
+                              initial = pre,
+                              exdent = nchar(pre)),
+                      "_", " "),
+              collapse = "\n"), 
+        rep("\n", linjer.under + 1), 
+        sep="")
+  }
+  if (Ut) return(erstatt(txt, "_", " "))
 }
 
 
 
-# Erstatte tegn i en tekststreng
-erstatt <- function(i, hva, med) gsub(hva, med, i, fixed = TRUE)
+# Trunkering av tall til intervallet [0; 1]
+trunker <- function(x) {
+  if (is.list(x) & length(x) > 0) {
+    for (i in 1:length(x)) {
+      x[[i]] <- trunker(x[[i]])
+    }
+  } else {
+    x[] <- ifelse(x[] > 1, 1, x[])
+    x[] <- ifelse(x[] < 0, 0, x[])
+  }
+  return(x)
+}
 
 
 
@@ -141,20 +159,20 @@ UTF8()
 
 
 # Oversette vannmiljøs parameterID til parameternavn
-parameterNavn <- function(id) {
-  rownames(Parametere) <- Parametere$id
-  navn <- Parametere[toupper(id), "navn"]
-  navn[which(is.na(navn))] <- "?"
-  return(navn)
-}
+#parameterNavn <- function(id) {
+#  rownames(Parametere) <- Parametere$id
+#  navn <- Parametere[toupper(id), "navn"]
+#  navn[which(is.na(navn))] <- "?"
+#  return(navn)
+#} #¤¤¤ avvikla!
 
 
 
 # Sjekker intervallet for tillatte verdier for vannmiljø-parametere
-tillatteVerdier <- function(id) {
-  rownames(Parametere) <- Parametere$id
-  as.numeric(unlist(Parametere[toupper(id), 3:4]))
-}
+#tillatteVerdier <- function(id) {
+#  rownames(Parametere) <- Parametere$id
+#  as.numeric(unlist(Parametere[toupper(id), 3:4]))
+#} #¤¤¤ avvikla!
 
 
 
@@ -339,3 +357,15 @@ farge <- function(eqr, na.farge=0.84) {
                      ifelse(eqr < 0.8, eqr * 10 - 7, 1)))
   rgb(r,g,b)
 }
+
+
+
+# Definere en fargepalett tilpassa kartvisning
+farve <- function(x, pess, opt, ...) {
+  x <- 0.8 * (x - pess) / (opt - pess)
+  return(rgb(255 - 255 * x, 165 - 165 * x, 255 * x, maxColorValue = 255, ...))
+}
+
+
+
+

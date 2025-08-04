@@ -32,7 +32,7 @@ _trunkering_ betyr at "overskytende verdier kappes av" (måleverdier som er bedr
 _skalering_ betyr at at tallverdiene omregnes (lineært) til en skala der 0 tilsvarer "nullverdien" og 1 tilsvarer referanseverdien.
 I et ytterligere trinn kan disse EQR-verdiene _transformeres_ til **nEQR**-verdier ("normaliserte økologiske kvalitetskvotienter"), der
 _transformering_ betyr at tallverdiene "forskyves" (som regel ikke-lineært) slik at de samsvarer med de fem økologiske tilstandsklassene (0,0&ndash;0,2 for svært dårlig, 0,2&ndash;0,4 for dårlig, 0,4&ndash;0,6 for moderat, 0,6&ndash;0,8 for god, 0,8&ndash;1,0 for svært god). 
-(Merk at [veileder 02:2018](https://www.vannportalen.no/veiledere/klassifiseringsveileder/), kap. 3.5, omtaler det siste trinnet som _normalisering_, ikke som _transformering_, som det matematisk sett er snakk om.
+(Merk at [klassifiseringsveilederen](https://www.vannportalen.no/veiledere/klassifiseringsveileder/) omtaler det siste trinnet som _normalisering_, ikke som _transformering_, som det matematisk sett er snakk om.
 Matematisk betegner _normalisering_ det trinnet som her er omtalt som _skalering_.)
 
 I naturindeksen er det imidlertid behov for ikke-trunkerte tilstandsverdier.

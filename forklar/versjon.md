@@ -9,6 +9,19 @@ I tillegg har alle arkiverte versjoner hver sin unike DOI.
 _Oversikt over publiserte versjoner:_
 
 
+## Versjon 1.5
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15276139.svg)](https://doi.org/10.5281/zenodo.15276139)  
+Publisert april 2025. _Endringer:_
+
+- Argumentet `beggeEnder` er tilføyd til funksjonen `fraVFtilNI` ([detaljer](fraVFtilNI.md)).
+- Argumentet `tidsvekt` i funksjonen `fraVFtilNI` har fått ny definisjon og standardverdi ([detaljer](fraVFtilNI.md)).
+- Argumentet `aktivitetsvekt` i funksjonen `fraVFtilNI` har fått ny standardverdi ([detaljer](fraVFtilNI.md)).
+- Usikkerheten for vannforekomster med målinger kvantifiseres som *konfidens*intervaller ([detaljer](dataflyt.md)).
+- Funksjonen `oppdaterNImedVF` har blitt helt omskrevet ([detaljer](oppdaterNImedVF.md)).
+- Definisjonen av vanntypene L108 og L302 ble korrigert ([detaljer](../R/vanntype.R)).
+- Klassegrenser for PIT, PPBIOMTOVO og PTI ble korrigert ([detaljer](../klassegrenser/)).
+
+
 ## Versjon 1.4
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11625234.svg)](https://doi.org/10.5281/zenodo.11625234)  
 Publisert juni 2024. _Endringer:_
