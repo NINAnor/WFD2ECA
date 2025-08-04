@@ -1,7 +1,7 @@
 ### Vanntyper
-# Hjelpefil til NI_vannf
+# Hjelpefil til WFD2ECA
 # ved Hanno Sandvik
-# mai 2024
+# juni 2025
 # se https://github.com/NINAnor/NI_vannf
 ###
 
@@ -19,7 +19,7 @@ Typologi.nominal <- c(
 Typologi.ordinal <- c(
   reg = "Region",
   son = "Sone",
-  stø = "Størrelse", 
+  sto = "Størrelse", 
   alk = "Alkalitet", 
   hum = "Humøsitet", 
   dyp = "Dybde",
@@ -36,7 +36,7 @@ Typologi.ordinal <- c(
 # Navn på numeriske typologifaktorer
 Typologi.numerisk <- c(
   gbred = "Geografisk bredde",
-  høyde = "Høyde over havet",
+  hoyde = "Høyde over havet",
   areal = "Innsjøareal", 
   tilsf = "Tilsigsfelt",
   CaCO3 = "Kalkinnhold", 
@@ -60,9 +60,9 @@ Typologi <- c(Typologi.ordinal, Typologi.nominal)
 # Samsvar mellom ordinale og numeriske typologifaktorer
 ord2numC <- c(reg = "gbred", kys = "kystt", sal = "saltk", eks = "ekspo", 
               mix = "miksg", opp = "oppht", str = "vknop")
-ord2numL <- c(reg = "gbred", son = "høyde", stø = "areal", 
+ord2numL <- c(reg = "gbred", son = "hoyde", sto = "areal", 
               alk = "CaCO3", hum = "P_tot", dyp = "dybde")
-ord2numR <- c(reg = "gbred", son = "høyde", stø = "tilsf", 
+ord2numR <- c(reg = "gbred", son = "hoyde", sto = "tilsf", 
               alk = "CaCO3", hum = "P_tot")
 
 
@@ -70,8 +70,8 @@ ord2numR <- c(reg = "gbred", son = "høyde", stø = "tilsf",
 # Forkortelser for typologifaktorer som inngår for de ulike vannkategoriene
 # Rekkefølgen tilsvarer vanntypekoden ifølge vann-nett
 TypologiC <- c("reg", "kys", "sal", "tid", "eks", "mix", "opp", "str")
-TypologiL <- c("reg", "son", "stø", "alk", "hum", "tur", "dyp")
-TypologiR <- c("reg", "son", "stø", "alk", "hum", "tur")
+TypologiL <- c("reg", "son", "sto", "alk", "hum", "tur", "dyp")
+TypologiR <- c("reg", "son", "sto", "alk", "hum", "tur")
 
 
 
@@ -89,7 +89,7 @@ Vanntyper.ordinal <- list(
   regL= c("S", "W", "E", "M", "N", "F"),
   regR= c("S", "W", "E", "M", "N", "F"),
   son = c("L", "M", "H"),
-  stø = c("1", "2", "3", "4", "5"),
+  sto = c("1", "2", "3", "4", "5"),
   alk = c("5", "6", "7", "1", "8", "2", "3", "4"),
   hum = c("4", "1", "2", "3"),
   dyp = c("1", "2", "3"),
@@ -104,7 +104,7 @@ Vanntyper.ordinal <- list(
 
 
 # Mulige verdier for alle typologifaktorer
-Vanntyper <- append(Vanntyper.ordinal, Vanntyper.nominal)
+Vanntyper <- append(Vanntyper.ordinal, Vanntyper.nominal)[c(1:7,15,8:10,16,11:14)]
 
 
 
@@ -112,7 +112,7 @@ Vanntyper <- append(Vanntyper.ordinal, Vanntyper.nominal)
 Tallverdier <- list(
   reg = 1:6,
   son = 1:3,
-  stø = 1:5,
+  sto = 1:5,
   alk = c(-0.8, -0.4, -0.2, -0.1, 0, 0.3, 0.9, 1.5),
   hum = c(0.75, 1.25, 1.75, 2.25),
   dyp = 1:3,

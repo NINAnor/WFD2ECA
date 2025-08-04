@@ -1,7 +1,7 @@
 ### Klassegrenser
-# Funksjon til NI_vannf
+# Funksjon til WFD2ECA
 # ved Hanno Sandvik
-# februar 2024
+# juni 2025
 # se https://github.com/NINAnor/NI_vannf
 ###
 
@@ -11,8 +11,8 @@ hentKlassegrenser <- function(filKlasser) {
   filOK <- TRUE
   KlasseGrenser <- NULL
   if (file.exists(filKlasser)) {
-    klassegrenser <- try(as.data.frame(read_xlsx(filKlasser, col_types =
-                                                   c("text", rep("numeric", 8)))))
+    klassegrenser <- suppressWarnings(try(as.data.frame(read_xlsx(filKlasser, 
+                       col_types = c("text", rep("numeric", 8))))))
     if (inherits(klassegrenser, "try-error")) {
       filOK <- FALSE
       skriv("Fila \"", filKlasser, "\" kunne ikke leses inn. Det skal være ",
@@ -58,7 +58,7 @@ hentKlassegrenser <- function(filKlasser) {
               1:3                                   # strøm
             KlasseGrenser <- matrix(NA, length(L) + length(R) + length(C), 8)
             colnames(KlasseGrenser) <- 
-              c("min", "SD_nedre", "SD_D", "D_M", "M_G", "G_SG", "SG_øvre", "max")
+              c("pess", "X0", "X20", "X40", "X60", "X80", "X100", "opt")
             rownames(KlasseGrenser) <- c(L, R, C)
             for (k in 1:nrow(klassegrenser)) {
               kl <- toupper(klassegrenser[k, 1])
@@ -86,10 +86,10 @@ hentKlassegrenser <- function(filKlasser) {
                     hvilke <- "L"
                     for (b in 2:8) {
                       if (is.na(bokst[b])) {
-                        hvilke <- hvilke %&% Vanntyper[[b]]
+                        hvilke <-   hvilke %&% Vanntyper[[c(1:2, 4:8)[b]]]
                       } else {
                         if (bokst[b] %=% ".") {
-                          hvilke <- hvilke %&% Vanntyper[[b]]
+                          hvilke <- hvilke %&% Vanntyper[[c(1:2, 4:8)[b]]]
                         } else {
                           hvilke <- hvilke %+% bokst[b]
                         }
@@ -100,10 +100,10 @@ hentKlassegrenser <- function(filKlasser) {
                       hvilke <- "R"
                       for (b in 2:7) {
                         if (is.na(bokst[b])) {
-                          hvilke <- hvilke %&% Vanntyper[[b]]
+                          hvilke <-   hvilke %&% Vanntyper[[b + 1]]
                         } else {
                           if (bokst[b] %=% ".") {
-                            hvilke <- hvilke %&% Vanntyper[[b]]
+                            hvilke <- hvilke %&% Vanntyper[[b + 1]]
                           } else {
                             hvilke <- hvilke %+% bokst[b]
                           }
@@ -114,10 +114,10 @@ hentKlassegrenser <- function(filKlasser) {
                         hvilke <- "C"
                         for (b in 2:9) {
                           if (is.na(bokst[b])) {
-                            hvilke <- hvilke %&% Vanntyper[[c(1:2, 9:15)[b]]]
+                            hvilke <-   hvilke %&% Vanntyper[[c(0:1, 10:16)[b]]]
                           } else {
                             if (bokst[b] %=% ".") {
-                              hvilke <- hvilke %&% Vanntyper[[c(1:2, 9:15)[b]]]
+                              hvilke <- hvilke %&% Vanntyper[[c(0:1, 10:16)[b]]]
                             } else {
                               hvilke <- hvilke %+% bokst[b]
                             }
