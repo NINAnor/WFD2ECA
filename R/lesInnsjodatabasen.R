@@ -1,31 +1,31 @@
 ### lesInnsjodatabasen
-# Funksjoner til NI_vannf
+# Funksjoner til WFD2ECA
 # ved Hanno Sandvik
-# juni 2024
+# august 2025
 # se https://github.com/NINAnor/NI_vannf
 ###
 
 
 
 lesInnsjodatabasen <- function(filnavn = "Innsjo_Innsjo.dbf",
-                               filsti = "data",
+                               filsti = "../data",
                                kolonnenavn = "navnNVEl.csv",
                                CACHE = NULL) {
   
   # Kolonner som datarammen "nve" trenger for å fungere:
   nyeKolonner <- c( 
-    "lnr",
-    "nam",
-    "reg",
-    "mnr",
-    "hoh",
-    "areal",
-    "arealn",
-    "tilsig",
-    "vassdrag",
-    "område",
-    "lat",
-    "lon"
+    "lnr",       # unikt løpenummer i NVEs innsjøregister
+    "nam",       # innsjøens navn
+    "reg",       # er innsjøen regulert
+    "mnr",       # magasinnummer
+    "hoh",       # høyde i meter over havet
+    "areal",     # innsjøens totale vannflateareal i km^2
+    "arealn",    # areal av innsjøens vannflate i Norge i km^2
+    "tilsig",    # tilsigsfeltets areal i km^2
+    "vassdr",    # vassdrags-ID (innsjøens overordna nedbørsfelt ifølge REGINE)
+    "omrade",    # vassdragsområdets ID
+    "lat",       # geografisk bredde
+    "lon"        # geografisk lengde
   )
   
   OK  <- TRUE
@@ -162,12 +162,12 @@ lesInnsjodatabasen <- function(filnavn = "Innsjo_Innsjo.dbf",
     }
   }
   if (OK) {
-    skriv("Innlesing av innsjødatabasen var vellykka.", ifelse(OBS, 
-          " (Men legg merke til beskjedene over!)", ""), linjer.over = 1)
+    nveL$areal <- sapply(nveL$areal, max, 0.0025) # minste areal er 0.0025, ikke 0!
+    skriv("Innlesing av innsjødatabasen var vellykka og omfatta ", nrow(nveL),
+          " innsjøer.", ifelse(OBS, " (Men legg merke til beskjedene over!)", ""), 
+          linjer.over = 1)
   }
   return(nveL)
 }
-
-
 
 

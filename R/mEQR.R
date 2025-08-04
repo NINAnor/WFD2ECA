@@ -10,6 +10,12 @@
 mEQR <- function(x, klassegrenser) {
   # Funksjonen beregner mEQR-verdier ("modifiserte EQR-verdier")
   K <- klassegrenser
+  if (is.infinite(K[2]) & K[8] %=% 0) {
+    K[8] <- K[7] / 100
+    x <- sapply(x, max, K[8])
+    x <- K[7] / x
+    K <- K[7] / K
+  }
   if ((K[8] < K[1]) %=% TRUE) {
     K <- -K
     x <- -x
@@ -41,6 +47,12 @@ mEQR <- function(x, klassegrenser) {
 mEQR.knekk <- function(x, klassegrenser) {
   # Funksjonen beregner mEQR-verdier, versjon "knekk"
   K <- klassegrenser
+  if (is.infinite(K[2]) & K[8] %=% 0) {
+    K[8] <- K[7] / 100
+    x <- sapply(x, max, K[8])
+    x <- K[7] / x
+    K <- K[7] / K
+  }
   if ((K[8] < K[1]) %=% TRUE) {
     K <- -K
     x <- -x
@@ -62,6 +74,12 @@ mEQR.knekk <- function(x, klassegrenser) {
 mEQR.forlenga <- function(x, klassegrenser) {
   # Funksjonen beregner mEQR-verdier, versjon "forlengelse"
   K <- klassegrenser
+  if (is.infinite(K[2]) & K[8] %=% 0) {
+    K[8] <- K[7] / 100
+    x <- sapply(x, max, K[8])
+    x <- K[7] / x
+    K <- K[7] / K
+  }
   if ((K[8] < K[1]) %=% TRUE) {
     K <- -K
     x <- -x
@@ -81,6 +99,12 @@ mEQR.forlenga <- function(x, klassegrenser) {
 nEQR <- function(x, klassegrenser) {
   # Funksjonen beregner nEQR-verdier
   K <- klassegrenser
+  if (is.infinite(K[2]) & K[8] %=% 0) {
+    K[8] <- K[7] / 100
+    x <- sapply(x, max, K[8])
+    x <- K[7] / x
+    K <- K[7] / K
+  }
   if ((K[8] < K[1]) %=% TRUE) {
     K <- -K
     x <- -x

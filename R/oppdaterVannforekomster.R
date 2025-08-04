@@ -1,7 +1,7 @@
 ### oppdaterVannforekomster
 # Funksjoner til NI_vannf
 # ved Hanno Sandvik
-# juni 2024
+# juni 2025
 # se https://github.com/NINAnor/NI_vannf
 ###
 
@@ -36,8 +36,8 @@ oppdaterVannforekomster <- function(V, nve,
   if (length(w)) {
     V$artot[w] <- Atot[w]
     nyttAreal  <- sapply(floor(lg(Atot[w] * 200)), max, 1)
-    endra      <- length(which(nyttAreal > V$stø[w]))
-    V$stø[w]   <- nyttAreal
+    endra      <- length(which(nyttAreal > V$sto[w]))
+    V$sto[w]   <- nyttAreal
     skriv("Totalarealet har blitt tilføyd for ", length(w), " innsjøer som har ",
           "en arealandel utenfor Norge. For ", endra,  " av disse medførte det ",
           "en oppjustering av størrelsesklassen.", pre = "OBS: ", linjer.over = 1)

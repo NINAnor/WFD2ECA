@@ -1,14 +1,14 @@
 ### lesVannforekomster
-# Funksjoner til NI_vannf
+# Funksjoner til WFD2ECA
 # ved Hanno Sandvik
-# juni 2024
-# se https://github.com/NINAnor/NI_vannf
+# juni 2025
+# se https://github.com/NINAnor/NI_vannf #¤
 ###
 
 
 
 lesVannforekomster <- function(vannkategori = c("L", "R", "C"),
-                               filsti = "data",
+                               filsti = "../data",
                                kolonnenavn = "navnVN.csv",
                                turbid = TRUE,
                                NVEnavn = c("SHAPE",
@@ -20,49 +20,49 @@ lesVannforekomster <- function(vannkategori = c("L", "R", "C"),
   
   # Kolonner som datarammen V trenger for å fungere:
   nyeKolonner <- c( 
-    "id",
-    "nam",
-    "typ",
-    "nas",
-    "int",
-    "kat",
-    "reg",
-    "son",
-    "stø",
-    "alk",
-    "hum",
-    "tur",
-    "dyp",
-    "kys",
-    "sal",
-    "tid",
-    "eks",
-    "mix",
-    "opp",
-    "str",
-    "smvf",
-    "øtil",
-    "øpot",
-    "ktil",
-    "ømål",
-    "pmål",
-    "kmål",
-    "vassdrag",
-    "område",
-    "region",
-    "knr",
-    "kommune",
-    "fylke",
-    "hoh",
-    "areal",
-    "artot",
-    "lengd",
-    "dybde",
-    "tilsig",
-    "utmx",
-    "utmy",
-    "lat",
-    "long"
+    "id",        # vannforekomst-ID
+    "nam",       # vannforekomstens navn
+    "typ",       # vanntype
+    "nas",       # nasjonal (gammel) vanntype
+    "int",       # interkalibreringstype (internasjonal vanntype)
+    "kat",       # vannkategori
+    "reg",       # økoregion
+    "son",       # høydesone (klimaregion)
+    "sto",       # størrelse
+    "alk",       # alkalitet
+    "hum",       # humøsitet
+    "tur",       # turbiditet
+    "dyp",       # innsjødyp
+    "kys",       # kysttype
+    "sal",       # salinitet
+    "tid",       # tidevannsforskjell
+    "eks",       # bølgeeksponering
+    "mix",       # miksing i vannsøylen
+    "opp",       # oppholdstid
+    "str",       # strømhastighet
+    "smvf",      # sterk modifisert vannforekomst?
+    "okotil",    # økologisk tilstand
+    "okopot",    # økologisk potensial
+    "kjetil",    # kjemisk tilstand
+    "okomal",    # miljømål for økologisk tilstand
+    "potmal",    # miljømål for økologisk potensial
+    "kjemal",    # kjemisk miljømål
+    "vassdrag",  # vassdragsområde (navn)
+    "omraade",   # vannområde (navn)
+    "region",    # vannregion (navn)
+    "knr",       # kommunenummer/numre
+    "kommune",   # kommunenavn
+    "fylke",     # fylke
+    "hoh",       # høyde i meter over havet
+    "areal",     # innsjøvannforekomstens norske arealandel i km^2  
+    "artot",     # innsjøvannforekomstens totale areal i km^2
+    "lengd",     # elvevannforekomstens lengde i km
+    "dybde",     # innsjøvannforekomstens maksimale dybde i m (ikke i bruk per na)
+    "tilsig",    # tilsigsfeltets areal i km^2
+    "utmx",      # UTM x-koordinat (ikke i bruk per nå)
+    "utmy",      # UTN y-koordinat (ikke i bruk per nå)
+    "lat",       # geografisk bredde
+    "long"       # geografisk lengde
   )
   
   koord <- function(x) {
@@ -75,6 +75,7 @@ lesVannforekomster <- function(vannkategori = c("L", "R", "C"),
   OK <- TRUE
   OBS <- FALSE
   V <- V. <- list()
+  cNA <- c()
   
   vannkategori <- toupper(vannkategori) %A% c("L", "R", "C")
   if (length(vannkategori) %=% 0) {
@@ -313,31 +314,27 @@ lesVannforekomster <- function(vannkategori = c("L", "R", "C"),
         verdi <- substr(V$typ[w], i + 1, i + 1)
         na <- which(!(verdi %in% Vanntyper[[hvilke[i]]]))
         if (length(na)) {
-          skriv("Noen vannforekomster har ukjente verdier for " %+%
-                  tolower(Typologi[hvilke[i]]) %+% ":",
-                pre = "OBS: ", linjer.over = 1)
           OBS <- TRUE
           for (j in 1:length(unique(verdi[na]))) {
             ukjent <- sort(unique(verdi[na]))[j]
-            skriv(length(which(verdi[na] == ukjent)), " med \"",
-                  ukjent %+% "\" = \"", 
-                  V[w[which(verdi == ukjent)], hvilke[i]][1],
-                  "\"", pre = "* ")
+            cNA <- c(cNA, length(which(verdi[na] == ukjent)) %+% " med \"" %+%
+                          ukjent %+% "\" = \"" %+% 
+                          V[w[which(verdi == ukjent)], hvilke[i]][1] %+% 
+                          "\" for " %+% tolower(Typologi[hvilke[i]]))
           }
-          skriv("Disse blir satt til <NA>!")
           verdi[na] <- NA
         }
-        for (j in unique(verdi)) {
-          if (length(unique(V[w[which(verdi == j)], hvilke[i]])) > 1) {
-            skriv("Verdien ", j, " av ", tolower(Typologi[hvilke[i]]),
-                  " har ulike beskrivelser:", pre = "OBS: ", linjer.over = 1)
-            OBS <- TRUE
-            for (k in unique(V[w[which(verdi == j)], hvilke[i]])) {
-              skriv(k, pre = "* ")
-            }
-            skriv("Dette blir ignorert!")
-          }
-        }
+        #for (j in unique(verdi)) {
+        #  if (length(unique(V[w[which(verdi == j)], hvilke[i]])) > 1) {
+        #    skriv("Verdien ", j, " av ", tolower(Typologi[hvilke[i]]),
+        #          " har ulike beskrivelser:", pre = "OBS: ", linjer.over = 1)
+        #    OBS <- TRUE
+        #    for (k in unique(V[w[which(verdi == j)], hvilke[i]])) {
+        #      skriv(k, pre = "* ")
+        #    }
+        #    skriv("Dette blir ignorert!")
+        #  }
+        #}
         V[w, hvilke[i]] <- verdi
       }
     }
@@ -347,64 +344,65 @@ lesVannforekomster <- function(vannkategori = c("L", "R", "C"),
     
     # Sjekk av kolonnene for økologisk og kjemisk tilstand, potensial og mål
     for (i in 1:2) {
-      kolonne <- c("øtil", "ømål")[i]
+      kolonne <- c("okotil", "okomal")[i]
       klasser <- c("Svært god", "God", "Moderat", "Dårlig", "Svært dårlig")
       V[which(V[, kolonne] == "Svært godt"), kolonne] <- "Svært god"
       V[which(V[, kolonne] ==       "Godt"), kolonne] <-       "God"
       na <- which(!(V[, kolonne] %in% klasser))
       if (length(na)) {
         ukjent <- sort(unique(V[na, kolonne]))
-        skriv("Noen vannforekomster har ukjente verdier for økologisk " %+% 
-                c("tilstand", "miljømål")[i] %+% ":", 
-              pre = "OBS: ", linjer.over = 1)
         OBS <- TRUE
         for (j in ukjent) {
-          skriv(length(which(V[na, kolonne] == j)) %+%
-                  " med \"" %+% j %+% "\"", pre = "* ")
+          cNA <- c(cNA, length(which(V[na, kolonne] == j)) %+%
+                        " med \"" %+% j %+% "\" for økologisk " %+%
+                        c("tilstand", "miljømål")[i])
         }
-        skriv("Disse blir satt til <NA>!")
       }
       V[na, kolonne] <- NA
     }
     for (i in 1:2) {
-      kolonne <- c("øpot", "pmål")[i]
+      kolonne <- c("okopot", "potmal")[i]
       klasser <- c("Svært godt", "Godt", "Moderat", "Dårlig", "Svært dårlig")
       V[which(V[, kolonne] == "Svært god"), kolonne] <- "Svært godt"
       V[which(V[, kolonne] ==       "God"), kolonne] <-       "Godt"
       na <- which(!(V[, kolonne] %in% klasser))
       if (length(na)) {
         ukjent <- sort(unique(V[na, kolonne]))
-        skriv("Noen vannforekomster har ukjente verdier for økologisk " %+% 
-                c("potensial", "potensial miljømål")[i] %+% ":",
-              pre = "OBS: ", linjer.over = 1)
         OBS <- TRUE
         for (j in ukjent) {
-          skriv(length(which(V[na, kolonne] == j)) %+% 
-                  " med \"" %+% j %+% "\"", pre = "* ")
+          cNA <- c(cNA, length(which(V[na, kolonne] == j)) %+% 
+                        " med \"" %+% j %+% "\" for økologisk " %+%
+                        c("potensial", "potensial miljømål")[i])
         }
-        skriv("Disse blir satt til <NA>!")
       }
       V[na, kolonne] <- NA
     }
     for (i in 1:2) {
-      kolonne <- c("ktil", "kmål")[i]
+      kolonne <- c("kjetil", "kjemal")[i]
       klasser <- c("God", "Dårlig")
       V[which(V[, kolonne] ==       "Godt"), kolonne] <-       "God"
       na <- which(!(V[, kolonne] %in% klasser))
       if (length(na)) {
         ukjent <- sort(unique(V[na, kolonne]))
-        skriv("Noen vannforekomster har ukjente verdier for kjemisk " %+% 
-                c("tilstand", "miljømål")[i] %+% ":", 
-              pre = "OBS: ", linjer.over = 1)
         OBS <- TRUE
         for (j in ukjent) {
-          skriv(length(which(V[na, kolonne] == j)) %+%
-                  " med \"" %+% j %+% "\"", pre = "* ")
+          cNA <- c(cNA, length(which(V[na, kolonne] == j)) %+% 
+                        " med \"" %+% j %+% "\" for kjemisk " %+%
+                        c("tilstand", "miljømål")[i])
         }
-        skriv("Disse blir satt til <NA>!")
       }
       V[na, kolonne] <- NA
     }
+  }
+  
+  # Oppsummer oppsamla beskjeder
+  if (length(cNA)) {
+    skriv("Noen vannforekomster har ukjente verdier:",
+          pre = "OBS: ", linjer.over = 1)
+    for (i in 1:length(cNA)) {
+      skriv(cNA[i], pre = "* ")
+    }
+    skriv("Disse blir satt til <NA>!")
   }
   
   # Kobling av vann-nett-data og NVE-data
@@ -425,16 +423,16 @@ lesVannforekomster <- function(vannkategori = c("L", "R", "C"),
   # Sjekk av størrelsesklasser mot faktiske arealer
   forLiten <- forStor <- 0
   w <- which(V$kat == "L" & is.na(V$areal))
-  if (length(w)) V$areal[w] <- 16 * 10^(as.numeric(V$stø[w]) - 3)
+  if (length(w)) V$areal[w] <- 16 * 10^(as.numeric(V$sto[w]) - 3)
   vorher <- hinterher <- character(0)
   for (i in 1:3) {
-    w <- which(V$kat == "L" & V$stø == i &
+    w <- which(V$kat == "L" & V$sto == i &
                V$areal > (5 * 10^(i - 2) * (1 + slingringsmonn)))
     forLiten <- forLiten + length(w)
     if (length(w)) {
-      vorher    <- c(vorher,       V$stø[w])
-      V$stø[w]  <- sapply(floor(lg(V$areal[w] * 200)), max, 1)
-      hinterher <- c(hinterher,    V$stø[w])
+      vorher    <- c(vorher,       V$sto[w])
+      V$sto[w]  <- sapply(floor(lg(V$areal[w] * 200)), max, 1)
+      hinterher <- c(hinterher,    V$sto[w])
     }
   }
   if (length(vorher)) {
@@ -450,13 +448,13 @@ lesVannforekomster <- function(vannkategori = c("L", "R", "C"),
   }
   vorher <- hinterher <- character(0)
   for (i in 4:2) {
-    w <- which(V$kat == "L" & V$stø == i &
+    w <- which(V$kat == "L" & V$sto == i &
                V$areal < (5 * 10^(i - 3) * (1 - slingringsmonn)))
     forStor <- forStor + length(w)
     if (length(w)) {
-      vorher    <- c(vorher,       V$stø[w])
-      V$stø[w]  <- sapply(floor(lg(V$areal[w] * 200)), max, 1)
-      hinterher <- c(hinterher,    V$stø[w])
+      vorher    <- c(vorher,       V$sto[w])
+      V$sto[w]  <- sapply(floor(lg(V$areal[w] * 200)), max, 1)
+      hinterher <- c(hinterher,    V$sto[w])
     }
   }
   if (length(vorher)) {
