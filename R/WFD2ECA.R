@@ -1,7 +1,7 @@
 ### WFD2ECA
 # Dataflyt fra vannforskriften til økologisk tilstandsregnskap
 # ved Hanno Sandvik
-# juni 2025
+# august 2025
 # se https://github.com/NINAnor/NI_vannf
 ###
 
@@ -13,7 +13,7 @@ WFD2ECA <- function(
   vannlokaliteter,
   parameter,
   vannkategori,
-  filKlasser = NULL, #¤¤???!?
+  filKlasser = NULL,
   rapportaar = c(2012, 2015, 2018, 2021, 2024),
   rapportenhet = c("norge", "landsdel"),
   adminAar = 2010,
@@ -126,12 +126,14 @@ WFD2ECA <- function(
   
   if (vis) {
     cat("\n\n")
-    if (all(c(2010, 2014, 2019, 2924) %in% rapportaar)) {
+    if (all(c(2010, 2014, 2019, 2024) %in% rapportaar)) {
       cat("****** Fra vannforskrift til naturindeks ******\n")
       cat("***************   versjon 2.0   ***************\n")
+      versjon <- "fraVFtilNI v. 2.0"
     } else {
       cat("*** Fra vannforskrift til økologisk tilstandsregnskap ***\n")
-      cat("*******************   versjon  0.15   *******************\n")
+      cat("********************   versjon 2.0   ********************\n")
+      versjon <- "WFD2ECA v. 2.0"
     }
   }
   
@@ -362,7 +364,10 @@ WFD2ECA <- function(
   if (OK & EQR %!=% FALSE) {
     # Lese inn klassegrenser for den angitte parameteren
     if (is.null(filKlasser)) {
-      filKlasser <- "../data/klassegrenser_" %+% parameter %+% ".xlsx"
+      filKlasser   <-  "../data/klassegrenser_" %+% parameter %+% ".xlsx"
+      if (!file.exists(filKlasser)) {
+        filKlasser <- "klassegr/klassegrenser_" %+% parameter %+% ".xlsx"
+      }
     }
     KlasseGrenser <- hentKlassegrenser(filKlasser)
     if (is.null(KlasseGrenser)) {
@@ -2413,7 +2418,7 @@ WFD2ECA <- function(
     konfident <- matrix(FALSE,              nrow(nydata), length(alleAar),
                         dimnames = list(rownames(nydata),        alleAar))
     maalt.gs <- maalt.sd <- matrix(NA,      nrow(nydata), length(alleAar),
-                                   dimnames = list(rownames(nydata),        alleAar))
+                        dimnames = list(rownames(nydata),        alleAar))
     for (i in rownames(nydata)) {
       for (j in names(alleAar)) {
         if (j %in% rapportaar) {
@@ -2458,27 +2463,27 @@ WFD2ECA <- function(
       UT[e] <- NA
       if ("fylker" %begynner% e) {
         names(UT)[length(UT)] <- "fylke"
-        UT$fylke <- array(0, c(length(FYL), length(rapportaar), nsim + 1),
-                          list(fylke=FNR, aar=rapportaar, 
+        UT$fylke <- array(0, c(length(FYL), length(alleAar), nsim + 1),
+                          list(fylke=FNR, aar=alleAar, 
                                simuleringer=c("pred", 1:nsim)))
       }
       if ("kommuner" %begynner% e) {
         names(UT)[length(UT)] <- "kommune"
-        UT$kommune <- array(0, c(length(KOM), length(rapportaar), nsim + 1),
-                            list(kommune=KOM, aar=rapportaar, 
+        UT$kommune <- array(0, c(length(KOM), length(alleAar), nsim + 1),
+                            list(kommune=KOM, aar=alleAar, 
                                  simuleringer=c("pred", 1:nsim)))
       }
       if ("landsdeler" %begynner% e) {
         names(UT)[length(UT)] <- "landsdel"
-        UT$landsdel <- array(0, c(5, length(rapportaar), nsim + 1),
+        UT$landsdel <- array(0, c(5, length(alleAar), nsim + 1),
                              list(landsdel=c("Østlandet", "Sørlandet", "Vestlandet", 
                                              "Midt-Norge", "Nord-Norge"),
-                                  aar=rapportaar, simuleringer=c("pred", 1:nsim)))
+                                  aar=alleAar, simuleringer=c("pred", 1:nsim)))
       }
       if ("norge" %begynner% e) {
         names(UT)[length(UT)] <- "Norge"
-        UT$Norge <- array(0, c(1, length(rapportaar), nsim + 1),
-                          list(rike="Norge", aar=rapportaar, 
+        UT$Norge <- array(0, c(1, length(alleAar), nsim + 1),
+                          list(rike="Norge", aar=alleAar, 
                                simuleringer=c("pred", 1:nsim)))
       }
     }
@@ -2607,7 +2612,7 @@ WFD2ECA <- function(
           
           for (e in rapportenhet) {
             if ("fylker" %begynner% e) {
-              for (j in as.character(rapportaar)) {
+              for (j in as.character(alleAar)) {
                 for (f in FNR) {
                   w <- which(Vf$fylke %inneholder% f)
                   w <- which(rownames(nydata) %in% Vf$id[w])
@@ -2627,13 +2632,21 @@ WFD2ECA <- function(
             }
             if ("kommuner" %begynner% e) {
               if (adminAar > 1976) {
+                
+#                print(str(UT$kommune))
+
                 for (k in KOM) {
                   w <- which(Vf$kommune %inneholder% (k %+% ","))
                   w <- which(rownames(nydata) %in% Vf$id[w])
                   if (length(w)) {
                     if (length(w) > 1) {
-                      
                       for (j in as.character(alleAar)) {
+                        
+#                        cat(k, j, SIM, s, ":", length(w), ":", dim(UT$kommune), "\n")
+#                        cat((k %in% dimnames(UT$kommune)[[1]]),
+#                            (j %in% dimnames(UT$kommune)[[2]]),
+#                            (SIM + s + 1 <= dim(UT$kommune)[3]), "\n")
+                        
                         UT$kommune[k, j, 1:SIM + s + 1] <-
                           apply(simdata[w, j, ], 2, weighted.mean, 
                                 Areal[w], na.rm = TRUE)
@@ -2661,7 +2674,7 @@ WFD2ECA <- function(
               }
             }
             if ("landsdeler" %begynner% e) {
-              for (j in as.character(rapportaar)) {
+              for (j in as.character(alleAar)) {
                 for (f in 1:5) {
                   w <- c()
                   for (k in 1:length(WF[[f]])) {
@@ -2683,7 +2696,7 @@ WFD2ECA <- function(
               }
             }
             if ("norge" %begynner% e) {
-              for (j in as.character(rapportaar)) {
+              for (j in as.character(alleAar)) {
                 UT$Norge[1, j, 1:SIM + s + 1] <- 
                   apply(simdata[, j, ], 2, weighted.mean, Areal, na.rm = TRUE)
               }
@@ -2701,7 +2714,7 @@ WFD2ECA <- function(
         if (logit %=% "log" | substr(logit, 1, 4) %=% "loga") {
           UT[[i]] <- exp(UT[[i]])
         }
-        for (j in 1:length(rapportaar)) {
+        for (j in 1:length(alleAar)) {
           for (k in 1:dim(UT[[i]])[1]) {
             UT[[i]][k, j, 1] <- median(UT[[i]][k, j, -1], na.rm = TRUE)
           }
@@ -2715,7 +2728,7 @@ WFD2ECA <- function(
     attr(UT, "parameter")     <- parameter
     attr(UT, "vannkategori")  <- vannkategori
     attr(UT, "tidspunkt")     <- Sys.time()
-    attr(UT, "versjon")       <- "WFD2ECA v. 0.15"
+    attr(UT, "versjon")       <- versjon
     innstillinger <- list(
       adminAar        =        adminAar,
       rapportperiode  =  rapportperiode,

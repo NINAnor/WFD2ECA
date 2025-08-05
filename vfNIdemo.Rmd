@@ -19,6 +19,8 @@ library(foreign)
 library(sf)
 library(readxl)
 library(raster)
+library(httr)
+library(jsonlite)
 library(magrittr)
 library(NIcalc)
 ```
@@ -27,6 +29,8 @@ library(foreign)
 library(sf)
 library(readxl)
 library(raster)
+library(httr)
+library(jsonlite)
 # library(magrittr)
 # library(NIcalc)
 # I demo-varianten kjøres ikke NIcalc-funksjonene, de vises bare
@@ -162,15 +166,14 @@ Det tas forbehold om at enkelte målinger kan bli tilordna feil kommune, i tilfe
 Strukturen på filene ser slik ut:
 ```{r}
 Fylker <- as.data.frame(read_xlsx("data/fnr.xlsx", col_types = "text"))
-Parametere <- as.data.frame(read_xlsx("data/VM-param.xlsx", na = "NA",
-                                       col_types = c("text", "text", 
-                                                     "numeric", "numeric")))
+Parametere  <- as.data.frame(read_xlsx("data/VM-param.xlsx", na = "NA",
+                                       col_types = "text"))
 Aktiviteter <- as.data.frame(read_xlsx("data/VM-aktiv.xlsx", na = "NA",
                                        col_types = c("text", "text", "numeric")))
 
 head(Fylker)
 
-head(Parametere)
+head(Parametere[which(!is.na(Parametere$min)), ])
 
 head(Aktiviteter)
 ```
@@ -187,7 +190,7 @@ Hvis vannmiljø endrer kolonnenavnene i sin nedlastingsløsning, må denne fila 
 
 Innlesinga skjer ved hjelp av funksjonen [`lesMaalinger`](forklar/lesMaalinger.md) på følgende måte:
 ```{r}
-DATA <- lesMaalinger("ASPT.xlsx", filsti = "data")
+DATA <- lesMaalinger("ASPT", filsti = "data")
 ```
 
 
