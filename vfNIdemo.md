@@ -56,30 +56,29 @@ typologi.
     (gdb) fra Miljødirektoratet
     (<https://karteksport.miljodirektoratet.no/>). I menyen må man
     foreta de følgende valg:
-
--   Produkt: “Vannforekomster”
--   Definer område: “nasjonalt”
--   Format: “ESRI Filgeodatabase (ESPG:4326)”
-
-Datasettet man da får tilsendt per e-post, må dekomprimeres og døpes om
+    
+    -   Produkt: “Vannforekomster”
+    -   Definer område: “nasjonalt”
+    -   Format: “ESRI Filgeodatabase (ESPG:4326)”
+    
+    Datasettet man da får tilsendt per e-post, må dekomprimeres og døpes om
 til “**VF.gdb**”.
 
-1.  Filer over vannforekomstenes typologi må lastes ned som excel-filer
-    (csv) fra [vann-nett](https://vann-nett.no/portal/). For øyeblikket
+2.  Filer over vannforekomstenes typologi må lastes ned som excel-filer
+    (csv) fra [vann-nett](https://vann-nett.no/). For øyeblikket
     er ikke de nødvendige filene tilgjengelig via vann-netts
     eksportfunksjon. Koden er derfor basert på datafiler som ble lasta
     ned i mars 2024. For at filene kan leses inn, må de gis følgende
     navn:
-
--   “**V-L.csv**” for innsjøvannforekomstene
--   “**V-R.csv**” for elvevannforekomstene
--   “**V-C.csv**” for kystvannforekomstene
-
-Man trenger ikke å laste ned alle tre. Det holder med den vannkategorien
+    -   “**V-L.csv**” for innsjøvannforekomstene
+    -   “**V-R.csv**” for elvevannforekomstene
+    -   “**V-C.csv**” for kystvannforekomstene
+    
+    Man trenger ikke å laste ned alle tre. Det holder med den vannkategorien
 som er relevant for vannforskrift-parameteren eller -parameterne.
 Benytta vannkategorier må også spesifiseres ved innlesing (se under).
 
-I tillegg trenger man en tabell som forklarer kolonnenavne i fila fra
+I tillegg trenger man en tabell som forklarer kolonnenavna i fila fra
 vann-nett. Denne fila er nødvendig for å lese inn vannforekomstdataene,
 og den ligger i dette arkivet under navnet
 “[**navnVN.csv**](data/navnVN.csv)”. Hvis vann-nett endrer
@@ -159,7 +158,7 @@ I menyen må man foreta de følgende valg:
 
 Datasettet man da får, er en formfil som heter “Innsjo\_Innsjo”.
 
-I tillegg trenger man en tabell som forklarer kolonnenavne i fila fra
+I tillegg trenger man en tabell som forklarer kolonnenavna i fila fra
 NVE. Denne fila er nødvendig for å lese inn innsjødataene, og den ligger
 i dette arkivet under navnet “[**navnNVEl.csv**](data/navnNVEl.csv)”.
 Hvis NVE endrer kolonnenavnene i sin nedlastingsløsning, må denne fila
@@ -320,14 +319,14 @@ Analysen består i å
 -   koble alle målinger til sine respektive vannforekomster,
 -   omregne (skalere) måleverdiene til
     [mEQR-verdier](forklar/asympEQR.md),
--   [tilpasse en modell](modell.md) som forklarer variasjonen i
+-   [tilpasse en modell](forklar/modell.md) som forklarer variasjonen i
     måleverdier med tidsperiode, typologifaktorer og
     [overvåkingsaktivitet](forklar/aktiv.md),
--   [ekstrapolere](extrapol.md) trolige verdier til vannforekomster som
+-   [ekstrapolere](forklar/extrapol.md) trolige verdier til vannforekomster som
     det ikke foreligger målinger fra,
 -   simulere usikkerheten (sannsynlighetsfordelinga) for de sistnevnte
     og
--   [aggregrere](arealvekt.md) resultatene opp til de ønska
+-   [aggregrere](forklar/arealvekt.md) resultatene opp til de ønska
     administrative enhetene.
 
 Dette trinnet tar sin tid. Utmatinger underveis viser progresjonen.
@@ -340,7 +339,7 @@ Funksjonen som gjennomfører analysen, heter
 første fem funksjonsargumentene må alltid oppgis. De resterende
 argumentene, inkludert mange som ikke vises i eksempelkjøringa under,
 trenger man bare å oppgi om man ønsker å endre på standardinnstillingene
-(som er [forklart her](forklar/VFtilNI.md)).
+(som er [forklart her](forklar/fraVFtilNI.md)).
 
     utmating <- fraVFtilNI(
                            DATA, 
@@ -696,5 +695,5 @@ bare *illustrert*, men ikke *utført*.
 Før en opplasting må det oppdaterte datasettet (`utmating`) sjekkes
 grundig for eventuelle inkompatibiliteter med NI-databasen. Noen
 relevante tester gjennomføres av funksjonen
-[`oppdaterNImedVF`](R/oppdaterNImedVF.R). Om denne ikke rapporterer noen
+[`oppdaterNImedVF`](forklar/oppdaterNImedVF.md). Om denne ikke rapporterer noen
 feil, har man mulighet til å fullføre opplastinga.
