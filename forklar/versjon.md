@@ -38,7 +38,7 @@ Publiseres i august 2025. _Endringer:_
 Før versjon 2.0 het GitHub-repositoriet **NI_vannf**. 
 Det hadde de følgende versjonene:
 
-## Versjon 1.5
+### Versjon 1.5
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15276139.svg)](https://doi.org/10.5281/zenodo.15276139)  
 Publisert april 2025. _Endringer:_
 
@@ -51,7 +51,7 @@ Publisert april 2025. _Endringer:_
 - Klassegrenser for PIT, PPBIOMTOVO og PTI ble korrigert ([detaljer](../klassegrenser/)).
 
 
-## Versjon 1.4
+### Versjon 1.4
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11625234.svg)](https://doi.org/10.5281/zenodo.11625234)  
 Publisert juni 2024. _Endringer:_
 
@@ -62,7 +62,7 @@ Publisert juni 2024. _Endringer:_
 - Beskjedene som [funksjonene](funksjon.md) gir underveis, er forbedra.
 
 
-## Versjon 1.3
+### Versjon 1.3
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11274927.svg)](https://doi.org/10.5281/zenodo.11274927)  
 Publisert mai 2024. _Endringer:_
 
@@ -71,7 +71,7 @@ Publisert mai 2024. _Endringer:_
 - Før kjøring sikres det at tegnsettet er kompatibelt med datafilene.
 
 
-## Versjon 1.2
+### Versjon 1.2
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10809052.svg)](https://doi.org/10.5281/zenodo.10809052)  
 Publisert mars 2024. _Endringer:_
 
@@ -82,7 +82,7 @@ Publisert mars 2024. _Endringer:_
 - Flere mindre forbedringer i [funksjoner](../R/) og [forklaringer](../forklar/).
 
 
-## Versjon 1.1
+### Versjon 1.1
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10497345.svg)](https://doi.org/10.5281/zenodo.10497345)  
 Publisert januar 2024. _Endringer:_
 
@@ -92,6 +92,6 @@ Publisert januar 2024. _Endringer:_
 - Filstrukturen er standardisert, og [forklaringene](../forklar/) er utvida.
 
 
-## Versjon 1.0
+### Versjon 1.0
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10278001.svg)](https://doi.org/10.5281/zenodo.10278001)  
 Publisert desember 2023.
