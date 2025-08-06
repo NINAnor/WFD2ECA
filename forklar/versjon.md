@@ -1,6 +1,6 @@
-# Versjoner av NI_vannf
+# Versjoner av WFD2ECA
 
-GitHub-repositoriet **NI_vannf** (altså [https://github.com/NINAnor/NI_vannf](https://github.com/NINAnor/NI_vannf)) inneholder den nyeste versjonen av koden.
+GitHub-repositoriet **WFD2ECA** (altså [https://github.com/NINAnor/WFD2ECA](https://github.com/NINAnor/WFD2ECA)) inneholder den nyeste versjonen av koden.
 Repositoriet er også arkivert på [Zenodo](https://doi.org/10.5281/zenodo.10278000).
 Der har hele repositoriet én DOI (<sub><sub>[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10278000.svg)](https://doi.org/10.5281/zenodo.10278000)</sub></sub>).
 Denne er alltid lenka opp mot den nyeste av de arkiverte versjonene.
@@ -8,6 +8,35 @@ I tillegg har alle arkiverte versjoner hver sin unike DOI.
 
 _Oversikt over publiserte versjoner:_
 
+
+## Versjon 2.0
+Publiseres i august 2025. _Endringer:_
+
+- Repositoriet er også tilrettelagt for bruk i økologiske tilstandsregnskap.
+- Hovedfunksjonen (tidligere `fraVFtilNI`) heter nå `WFD2ECA`.
+- Standardinnstillingene til `WFD2ECA` er tilpassa tilstandsregnskap ([detaljer](WFD2ECA.md)).
+- Funksjonen `fraVFtilNI` har fortsatt standardinnstillinger tilpassa naturindeks ([detaljer](fraVFtilNI.md)).
+- Begge funksjonene tillater nå modelltilpasning av uskalerte måleverdier med `EQR = FALSE`.
+- Begge funksjonene skjuler flere beskjeder med `vis = FALSE`.
+- Begge funksjonene tillater lagring og lesing av bearbeida data vha. argumentet `utMaaling`.
+- Begge funksjonene kan håndtere anadrom elvestatus som typologifaktor vha. argumentet `anadromi`.
+- Begge funksjonene fjerner målinger med mEQR < &minus;0,2 eller > 1,2 uten å kræsje.
+- Funksjonen `lesMaalinger` leser data og måleenheter fra vannmiljø-API-en ([detaljer](lesMaalinger.md)).
+- Funksjonen `lesVannlokaliteter` leser vannlokaliteter fra vannmiljø-API-en ([detaljer](lesVannlokaliteter.md)).
+- Funksjonen `lesVannforekomster` gir mer oversiktlige beskjeder ([detaljer](lesVannforekomster.md)).
+- Funksjonen `lesInnsjodatabasen` sørger for at innsjøarealer ikke angis som null ([detaljer](lesInnsjodatabasen.md)).
+- Funksjonen `oppdaterNImedVF` kan også laste opp kvartiler til naturindeks-basen ([detaljer](oppdaterNImedVF.md)).
+- Den nye funksjonen `trunker` er nå tilgjengelig ([detaljer](../R/Funksjon.R)).
+- Kolonnenavna i "klassegr*"-filer er endra til "typ/pess/X0/X20/X40/X60/X80/X100/opt" ([detaljer](../klassegrenser/)).
+- Klassegrenser for RADDUM1 ble korrigert ([detaljer](../klassegrenser/)).
+- Tillatte verdier ble korrigert for flere parametere i regnearket VM-param.xlsx.
+- Særnorske tegn er fjerna fra alle variabel- og kolonnenavn.
+
+
+## Versjoner av NI_vannf
+
+Før versjon 2.0 het GitHub-repositoriet **NI_vannf**. 
+Det hadde de følgende versjonene:
 
 ## Versjon 1.5
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15276139.svg)](https://doi.org/10.5281/zenodo.15276139)  

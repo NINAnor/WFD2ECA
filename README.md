@@ -1,8 +1,8 @@
 # NI_vannf
-**Automatisert dataflyt fra vannforskriften til naturindeks** &nbsp;&nbsp; <sub> &nbsp;&nbsp; <sup> &nbsp;&nbsp; _[English version below](#english-summary)_ <sup> <sub>
+**Automatisert dataflyt fra vannforskriften til økologisk tilstandsregnskap og til naturindeks** &nbsp;&nbsp; <sub> &nbsp;&nbsp; <sup> &nbsp;&nbsp; _[English version below](#english-summary)_ <sup> <sub>
 
 ## Mål
-Prosjektet har utvikla kode for å laste opp data som har blitt innsamla i rammen av [vannforskriften](https://lovdata.no/dokument/SF/forskrift/2006-12-15-1446), til [naturindeks](https://www.naturindeks.no/)-databasen. 
+Prosjektet har utvikla kode for å laste opp data som har blitt innsamla i rammen av [vannforskriften](https://lovdata.no/dokument/SF/forskrift/2006-12-15-1446) (WFD), til et [økologisk tilstandsregnskap](https://github.com/NINAnor/ecRxiv) og til [naturindeks](https://www.naturindeks.no/)-databasen. 
 **R**-koden, en eksempelkjøring og ytterligere forklaringer er tilgjengelig i filene som er deponert her.
 
 ## Oversikt
@@ -22,10 +22,10 @@ Denne sida vedlikeholdes av [Hanno Sandvik](mailto:hanno.sandvik@nina.no).
 &nbsp;
 
 # _English summary_
-_**Automated data flow from the Water Framework Directive to the Nature Index**_
+_**Automated data flow from the Water Framework Directive (WFD) to Ecological Condition Accounts (ECA) or to the Nature Index**_
 
 ## _Purpose_
-_The **R** code developed here streamlines the flow of data that have been sampled in connection with the Water Framework Directive to the [Nature Index for Norway](https://www.naturindeks.no/)._
+_The **R** code developed here streamlines the flow of data that have been sampled in connection with the Water Framework Directive (WFD) to Ecological Condition Accounts (ECA) or to the [Nature Index for Norway](https://www.naturindeks.no/)._
 
 _[Full documentation](forklar/) is provided in Norwegian only.
 However, an [English summary](forklar/dataflow.md) of the workflow is available._
