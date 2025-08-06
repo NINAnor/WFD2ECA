@@ -2,7 +2,7 @@
 # Funksjoner til WFD2ECA
 # ved Hanno Sandvik
 # august 2025
-# se https://github.com/NINAnor/NI_vannf
+# se https://github.com/NINAnor/WFD2ECA
 ###
 
 
@@ -12,6 +12,8 @@ lesInnsjodatabasen <- function(filnavn = "Innsjo_Innsjo.dbf",
                                kolonnenavn = "navnNVEl.csv",
                                CACHE = NULL) {
   
+  # Funksjonen leser inn innsjøer fra en fil som er eksportert fra innsjødatabasen
+
   # Kolonner som datarammen "nve" trenger for å fungere:
   nyeKolonner <- c( 
     "lnr",       # unikt løpenummer i NVEs innsjøregister

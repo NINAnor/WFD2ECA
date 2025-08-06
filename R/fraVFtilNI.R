@@ -1,12 +1,14 @@
 ### fraVFtilNI
-# Funksjoner til NI_vannf
+# Funksjoner til WFD2ECA
 # ved Hanno Sandvik
 # august 2025
-# se https://github.com/NINAnor/NI_vannf
+# se https://github.com/NINAnor/WFD2ECA
 ###
 
 
 
+# Gjennomfører (mesteparten av) dataflyten fra vannforskriften til naturindeks
+# (basert på funksjonen WFD2ECA, men med andre standardinnstillinger enn denne)
 fraVFtilNI  <- function(
   DATA,
   vannforekomster,
