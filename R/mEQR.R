@@ -1,8 +1,8 @@
 ### mEQR
-# Funksjoner til NI_vannf
+# Funksjoner til WFD2ECA
 # ved Hanno Sandvik
-# februar 2024
-# se https://github.com/NINAnor/NI_vannf
+# mai 2025
+# se https://github.com/NINAnor/WFD2ECA
 ###
 
 

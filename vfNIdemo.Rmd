@@ -72,7 +72,7 @@ Det omfatter informasjon om vannforekomstenes (1) beliggenhet og deres (2) typol
 
   Man trenger ikke å laste ned alle tre. Det holder med den vannkategorien som er relevant for vannforskrift-parameteren eller -parameterne. Benytta vannkategorier må også spesifiseres ved innlesing (se under).
 
-  I tillegg trenger man en tabell som forklarer kolonnenavne i fila fra vann-nett. Denne fila er nødvendig for å lese inn vannforekomstdataene, og den ligger i dette arkivet under navnet "[**navnVN.csv**](data/navnVN.csv)". Hvis vann-nett endrer kolonnenavnene i sin nedlastingsløsning, må denne fila [oppdateres tilsvarende](forklar/hjelpfil.md#vannforekomster-v-.csv-navnvn.csv).
+  I tillegg trenger man en tabell som forklarer kolonnenavna i fila fra vann-nett. Denne fila er nødvendig for å lese inn vannforekomstdataene, og den ligger i dette arkivet under navnet "[**navnVN.csv**](data/navnVN.csv)". Hvis vann-nett endrer kolonnenavnene i sin nedlastingsløsning, må denne fila [oppdateres tilsvarende](forklar/hjelpfil.md#vannforekomster-v-.csv-navnvn.csv).
 
 De nødvendige filene er plassert i mappa "[data](data/)".
 De leses da inn i **R** ved hjelp av funksjonen [`lesVannforekomster`](forklar/lesVannforekomster.md) på følgende måte:
@@ -107,7 +107,7 @@ I menyen må man foreta de følgende valg:
 
 Datasettet man da får, er en formfil som heter "Innsjo_Innsjo".
 
-I tillegg trenger man en tabell som forklarer kolonnenavne i fila fra NVE.
+I tillegg trenger man en tabell som forklarer kolonnenavna i fila fra NVE.
 Denne fila er nødvendig for å lese inn innsjødataene, og den ligger i dette arkivet under navnet "[**navnNVEl.csv**](data/navnNVEl.csv)".
 Hvis NVE endrer kolonnenavnene i sin nedlastingsløsning, må denne fila [oppdateres tilsvarende](forklar/hjelpfil.md#innsjødatabasen-navnnvel.csv).
 
@@ -205,10 +205,10 @@ Analysen består i å
 
 - koble alle målinger til sine respektive vannforekomster,
 - omregne (skalere) måleverdiene til [mEQR-verdier](forklar/asympEQR.md),
-- [tilpasse en modell](modell.md) som forklarer variasjonen i måleverdier med tidsperiode, typologifaktorer og [overvåkingsaktivitet](forklar/aktiv.md),
-- [ekstrapolere](extrapol.md) trolige verdier til vannforekomster som det ikke foreligger målinger fra,
+- [tilpasse en modell](forklar/modell.md) som forklarer variasjonen i måleverdier med tidsperiode, typologifaktorer og [overvåkingsaktivitet](forklar/aktiv.md),
+- [ekstrapolere](forklar/extrapol.md) trolige verdier til vannforekomster som det ikke foreligger målinger fra,
 - simulere usikkerheten (sannsynlighetsfordelinga) for de sistnevnte og
-- [aggregrere](arealvekt.md) resultatene opp til de ønska administrative enhetene.
+- [aggregrere](forklar/arealvekt.md) resultatene opp til de ønska administrative enhetene.
 
 Dette trinnet tar sin tid.
 Utmatinger underveis viser progresjonen.
@@ -218,7 +218,7 @@ For bruk i naturindeks bør man velge en større verdi (minst 10&nbsp;000).
 
 Funksjonen som gjennomfører analysen, heter [`fraVFtilNI`](R/fraVFtilNI.R) ("fra vannforkrift til naturindeks").
 De første fem funksjonsargumentene må alltid oppgis.
-De resterende argumentene, inkludert mange som ikke vises i eksempelkjøringa under, trenger man bare å oppgi om man ønsker å endre på standardinnstillingene (som er [forklart her](forklar/VFtilNI.md)).
+De resterende argumentene, inkludert mange som ikke vises i eksempelkjøringa under, trenger man bare å oppgi om man ønsker å endre på standardinnstillingene (som er [forklart her](forklar/fraVFtilNI.md)).
 
 ```{r, eval=FALSE, echo=TRUE}
 utmating <- fraVFtilNI(
@@ -391,6 +391,6 @@ NIcalc::writeIndicatorValues(NIdata)
 ```
 
 Før en opplasting må det oppdaterte datasettet (`utmating`) sjekkes grundig for eventuelle inkompatibiliteter med NI-databasen. 
-Noen relevante tester gjennomføres av funksjonen [`oppdaterNImedVF`](R/oppdaterNImedVF.R). 
+Noen relevante tester gjennomføres av funksjonen [`oppdaterNImedVF`](forklar/oppdaterNImedVF.R). 
 Om denne ikke rapporterer noen feil, har man mulighet til å fullføre opplastinga.
 

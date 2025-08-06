@@ -2,7 +2,7 @@
 # Hjelpefil til WFD2ECA
 # ved Hanno Sandvik
 # juni 2025
-# se https://github.com/NINAnor/NI_vannf
+# se https://github.com/NINAnor/WFD2ECA
 ###
 
 

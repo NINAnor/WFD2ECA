@@ -2,7 +2,7 @@
 # Dataflyt fra vannforskriften til økologisk tilstandsregnskap
 # ved Hanno Sandvik
 # august 2025
-# se https://github.com/NINAnor/NI_vannf
+# se https://github.com/NINAnor/WFD2ECA
 ###
 
 
@@ -58,7 +58,7 @@ WFD2ECA <- function(
   # = fra vannforskrift til økologisk tilstandsregnskap]
   # ved Hanno Sandvik
   # august 2025
-  # se https://github.com/NINAnor/NI_vannf #¤
+  # se https://github.com/NINAnor/WFD2ECA
   ###
   
   

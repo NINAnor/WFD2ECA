@@ -1,14 +1,19 @@
 ### oppdaterVannforekomster
-# Funksjoner til NI_vannf
+# Funksjoner til WFD2ECA
 # ved Hanno Sandvik
 # juni 2025
-# se https://github.com/NINAnor/NI_vannf
+# se https://github.com/NINAnor/WFD2ECA
 ###
 
 
 
 oppdaterVannforekomster <- function(V, nve,
                                     slingringsmonn = 0.1) {
+  
+  # Funksjonen opdaterer informasjonen om innsjøvannforekomster (argumentet "V",
+  # som må ha blitt lest inn fra vannmiljø  med funksjonen "lesVannforekomster")
+  # med informasjon fra  innsjødatasen  (argumentet "nve",  som må ha blitt lest
+  # inn fra NVE med funksjonen "lesInnsjodatabasen")
   
   OBS <- FALSE
   
