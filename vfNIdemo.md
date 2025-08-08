@@ -2,7 +2,10 @@
 
 Dette dokumentet viser gangen i å forberede og gjennomføre opplasting av
 data som har blitt samla inn i rammen av vannforskriften, til
-naturindeks-databasen.
+naturindeks-databasen. 
+Dataflyt til økologiske tilstandsregnskap fungerer på tilsvarende måte
+(for detaljert dokumentasjon henvises her til 
+[ecRxiv](https://github.com/NINAnor/ecRxiv)).
 
 -   [Forberedelser](#forberedelser)
 -   [Nødvendig informasjon om
