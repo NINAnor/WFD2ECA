@@ -65,8 +65,8 @@ typologi.
 til “**VF.gdb**”.
 
 2.  Filer over vannforekomstenes typologi må lastes ned som excel-filer
-    (csv) fra [vann-nett](https://vann-nett.no/). For øyeblikket
-    er ikke de nødvendige filene tilgjengelig via vann-netts
+    (csv) fra [vann-nett](https://vann-nett.no/). For øyeblikket (august 
+    2025) er ikke de nødvendige filene tilgjengelig via vann-netts
     eksportfunksjon. Koden er derfor basert på datafiler som ble lasta
     ned i mars 2024. For at filene kan leses inn, må de gis følgende
     navn:
@@ -78,7 +78,7 @@ til “**VF.gdb**”.
 som er relevant for vannforskrift-parameteren eller -parameterne.
 Benytta vannkategorier må også spesifiseres ved innlesing (se under).
 
-I tillegg trenger man en tabell som forklarer kolonnenavna i fila fra
+    I tillegg trenger man en tabell som forklarer kolonnenavna i fila fra
 vann-nett. Denne fila er nødvendig for å lese inn vannforekomstdataene,
 og den ligger i dette arkivet under navnet
 “[**navnVN.csv**](data/navnVN.csv)”. Hvis vann-nett endrer
@@ -165,7 +165,7 @@ Hvis NVE endrer kolonnenavnene i sin nedlastingsløsning, må denne fila
 [oppdateres
 tilsvarende](forklar/hjelpfil.md#innsjødatabasen-navnnvel.csv).
 
-Filnavnet oppgis som parameter når dataene leses inn i **R** ved hjelp
+Filnavnet oppgis som argument når dataene leses inn i **R** ved hjelp
 av funksjonen [`lesInnsjodatabasen`](forklar/lesInnsjodatabasen.md):
 
     nve <- lesInnsjodatabasen("Innsjo_Innsjo.dbf", filsti = "data")
@@ -196,8 +196,10 @@ plassert i mappa “[data](data/)” under navnet
 kolonnenavnene i sin nedlastingsløsning, må denne fila [oppdateres
 tilsvarende](forklar/hjelpfil.md#vannlokaliteter-vl-.xlsx-navnvl.csv).
 
-Innlesinga skjer ved hjelp av funksjonen
-[`lesVannlokaliteter`](forklar/lesVannlokaliteter.md) på følgende måte:
+De relevante vannkategoriene ("L" for innsjø, "R" for elv og/eller 
+"C" for kyst) oppgis som argument når vannlokalitene leses inn i 
+R ved hjelp av funksjonen 
+[`lesVannlokaliteter`](forklar/lesVannlokaliteter.md):
 
     VL <- lesVannlokaliteter(c("L", "R", "C"), filsti = "data")
 
@@ -241,7 +243,7 @@ Til slutt trengs det lister over kommune- og fylkesnummer og -navn,
 vannforskriftsparametere og overvåkingsaktiviteter. Denne informasjonen
 leses inn automatisk, gitt at den er lagra i excel-regneark som heter
 henholdsvis “**knr.xlsx**”, “**fnr.xlsx**”, “**VM-param.xlsx**” og
-“**VM-aktiv.xlsx**”, og at disse er plassert i mappa “data”. Det tas
+“**VM-aktiv.xlsx**”, og at disse er plassert i mappa “[data](data/)”. Det tas
 forbehold om at enkelte målinger kan bli tilordna feil kommune, i
 tilfeller der målinger ble tatt i en sammenslått kommune og
 tilbakedateres til et tidspunkt før sammenslåinga.
@@ -298,8 +300,9 @@ vannmiljø. Denne fila er plassert i mappa “[data](data/)” under navnet
 kolonnenavnene i sin nedlastingsløsning, må denne fila [oppdateres
 tilsvarende](forklar/hjelpfil.md#vannmiljø-data-navnvm.csv).
 
-Innlesinga skjer ved hjelp av funksjonen
-[`lesMaalinger`](forklar/lesMaalinger.md) på følgende måte:
+Forkortelsen for parameteren (her er det valgt "ASPT") oppgis som 
+argument når målingene leses inn i R ved hjelp av funksjonen 
+[`lesMaalinger`](forklar/lesMaalinger.md):
 
     DATA <- lesMaalinger("ASPT", filsti = "data")
 
