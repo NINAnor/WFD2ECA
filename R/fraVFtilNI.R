@@ -253,7 +253,11 @@ oppdaterNImedVF <- function(NIdata,   # datasett som er lasta ned fra NI-basen
   skriv("Simulerte  indikatorverdier fra vannmiljø:")
   print(summary(as.vector(c(nyeData[, , 1], 
                             rep(1, length(unique(NIdata[[1]]$areaId)))))))
-  for (i in 8:12) {
+  for (i in 7:9) {
+    skriv("Oppsummering av ", colnames(NIdata[[1]])[i], ":")
+    print(summary(NIdata[[1]][, i], useNA = "always"))
+  }
+  for (i in 10:12) {
     skriv("Oppsummering av ", colnames(NIdata[[1]])[i], ":")
     print(table(NIdata[[1]][, i], useNA = "always"))
   }
