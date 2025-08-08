@@ -8,8 +8,8 @@ output:
 ---
 
 
-Dette dokumentet viser gangen i å forberede og gjennomføre opplasting av data som har blitt samla inn i rammen av vannforskriften, til naturindeks-databasen.
-
+Dette dokumentet viser gangen i å forberede og gjennomføre opplasting av data som har blitt samla inn i rammen av vannforskriften, til naturindeks-databasen. 
+Dataflyt til økologiske tilstandsregnskap fungerer på tilsvarende måte (for detaljert dokumentasjon henvises her til [ecRxiv](https://github.com/NINAnor/ecRxiv)).
 
 ## Forberedelser
 
@@ -64,7 +64,7 @@ Det omfatter informasjon om vannforekomstenes (1) beliggenhet og deres (2) typol
 
   Datasettet man da får tilsendt per e-post, må dekomprimeres og døpes om til "**VF.gdb**".
 
-(2) Filer over vannforekomstenes typologi må lastes ned som excel-filer (csv) fra [vann-nett](https://vann-nett.no/portal/). For øyeblikket er ikke de nødvendige filene tilgjengelig via vann-netts eksportfunksjon. Koden er derfor basert på datafiler som ble lasta ned i mars 2024. For at filene kan leses inn, må de gis følgende navn:
+(2) Filer over vannforekomstenes typologi må lastes ned som excel-filer (csv) fra [vann-nett](https://vann-nett.no/portal/). For øyeblikket (august 2025) er ikke de nødvendige filene tilgjengelig via vann-netts eksportfunksjon. Koden er derfor basert på datafiler som ble lasta ned i mars 2024. For at filene kan leses inn, må de gis følgende navn:
 
   - "**V-L.csv**" for innsjøvannforekomstene
   - "**V-R.csv**" for elvevannforekomstene
@@ -111,7 +111,7 @@ I tillegg trenger man en tabell som forklarer kolonnenavna i fila fra NVE.
 Denne fila er nødvendig for å lese inn innsjødataene, og den ligger i dette arkivet under navnet "[**navnNVEl.csv**](data/navnNVEl.csv)".
 Hvis NVE endrer kolonnenavnene i sin nedlastingsløsning, må denne fila [oppdateres tilsvarende](forklar/hjelpfil.md#innsjødatabasen-navnnvel.csv).
 
-Filnavnet oppgis som parameter når dataene leses inn i **R** ved hjelp av funksjonen [`lesInnsjodatabasen`](forklar/lesInnsjodatabasen.md):
+Filnavnet oppgis som argument når dataene leses inn i **R** ved hjelp av funksjonen [`lesInnsjodatabasen`](forklar/lesInnsjodatabasen.md):
 ```{r, eval=FALSE, echo=TRUE}
 nve <- lesInnsjodatabasen("Innsjo_Innsjo.dbf", filsti = "data")
 ```
@@ -133,7 +133,7 @@ Funksjonen som står for innlesinga, forutsetter at det foreligger en tabell som
 Denne fila er plassert i mappa "[data](data/)" under navnet "[**navnVL.csv**](data/navnVL.csv)".
 Hvis vannmiljø endrer kolonnenavnene i sin nedlastingsløsning, må denne fila [oppdateres tilsvarende](forklar/hjelpfil.md#vannlokaliteter-vl-.xlsx-navnvl.csv).
 
-Innlesinga skjer ved hjelp av funksjonen [`lesVannlokaliteter`](forklar/lesVannlokaliteter.md) på følgende måte:
+De relevante vannkategoriene ("L" for innsjø, "R" for elv og/eller "C" for kyst) oppgis som argument når vannlokalitene leses inn i R ved hjelp av funksjonen [`lesVannlokaliteter`](forklar/lesVannlokaliteter.md):
 ```{r}
 VL <- lesVannlokaliteter(c("L", "R", "C"), filsti = "data")
 ```
@@ -160,7 +160,7 @@ Under antagelse av at innsjødatabasen er mer pålitelig enn vannforekomsttypifi
 ### Ytterligere datafiler
 
 Til slutt trengs det lister over kommune- og fylkesnummer og -navn, vannforskriftsparametere og overvåkingsaktiviteter.
-Denne informasjonen leses inn automatisk, gitt at den er lagra i excel-regneark som heter henholdsvis "**knr.xlsx**", "**fnr.xlsx**", "**VM-param.xlsx**" og "**VM-aktiv.xlsx**", og at disse er plassert i mappa "data".
+Denne informasjonen leses inn automatisk, gitt at den er lagra i excel-regneark som heter henholdsvis "**knr.xlsx**", "**fnr.xlsx**", "**VM-param.xlsx**" og "**VM-aktiv.xlsx**", og at disse er plassert i mappa "[data](data/)".
 Det tas forbehold om at enkelte målinger kan bli tilordna feil kommune, i tilfeller der målinger ble tatt i en sammenslått kommune og tilbakedateres til et tidspunkt før sammenslåinga.
 
 Strukturen på filene ser slik ut:
@@ -188,7 +188,7 @@ Funksjonen som står for innlesinga, forutsetter at det foreligger en tabell som
 Denne fila er plassert i mappa "[data](data/)" under navnet "[**navnVM.csv**](data/navnVM.csv)".
 Hvis vannmiljø endrer kolonnenavnene i sin nedlastingsløsning, må denne fila [oppdateres tilsvarende](forklar/hjelpfil.md#vannmiljø-data-navnvm.csv).
 
-Innlesinga skjer ved hjelp av funksjonen [`lesMaalinger`](forklar/lesMaalinger.md) på følgende måte:
+Forkortelsen for parameteren (her er det valgt "ASPT") oppgis som argument når målingene leses inn i R ved hjelp av funksjonen [`lesMaalinger`](forklar/lesMaalinger.md):
 ```{r}
 DATA <- lesMaalinger("ASPT", filsti = "data")
 ```
