@@ -124,17 +124,18 @@ WFD2ECA <- function(
   ###
 
   
-  if (vis) {
-    cat("\n\n")
-    if (all(c(2010, 2014, 2019, 2024) %in% rapportaar)) {
-      cat("****** Fra vannforskrift til naturindeks ******\n")
-      cat("***************   versjon 2.0   ***************\n")
-      versjon <- "fraVFtilNI v. 2.0"
-    } else {
-      cat("*** Fra vannforskrift til økologisk tilstandsregnskap ***\n")
-      cat("********************   versjon 2.0   ********************\n")
-      versjon <- "WFD2ECA v. 2.0"
+  if (all(c(2010, 2014, 2019, 2024) %in% rapportaar)) {
+    if (vis) {
+      cat("\n\n****** Fra vannforskrift til naturindeks ******\n")
+      cat(    "***************   versjon 2.0   ***************\n")
     }
+    versjon <- "fraVFtilNI v. 2.0"
+  } else {
+    if (vis) {
+      cat("\n\n*** Fra vannforskrift til økologisk tilstandsregnskap ***\n")
+      cat(    "********************   versjon 2.0   ********************\n")
+    }
+    versjon <- "WFD2ECA v. 2.0"
   }
   
   OK <- TRUE
