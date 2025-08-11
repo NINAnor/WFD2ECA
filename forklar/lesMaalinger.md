@@ -22,7 +22,9 @@ lesMaalinger(parameter, filsti = "../data", kolonnenavn = "navnVM.csv", medium =
 
 ## Detaljer
 
-Funksjonen leser inn den oppgitte informasjonen fra vannmiljø-databasens [API](https://vannmiljowebapi.miljodirektoratet.no/swagger/ui/index#/).
+Funksjonen leser inn registreringer av den oppgitte vannforskrifts-parameteren fra vannmiljø-databasens [API](https://vannmiljowebapi.miljodirektoratet.no/swagger/ui/index#/).
+
+I tillegg leser den inn en liste over vannmiljø-databasens måleenheter og lagrer denne som en egen variabel ved navn `Enheter`.
 
 
 ## Funksjonsverdi
