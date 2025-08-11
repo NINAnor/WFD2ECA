@@ -729,28 +729,30 @@ WFD2ECA <- function(
       }
       
       # Sjekk av måleverdiene mot pessimum og optimum
-      PessOpt <- c(min(KlasseGrenser[, "pess"], na.rm = TRUE),
-                   max(KlasseGrenser[,  "opt"], na.rm = TRUE))
-      feil1 <- er.med %A% which(DATA$verdi %utafor% sort(PessOpt))
-      if (length(feil1)) {
-        u <- c(u, skriv(length(feil1), ifelse(length(feil1) == 1,
-                                         " måling ble ekskludert fordi den var",
-                                         " målinger ble ekskludert fordi de var"),
-                        paste(c(if (PessOpt[2] > PessOpt[1] & 
-                                any(DATA$verdi < PessOpt[1]))
-                                  " mindre enn pessimumet" else character(0),
-                                if (PessOpt[2] > PessOpt[1] &
-                                any(DATA$verdi > PessOpt[2]))
-                                  " større enn optimumet"  else character(0),
-                                if (PessOpt[2] < PessOpt[1] &
-                                any(DATA$verdi > PessOpt[1]))
-                                  " større enn pessimumet" else character(0),
-                                if (PessOpt[2] < PessOpt[1] &
-                                any(DATA$verdi < PessOpt[2]))
-                                  " mindre enn optimumet"  else character(0)),
-                              collapse = " eller"), ".", pre = "OBS: ",
-                        linjer.under = 1, Ut = TRUE))
-        er.med <- er.med %-% feil1
+      if (EQR %!=% FALSE) {
+        PessOpt <- c(min(KlasseGrenser[, "pess"], na.rm = TRUE),
+                     max(KlasseGrenser[,  "opt"], na.rm = TRUE))
+        feil1 <- er.med %A% which(DATA$verdi %utafor% sort(PessOpt))
+        if (length(feil1)) {
+          u <- c(u, skriv(length(feil1), ifelse(length(feil1) == 1,
+                                           " måling ble ekskludert fordi den var",
+                                           " målinger ble ekskludert fordi de var"),
+                          paste(c(if (PessOpt[2] > PessOpt[1] & 
+                                  any(DATA$verdi < PessOpt[1]))
+                                    " mindre enn pessimumet" else character(0),
+                                  if (PessOpt[2] > PessOpt[1] &
+                                  any(DATA$verdi > PessOpt[2]))
+                                    " større enn optimumet"  else character(0),
+                                  if (PessOpt[2] < PessOpt[1] &
+                                  any(DATA$verdi > PessOpt[1]))
+                                    " større enn pessimumet" else character(0),
+                                  if (PessOpt[2] < PessOpt[1] &
+                                  any(DATA$verdi < PessOpt[2]))
+                                    " mindre enn optimumet"  else character(0)),
+                                collapse = " eller"), ".", pre = "OBS: ",
+                          linjer.under = 1, Ut = TRUE))
+          er.med <- er.med %-% feil1
+        }
       }
 
       # Sjekk av overvåkingsaktivitetene bak målingene
@@ -1120,31 +1122,33 @@ WFD2ECA <- function(
     # Skalering
     minV <- +Inf
     maxV <- -Inf
-    if (dim(KlasseGrenser) %=% c(1, 8)) {
-      # parametere som har de samme terskelverdiene for alle vanntyper:
-      K <- as.vector(unlist(KlasseGrenser[1, ]))
-      maaling$vrd <- mEQR(maaling$vrd, K)
-      minV <- mEQR(K[1], K)
-      maxV <- mEQR(K[8], K)
-    } else {
-      if (nrow(KlasseGrenser) < pi) {
-        # parametere som har de samme terskelverdiene 
-        # for alle vanntyper innafor vannkategorien:
-        VT <- substr(maaling$typ, 1, 1)
-        for (v in unique(VT)) {
-          K <- as.vector(unlist(KlasseGrenser[toupper(substr(v, 1, 1)), ]))
-          maaling$vrd[which(VT == v)] <- mEQR(maaling$vrd[which(VT == v)], K)
-          minV <- min(minV, mEQR(K[1], K))
-          maxV <- max(maxV, mEQR(K[8], K))
-        }
+    if (EQR %!=% FALSE) {
+      if (dim(KlasseGrenser) %=% c(1, 8)) {
+        # parametere som har de samme terskelverdiene for alle vanntyper:
+        K <- as.vector(unlist(KlasseGrenser[1, ]))
+        maaling$vrd <- mEQR(maaling$vrd, K)
+        minV <- mEQR(K[1], K)
+        maxV <- mEQR(K[8], K)
       } else {
-        # resten, dvs. parametere der terskelverdiene varierer mellom vanntyper:
-        for (v in unique(maaling$typ)) {
-          K <- as.vector(unlist(KlasseGrenser[v, ]))
-          maaling$vrd[which(maaling$typ == v)] <- 
-            mEQR(maaling$vrd[which(maaling$typ == v)], K)
-          minV <- min(minV, mEQR(K[1], K))
-          maxV <- max(maxV, mEQR(K[8], K))
+        if (nrow(KlasseGrenser) < pi) {
+          # parametere som har de samme terskelverdiene 
+          # for alle vanntyper innafor vannkategorien:
+          VT <- substr(maaling$typ, 1, 1)
+          for (v in unique(VT)) {
+            K <- as.vector(unlist(KlasseGrenser[toupper(substr(v, 1, 1)), ]))
+            maaling$vrd[which(VT == v)] <- mEQR(maaling$vrd[which(VT == v)], K)
+            minV <- min(minV, mEQR(K[1], K))
+            maxV <- max(maxV, mEQR(K[8], K))
+          }
+        } else {
+          # resten, dvs. parametere der terskelverdiene varierer mellom vanntyper:
+          for (v in unique(maaling$typ)) {
+            K <- as.vector(unlist(KlasseGrenser[v, ]))
+            maaling$vrd[which(maaling$typ == v)] <- 
+              mEQR(maaling$vrd[which(maaling$typ == v)], K)
+            minV <- min(minV, mEQR(K[1], K))
+            maxV <- max(maxV, mEQR(K[8], K))
+          }
         }
       }
     }

@@ -55,13 +55,13 @@
 
 # Sjekker om verdier ligger innenfor et intervall
 "%mellom%" <- function(a, b) (a > b[1]         | a %==% b[1]) &
-  (a < b[length(b)] | a %==% b[length(b)])
+                             (a < b[length(b)] | a %==% b[length(b)])
 
 
 
 # Sjekker om verdier ligger utenfor et intervall
 "%utafor%" <- function(a, b) !(a > b[1]         | a %==% b[1]) |
-  !(a < b[length(b)] | a %==% b[length(b)])
+                             !(a < b[length(b)] | a %==% b[length(b)])
 
 
 
@@ -179,12 +179,11 @@ UTF8()
 # Oppsummerer en vektor 
 oppsummer <- function(x) {
   x <- as.vector(summary(x))
-  N <- nchar(trunc(abs(x))) + (x < 0)
-  L <- max(floor(log10(max(abs(x)))), 0)
-  x <- ("        ") %+% ifelse(x < 0, "-", "") %+% trunc(abs(x)) %+% "," %+%
-    substr(round(abs(x), 5 - L) - trunc(abs(x)), 3, 9) %+% "000000"
-  x <- substr(x, 7 + N - L, 14 + N - L)
-  n <- c(" minimum", "ned. kv.", "  median", "gj.snitt", "øvr. kv.", "maksimum")
+  N <- max(nchar(formatC(abs(X), format = "f", digits = 0, flag = "+")))
+  if (N <= 6) x <- formatC(X, width = 8, format = "f", digits = 7 - N, dec = ",")
+  if (N >  6) x <- formatC(X, width = 8, format = "f", digits = 0,     dec = ",")
+  if (N >  8) x <- formatC(X, width = 8, format = "E", digits = 1,     dec = ",")
+  n <- c(" minimum", "ned. kv.", "  median", "gj.snitt", "øvr. kv.",  "maksimum")
   return(c(paste(n, collapse = "  "), paste(x, collapse = "  ")))
 }
 
@@ -365,6 +364,7 @@ farve <- function(x, pess, opt, ...) {
   x <- 0.8 * (x - pess) / (opt - pess)
   return(rgb(255 - 255 * x, 165 - 165 * x, 255 * x, maxColorValue = 255, ...))
 }
+
 
 
 
