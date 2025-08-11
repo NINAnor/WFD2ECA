@@ -1,6 +1,6 @@
 # Modelltilpasning
 
-Funksjonene [`WFD2ECA`](WFD2ECA) og [`fraVFtilNI`](fraVFtilNI.md) ekstrapolerer [mEQR-verdier](mEQR.md) til vannforekomster som det ikke foreligger målinger fra.
+Funksjonene [`WFD2ECA`](WFD2ECA.md) og [`fraVFtilNI`](fraVFtilNI.md) ekstrapolerer [mEQR-verdier](mEQR.md) til vannforekomster som det ikke foreligger målinger fra.
 Denne [ekstrapoleringa](extrapol.md) er basert på en modell som blir tilpassa til de foreliggende målingene (trinn 11 i [dataflyten](dataflyt.md)).
 Modelltilpasninga gjøres slik:
 
