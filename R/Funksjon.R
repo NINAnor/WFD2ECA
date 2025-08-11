@@ -178,7 +178,7 @@ UTF8()
 
 # Oppsummerer en vektor 
 oppsummer <- function(x) {
-  x <- as.vector(summary(x))
+  X <- as.vector(summary(x))
   N <- max(nchar(formatC(abs(X), format = "f", digits = 0, flag = "+")))
   if (N <= 6) x <- formatC(X, width = 8, format = "f", digits = 7 - N, dec = ",")
   if (N >  6) x <- formatC(X, width = 8, format = "f", digits = 0,     dec = ",")
