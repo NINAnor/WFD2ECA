@@ -10,7 +10,8 @@ _Oversikt over publiserte versjoner:_
 
 
 ## Versjon 2.0
-Publiseres i august 2025. _Endringer:_
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.16811526.svg)](https://doi.org/10.5281/zenodo.16811526)  
+Publisert august 2025. _Endringer:_
 
 - Funksjonen `WFD2ECA`, som er tilpassa tilstandsregnskap, er tilføyd ([detaljer](../R/WFD2ECA.md)).
 - Argumentet `anadromi` er tilføyd til funksjonene `WFD2ECA` og `fraVFtilNI` ([detaljer](../R/WFD2ECA.md)).
