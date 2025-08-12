@@ -1,6 +1,6 @@
 # Håndtering av ulike vannforskriftsparametere
 
-Funksjonen `fraVFtilNI` forutsetter at informasjon om vannforskriftsparameteren som skal flyttes fra vannforskriften til naturindeksen, er tilgjengelig i en spesifisert form.
+Funksjonene [`WFD2ECA`](WFD2ECA.md) og [`fraVFtilNI`](fraVFtilNI.md) forutsetter at informasjon om vannforskriftsparameteren som skal flyttes fra vannforskriften til et økologisk tilstandsregnskap eller naturindeksen, er tilgjengelig i en spesifisert form.
 Parametrenes klassegrenser må bl.a. foreligge i form av regneark.
 På denne sida forklares for hvilke parametere slike regneark er klargjort, og hvordan man kan revidere dem eller klargjøre flere.
 
@@ -13,13 +13,10 @@ På denne sida forklares for hvilke parametere slike regneark er klargjort, og h
 ## Vannforskriftsparametere som er relevante
 
 Eksisterende vannforskriftsparametere er beskrevet i [Direktoratsgruppas klassifiseringsveileder](https://www.vannportalen.no/veiledere/klassifiseringsveileder/), og relevante målinger er samla i [vannmiljø-databasen](https://vannmiljo.miljodirektoratet.no/).
-Vannforskriftsparametere som den her beskrevne dataflyten er relevante for, er i første rekke slike som også brukes som indikatorer av naturindeksen ([Sandvik 2019](http://hdl.handle.net/11250/2631056)).
-I tillegg kan dataflyten være relevant for vannforskriftsparametere som inngår i et fremtidig økologisk tilstandsregnskap ([Fremstad mfl. 2023](https://hdl.handle.net/11250/3104185)).
+Vannforskriftsparametere som den her beskrevne dataflyten er relevante for, er i første rekke slike som også brukes som indikatorer i et økologisk tilstandsregnskap ([Fremstad mfl. 2023](https://hdl.handle.net/11250/3104185)) eller av naturindeksen ([Sandvik 2019](http://hdl.handle.net/11250/2631056)).
 
-I den aktuelle versjonen av [naturindeksen](https://www.naturindeks.no/) (dvs. 2019) er det brukt flere vannforskriftsparametere:
-
-- For ferskvann brukes parametrene **AIP**, **ASPT**, **PIT**, **PTI**, **Raddum 1** og **TIc**. For ASPT og Raddum 1 ble naturindeksen i 2019 basert på den her beskrevne dataflyten. Dataflyten er i prinsippet også tilgjengelig for de øvrige parametrene (se [under](#vannforskriftsparametere-som-er-klare-til-bruk)). 
-- For kystvann brukes **MBH**, **NQI1**, klorofyll a (vannmiljø-id **KLFA**), "hardbunn vegetasjon algeindeks" (**RSLA**1&ndash;3 og **RSL**4&ndash;5) og "hardbunn vegetasjon nedre voksegrense" (**MSMDI**). Den her beskrevne dataflyten har ikke blitt brukt på noen av disse, men for de to førstnevnte er den i prinsippet tilgjengelig (se [under](#vannforskriftsparametere-som-er-klare-til-bruk)). 
+* De fleste vannforskriftsparameterne kan i prinsippet være relevante som indikatorer for et økologisk tilstandsregnskap ([Fremstad mfl. 2023](https://hdl.handle.net/11250/3104185)). Indikatorene som har blitt prioritert, er ferskvannsindikatorer med et tilstrekkelig datagrunnlag i vannmiljø-databasen. Per august 2025 er [**ASPT**](https://github.com/NINAnor/ecRxiv/tree/main/indicators/NO_WSPT_001), [**AIP**](https://github.com/NINAnor/ecRxiv/tree/main/indicators/NO_WAIP_001), [**ANC**](https://github.com/NINAnor/ecRxiv/tree/main/indicators/NO_WANC_001_002), [**KLFA**](https://github.com/NINAnor/ecRxiv/tree/main/indicators/NO_WCHL_001), [**LAL**](https://github.com/NINAnor/ecRxiv/tree/main/indicators/NO_WLAL_001_002), [**PH**](https://github.com/NINAnor/ecRxiv/tree/main/indicators/NO_WPHX_001_002), [**PIT**](https://github.com/NINAnor/ecRxiv/tree/main/indicators/NO_WPIT_001), [**PPBIOMTOVO**](https://github.com/NINAnor/ecRxiv/tree/main/indicators/NO_WPPB_001), [**PTI**](https://github.com/NINAnor/ecRxiv/tree/main/indicators/NO_WPTI_001), [**P-TOT**](https://github.com/NINAnor/ecRxiv/tree/main/indicators/NO_WTPX_001_002) og [**RAMI**](https://github.com/NINAnor/ecRxiv/tree/main/indicators/NO_WAMI_001) gjort klar til bruk (se [under](#vannforskriftsparametere-som-er-klare-til-bruk)) og beskrevet med hver sin indikatordokumentasjon på [ecRxiv](https://github.com/NINAnor/ecRxiv) (som forkortelsene lenker til).
+* I den aktuelle versjonen av [naturindeksen](https://www.naturindeks.no/) (dvs. 2024) er det brukt flere vannforskriftsparametere. For ferskvann er dette **AIP**, **ASPT**, **PIT**, **PTI**, **Raddum&nbsp;1** og **TIc**, hvorav ASPT og Raddum&nbsp;1 benytter den her beskrevne dataflyten (og de øvrige kunne i prinsippet benytte den, se [under](#vannforskriftsparametere-som-er-klare-til-bruk)). For kystvann brukes **MBH**, **NQI1**, **KLFA**, **RSLA**1&ndash;3, **RSL**4&ndash;5 og **MSMDI**, hvorav de to førstnevnte i prinsippet kunne benytte dataflyten (se [under](#vannforskriftsparametere-som-er-klare-til-bruk)). 
 
 
 ## Vannforskriftsparametere som er klare til bruk
@@ -80,7 +77,7 @@ For å gjøre nye parametere klar til dataflyt eller oppdatere klassegrensene et
     - "X60": klassegrensa mellom moderat tilstand og god tilstand (tilsvarende nEQR = 0,60);
     - "X80": klassegrensa mellom god tilstand og svært god tilstand (tilsvarende nEQR = 0,80);
     - "X100": parameterens **referanseverdi**, dvs. _øvre_ (det vil her si _beste_) klassegrense for svært god tilstand (tilsvarende nEQR = 1,00);
-    - "opt": den _beste mulige_ verdien (_optimum_) for parameteren (merk at verdien for mange, men ikke alle parametere er lik "X100", og at den _beste_ ikke trenger å være den største tallverdien).
+    - "opt": den _beste mulige_ verdien (_optimum_) for parameteren (merk at verdien for mange, men ikke alle parametere er lik "X100", og at den _beste_ ikke trenger å være den _største_ tallverdien).
 
 Som mal kan man bruke et av de foreliggende regnearkene, f.eks. [klassegrenser_AIP.xlsx](../klassegr/klassegrenser_AIP.xlsx).
 
@@ -94,17 +91,22 @@ I slike tilfeller bør den aktuelle verdien (dvs. "pess" eller "opt") settes vil
 
 ## Spesielle krav til de ulike vannforskriftsparameterne
 
-Funksjonen `fraVFtilNI` sjekker om målinger som er rapportert i vannmiljø-databasen, inneholder åpenbare måle- eller rapporteringsfeil (dvs. verdier som er uforenlige med parameterens definisjon). 
+Funksjonene [`WFD2ECA`](WFD2ECA.md) og [`fraVFtilNI`](fraVFtilNI.md) sjekker om målinger som er rapportert i vannmiljø-databasen, inneholder åpenbare måle- eller rapporteringsfeil (dvs. verdier som er uforenlige med parameterens definisjon). 
 I tillegg eksisterer imidlertid spesifikke krav til de fleste vannforskriftsparameterne. 
-Noen av disse kravene, men ikke alle, blir kontrollert av funksjonen `fraVFtilNI` (nærmere bestemt av hjelpefunksjonene [`sjekkXXX`](sjekkPar.md)).
+Noen av disse kravene, men ikke alle, blir kontrollert av funksjonene `WFD2ECA` og `fraVFtilNI` (nærmere bestemt av hjelpefunksjonene [`sjekkXXX`](sjekkPar.md)).
 Nedenfor gis en liste over foreliggende krav og hvilke av disse som blir kontrollert (der lista over foreliggende krav ikke nødvendigvis er uttømmende).
 
 * **AIP** skal måles mellom juni og oktober. Målinger som ikke oppfyller dette kravet, blir ekskludert (se [`sjekkAIP`](sjekkPar.md)). Standardinnstillinga tillater et slingringsmonn på to uker. Hver AIP-måling bør dessuten være basert på minst tre arter. Dette kravet blir _ikke_ sjekket, siden antall arter som en AIP-verdi er basert på, ikke fremgår av vannmiljø-databasen.
+* **ANC** skal baseres på minst fire målinger per år (én per årstid). Målinger som ikke oppfyller dette kravet, blir ekskludert (se [`sjekkANC`](sjekkPar.md)).
 * **ASPT** skal ikke brukes for breelver. Målinger som ikke oppfyller dette kravet, blir ekskludert (se [`sjekkASPT`](sjekkPar.md)).
 * **HBI2** skal baseres på minst to målinger per år, der den første er tatt på våren (januar–april) og den andre på høsten (oktober–desember). Målinger som ikke oppfyller dette kravet, blir ekskludert (se [`sjekkHBI2`](sjekkPar.md)).
-* **PIT** skal måles mellom juni og oktober. Målinger som ikke oppfyller dette kravet, blir ekskludert (se [`sjekkPIT`](sjekkPar.md)). Standardinnstillinga tillater et slingringsmonn på to uker. Hver PIT-måling bør dessuten være basert på minst to arter. Dette kravet blir _ikke_ sjekket, siden antall arter som en PIT-verdi er basert på, ikke fremgår av vannmiljø-databasen.
-* **PPBIOMTOVO** skal baseres på minst månedlige prøver gjennom hele vekstsesongen. Målinger som ikke oppfyller dette kravet, blir ekskludert (se [`sjekkPPBIOMTOVO`](sjekkPar.md)). Standardinnstillinga er som for PTI.
-* **PPTI** (PTI) skal baseres på minst månedlige prøver gjennom hele vekstsesongen. Målinger som ikke oppfyller dette kravet, blir ekskludert (se [`sjekkPPBIOMTOVO`](sjekkPar.md)). Standardinnstillinga er å anta at vekstsesongen varer fra mai til oktober, og å kreve at det er tatt minst fire målinger i løpet av denne perioden i Sør-Norge under 200 moh. og minst tre målinger i resten av Norge (dvs. å tillate at det mangler målinger fra noen av månedene).
+* **KLFA** (klorofyll _a_) skal baseres på minst månedlige prøver gjennom hele vekstsesongen. Målinger som ikke oppfyller dette kravet, blir ekskludert (se [`sjekkKLFA`](sjekkPar.md)). Standardinnstillinga er å anta at vekstsesongen varer fra mai til oktober, og å kreve at det er tatt minst fire målinger i løpet av denne perioden i Sør-Norge under 200 moh. og minst tre målinger i resten av Norge (dvs. å tillate at det mangler målinger fra noen av månedene).
+* **LAL** (labilt aluminium) skal baseres på minst fire målinger per år (én per årstid). Målinger som ikke oppfyller dette kravet, blir ekskludert, og blant de gyldige målingene blir kun den med høyest måleverdi i et år benytta (se [`sjekkLAL`](sjekkPar.md)).
+* **PH** skal håndteres som ANC (se over og [`sjekkPH`](sjekkPar.md)).
+* **PIT** skal håndteres som AIP (se over og [`sjekkPIT`](sjekkPar.md)).
+* **PPBIOMTOVO** skal håndteres som KLFA (se over og [`sjekkPPBIOMTOVO`](sjekkPar.md)).
+* **PPTI** (PTI) skal håndteres som KLFA (se over og [`sjekkPPTI`](sjekkPar.md)).
+* **P-TOT** (totalfosfor) skal håndteres som KLFA (se over og [`sjekkPTOT`](sjekkPar.md)).
 * **RADDUM1** (Raddum I) skal kun brukes i klare vannforekomster (humøsitet = 1). Målinger som ikke oppfyller dette kravet, blir ekskludert (se [`sjekkRADDUM1`](sjekkPar.md)). Merk at kun Raddum I inngår i naturindeksen, mens Raddum II ikke gjør det. Raddum&nbsp;II-målinger er imidlertid enkelt å regne om til Raddum&nbsp;I-verdier. Dermed kan datagrunnlaget utvides betraktelig (men _bare for elver_, siden Raddum II ikke er definert for innsjøer). Dette kan gjøres ved hjelp av funksjonen [`Raddum2_1`](../R/Funksjon.R), f.eks. slik (når det foreligger én dataramme hver for målinger av Raddum I og Raddum II): `data_Raddum1 <- rbind(data_Raddum1, Raddum2_1(data_Raddum2))`; eller slik (når alle målinger er i samme dataramme): `data <- Raddum2_1(data)`.
-* **TIANTL** (TIc) skal måles mellom juli og september. Målinger som ikke oppfyller dette kravet, blir ekskludert (se [`sjekkAIP`](sjekkPar.md)). Standardinnstillinga tillater et slingringsmonn på to uker.
+* **TIANTL** (TIc) skal måles mellom juli og september. Målinger som ikke oppfyller dette kravet, blir ekskludert (se [`sjekkTIANTL`](sjekkPar.md)). Standardinnstillinga tillater et slingringsmonn på to uker.
 
