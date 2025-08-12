@@ -8,7 +8,7 @@ _Innhold:_ [syntaks](#syntaks) – [argumenter](#argumenter) – [detaljer](#det
 ## Syntaks
 
 ```{r}
-lesVannforekomster(vannkategori = c("L", "R", "C"), filsti = "data", kolonnenavn = "navnVN.csv", turbid = TRUE,
+lesVannforekomster(vannkategori = c("L", "R", "C"), filsti = "../data", kolonnenavn = "navnVN.csv", turbid = TRUE,
                    NVEnavn = c("SHAPE", "identifikasjon_lokalId", "arealKvadratkilometer", "lengdeKilometer"),
                    slingringsmonn = 0.02, CACHE = NULL)
 ```
@@ -38,17 +38,7 @@ Funksjonen forutsetter at filer over vannforekomstenes (1) beliggenhet og deres 
 Datasettet man da får tilsendt per e-post, må dekomprimeres og døpes om
 til “**VF.gdb**”.
 
-(2) Filer over vannforekomstenes typologi må lastes ned som excel-filer (csv) fra [vann-nett](https://vann-nett.no/portal/):
-
-`https://vann-nett.no/portal/ > Rapporter > Vanntyper`
-
-Filer for de ulike vannkategoriene må lastes ned hver for seg:
-
-- Innsjøvannforekomster med vanntypeparametere, påvirkninger, tilstand, potensial og miljømål
-- Elvevannforekomster   med vanntypeparametere, påvirkninger, tilstand, potensial og miljømål
-- Kystvannforekomster   med vanntypeparametere, påvirkninger, tilstand, potensial og miljømål
-
-For at filene kan leses inn, må de få følgende navn:
+(2) Filer over vannforekomstenes typologi må lastes ned som excel-filer (csv) fra [vann-nett](https://vann-nett.no/). For at filene kan leses inn, må de få følgende navn:
 
 - "**V-L.csv**" for innsjøvannforekomstene
 - "**V-R.csv**" for elvevannforekomstene
@@ -57,6 +47,9 @@ For at filene kan leses inn, må de få følgende navn:
 Man trenger ikke å laste ned alle tre.
 Det holder med den vannkategorien som er relevant for vannforskrift-parameteren eller -parameterne.
 Dette må samsvare med funksjonsargumentet `vannkategori`.
+
+I skrivende stund (august 2025) holder vann-nett på å bli oppdatert, og den påkrevde informasjonen er midlertidig utilgjengelig for eksport.
+Inntil videre må man derfor bruke filene som ble lasta ned i mars 2024 (disse ligger i mappa [data](../data/)).
 
 
 ## Funksjonsverdi
@@ -69,14 +62,14 @@ Funksjonsverdien er en **tabell** (_dataframe_) med informasjon om alle vannfore
 - `nas` (**tekst**), nasjonal vanntype
 - `int` (**tekst**), interkalibreringstype
 - `kat` (**tekst**), vannkategori ("C", "L", "R")
-- `reg` (**tekst**), økoregion (se [klassifiseringsveileder 02:2018](https://www.vannportalen.no/veiledere/klassifiseringsveileder/), kap. 3.3, for denne og de følgende 6 typologifaktorene)
+- `reg` (**tekst**), økoregion (se [klassifiseringsveilederen](https://www.vannportalen.no/veiledere/klassifiseringsveileder/) for denne og de følgende 6 typologifaktorene)
 - `son` (**tekst**), klimasone
-- `stø` (**tekst**), størrelsesklasse
+- `sto` (**tekst**), størrelsesklasse
 - `alk` (**tekst**), alkalitet
 - `hum` (**tekst**), humøsitet
 - `tur` (**tekst**), turbiditet
 - `dyp` (**tekst**), dybde
-- `kys` (**tekst**), kystvanntype (se [klassifiseringsveileder 02:2018](https://www.vannportalen.no/veiledere/klassifiseringsveileder/), kap. 3.4, for denne og de følgende 6 typologifaktorene)
+- `kys` (**tekst**), kystvanntype (se [klassifiseringsveilederen](https://www.vannportalen.no/veiledere/klassifiseringsveileder/) for denne og de følgende 6 typologifaktorene)
 - `sal` (**tekst**), salinitet
 - `tid` (**tekst**), tidevann
 - `eks` (**tekst**), bølgeeksponering
@@ -84,14 +77,14 @@ Funksjonsverdien er en **tabell** (_dataframe_) med informasjon om alle vannfore
 - `opp` (**tekst**), oppholdstid
 - `str` (**tekst**), strømhastighet
 - `smvf` (**sannhetsverdi**), sterkt modifisert vannforekomst
-- `øtil` (**tekst**), økologisk tilstandsklasse
-- `øpot` (**tekst**), økologisk potensial
-- `ktil` (**tekst**), kjemisk tilstand
-- `ømål` (**tekst**), miljømål for økologisk tilstand
-- `pmål` (**tekst**), miljømål for økologisk potensialmål
-- `kmål` (**tekst**), kjemisk miljømål
+- `okotil` (**tekst**), økologisk tilstandsklasse
+- `okopot` (**tekst**), økologisk potensial
+- `kjetil` (**tekst**), kjemisk tilstand
+- `okomal` (**tekst**), miljømål for økologisk tilstand
+- `potmal` (**tekst**), miljømål for økologisk potensial
+- `kjemal` (**tekst**), miljømål for kjemisk tilstand
 - `vassdrag` (**tekst**), vassdragsområde
-- `område` (**tekst**), vannområde
+- `omraade` (**tekst**), vannområde
 - `region` (**tekst**), vannregion
 - `knr` (**tekst**), kommunenummer (ev. flere, adskilt ved komma)
 - `kommune` (**tekst**), kommune(r)

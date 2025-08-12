@@ -20,8 +20,8 @@ nEQR(x, klassegrenser)
 
 ## Argumenter
 
-* `x` (**numerisk vektor**) er en verdi (eller en vektor eller matrise av verdier) av en vannforskriftsparameter oppgitt på parameterens opprinnelige måleskala.
-* `klassegrenser` (**numerisk vektor**) er klassegrensene for den aktuelle vannforskriftsparameteren, f.eks. slik de genereres av funksjonen [`hentKlassegrenser`](hentKlassegrenser.md). Vektoren må ha en lengde på 8 (dårligste mulige verdi, "nullverdi", fire klassegrenser mellom tilstandsklassene, referanseverdi og beste mulige verdi).
+* `x` (**numerisk vektor**) er en tallverdi (eller en vektor eller matrise av tallverdier) av en vannforskriftsparameter oppgitt på parameterens opprinnelige måleskala.
+* `klassegrenser` (**numerisk vektor**) er klassegrensene for den aktuelle vannforskriftsparameteren, f.eks. slik de genereres av funksjonen [`hentKlassegrenser`](hentKlassegrenser.md). Argumentet må være en vektor med en lengde på 8 eller en matrise med 8 kolonner (dårligste mulige verdi, "nullverdi", fire klassegrenser mellom tilstandsklassene, referanseverdi og beste mulige verdi) og en rad per vanntype.
 
 
 ## Detaljer
@@ -35,15 +35,15 @@ _transformering_ betyr at tallverdiene "forskyves" (som regel ikke-lineært) sli
 (Merk at [klassifiseringsveilederen](https://www.vannportalen.no/veiledere/klassifiseringsveileder/) omtaler det siste trinnet som _normalisering_, ikke som _transformering_, som det matematisk sett er snakk om.
 Matematisk betegner _normalisering_ det trinnet som her er omtalt som _skalering_.)
 
-I naturindeksen er det imidlertid behov for ikke-trunkerte tilstandsverdier.
-Sandvik ([2019](http://hdl.handle.net/11250/2631056), kap. 2.3) har derfor foreslått å endre på trinnenes rekkefølge: (1) skalering, (2) transformering, (3) trunkering
+I økologisk tilstandsregnskap og naturindeksen er det imidlertid behov for ikke-trunkerte tilstandsverdier.
+Sandvik ([2019](http://hdl.handle.net/11250/2631056), kap. 2.3) har derfor foreslått å endre på trinnenes rekkefølge: (1)&nbsp;skalering, (2)&nbsp;transformering, (3)&nbsp;romlig aggregrering, (4)&nbsp;trunkering 
 (for rekkefølgens betydning se [Fremstad mfl. 2023](https://hdl.handle.net/11250/3104185), kap. 3.6.).
 Verdiene som er skalert og transformert, men ikke trunkert, kalles her **mEQR**-verdier ("m" for "modifisert" – eller som bokstaven før "n").
-Utveksling av data mellom vannforskriften og naturindeksen skjer på dette stadiet, altså i form av mEQR-verdier.
+Utveksling av data mellom vannforskriften og økologisk tilstandsregnskap eller naturindeksen skjer på dette stadiet, altså i form av mEQR-verdier.
 Når disse til slutt trunkeres, får man igjen nEQR-verdier.
-Fordelen er at de ikke-trunkerte verdiene først kan brukes i naturindeks-databasen til å estimere variasjonen og/eller usikkerheten i tilstandsverdiene.
+Fordelen er at de ikke-trunkerte verdiene først kan brukes til å estimere variasjonen og/eller usikkerheten i indikatorverdiene.
 
-Funksjonen [`fraVFtilNI`](fraVFtilNI.md) tillater via argumentet `EQR` å spesifisere fire ulike beregningsmåter for mEQR (se [utdypende forklaring](asympEQR.md)).
+Funksjonene [`WFD2ECA`](WFD2ECA.md) og [`fraVFtilNI`](fraVFtilNI.md) tillater via argumentet `EQR` å spesifisere fire ulike beregningsmåter for mEQR (se [utdypende forklaring](asympEQR.md)).
 Ifølge standardinnstillinga (`EQR = "asymptotisk"`) benyttes funksjonen `mEQR`.
 De tilgjengelige alternativene blir implementert gjennom funksjonene `mEQR.knekk`, `mEQR.forlenga` og `nEQR`.
 

@@ -28,7 +28,7 @@ Funksjonsverdien er en **numerisk matrise** som inneholder klassegrenser.
 Med klassegrense menes terskelverdiene mellom økologiske tilstandsklasser (svært dårlig, dårlig, moderat, god og svært god).
 Matrisens kolonner og rader har de følgende navn:
 
-- Kolonnenavnene er `c("min", "SD_nedre", "SD_D", "D_M", "M_G", "G_SG", "SG_øvre", "max")`, som identifiserer klassegrensene samt den dårligste og beste verdien som er teknisk mulig.
+- Kolonnenavnene er `c("pess", "X0", "X20", "X40", "X60", "X80", "X100", "opt")`, som identifiserer klassegrensene samt den dårligste og beste verdien (pessimum/optimum) som er teknisk mulig.
 - Radnavnene er forkorta vanntyper ("LEL11011" osv.).
 
 

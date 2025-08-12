@@ -10,15 +10,27 @@ _Innhold:_ [syntaks](#syntaks) – [argumenter](#argumenter) – [detaljer](#det
 ```{r}
 sjekkAIP(maaling, slingring, fraMaaned, tilMaaned)
 
+sjekkANC(maaling)
+
 sjekkASPT(maaling)
 
 sjekkHBI2(maaling)
+
+sjekkKLFA(maaling, slingring, fraMaaned, tilMaaned, antallSyd, antallNor)
+
+sjekkLAL(maaling)
+
+sjekkNTOT(maaling, slingring, fraMaaned, tilMaaned, antallSyd, antallNor)
+
+sjekkPH(maaling)
 
 sjekkPIT(maaling, slingring, fraMaaned, tilMaaned)
 
 sjekkPPBIOMTOVO(maaling, slingring, fraMaaned, tilMaaned, antallSyd, antallNor)
 
 sjekkPPTI(maaling, slingring, fraMaaned, tilMaaned, antallSyd, antallNor)
+
+sjekkPTOT(maaling, slingring, fraMaaned, tilMaaned, antallSyd, antallNor)
 
 sjekkRADDUM1(maaling)
 
@@ -40,11 +52,11 @@ sjekkTIANTL(maaling, slingring, fraMaaned, tilMaaned)
 
 Funksjonene kontrollerer visse parameterspesifikke krav, slik som antall målinger tatt i et år, måneden målingen er tatt i, vanntypen målingen er tatt i, og lignende.
 Det fins separate funksjoner for ulike vannforskriftsparamtere.
-Funksjonenes navn er "sjekk", etterfulgt av vannmiljø-databasens forkortelse av parameterne.
+Funksjonenes navn er "sjekk", etterfulgt av vannmiljø-databasens forkortelse av parameterne (der eventuelle bindestrek hlir utelatt).
 
-Funksjonene brukes internt av funksjonen [`fraVFtilNI`](fraVFtilNI.md).
+Funksjonene brukes internt av funksjonene [`WFD2ECA`](WFD2ECA.md) og [`fraVFtilNI`](fraVFtilNI.md).
 De er ikke tilrettelagt for annen bruk.
-Funksjonenes parametere (unntatt `maaling`) kan angis som parametere for `fraVFtilNI`.
+Funksjonenes parametere (unntatt `maaling`) kan angis som parametere for `WFD2ECA` og `fraVFtilNI`.
 Disse kan brukes for å regulere "slingringsmonnet" rundt kravene.
 Standardinnstillinga er å godta noen mindre avvik fra kravene, for ikke å redusere stikkprøvestørrelsen unødig.
 
@@ -56,7 +68,7 @@ I oversikten over [vannforskriftsparametere som er tilrettelagt for dataflyt](pa
 
 Funksjonsverdien er en **numerisk vektor** som angir radene i `maaling` som _ikke_ oppfyller de parameterspesifikke kravene.
 
-For noen av funksjonene (`sjekkASPT` og `sjekkRADDUM1`) har funksjonsverdien et attributt kalt `ikkeInkluder`, som har samme oppgave som det likelydende argumentet til funksjonen `fraVFtilNI`.
+For noen av funksjonene (`sjekkASPT` og `sjekkRADDUM1`) har funksjonsverdien et attributt kalt `ikkeInkluder`, som har samme oppgave som det likelydende argumentet til funksjonene `WFD2ECA` og `fraVFtilNI`.
 
 
 ## Kode

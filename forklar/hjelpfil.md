@@ -31,7 +31,7 @@ tilfelle det er nødvendig å oppdatere dem.
 ## <a id="vannforekomster-v-.csv-navnvn.csv">Vannforekomster</a> (V-\*.csv, navnVN.csv)
 
 Før kjøring av analyser bør aktuelle filer over vannforekomster lastes
-ned fra [vann-nett](https://vann-nett.no/portal/) og 
+ned fra [vann-nett](https://vann-nett.no/) og 
 [Miljødirektoratets karteksport](https://karteksport.miljodirektoratet.no/) 
 ([se detaljert forklaring](lesVannforekomster.md)). Det sistenevnte er 
 en formfil-folder som må omdøpes til "**VF.gdb**". Filene fra vann-nett 
@@ -53,18 +53,17 @@ f.eks. med “n” etterfulgt av et tall).
 
 ## <a id="vannlokaliteter-vl-.xlsx-navnvl.csv">Vannlokaliteter</a> (VL-\*.xlsx, navnVL.csv)
 
-Før kjøring av analyser bør aktuelle filer over vannlokaliteter lastes
-ned fra [vannmiljø](https://vannmiljo.miljodirektoratet.no/)-databasen
-([se detaljert forklaring](lesVannlokaliteter.md)). Filene er
-excel-regneark med filendelsen “.xlsx”. Filnavnene på disse filene må
-endres til “**VL-**” etterfulgt av “**C**”, “**L**” eller “**R**” for
-henholdsvis kyst-, innsjø- og elvevannforekomster.
+Før kjøring av analyser må informasjon om vannlokaliteter leses inn 
+fra [vannmiljø](https://vannmiljo.miljodirektoratet.no/)-databasen
+ved hjelp av funksjonen [`lesVannlokaliteter`](lesVannlokaliteter.md).
+Innlesinga skjer automatisert via vannmiljøs 
+[API](https://vannmiljowebapi.miljodirektoratet.no/swagger/ui/index#/).
 
-For tolkning av filkolonnene trengs det en oversettelsesfil. Fila heter
+For tolkning av innlesinga trengs det en oversettelsesfil. Fila heter
 “[navnVL.csv](../data/navnVL.csv)” og er en tabulatordelt tekstfil med
 to kolonner. Fila bør bare endres hvis funksjonen
 [`lesVannlokaliteter`](lesVannlokaliteter.md) genererer feilmeldinger
-som antyder at filene som er eksportert fra vannmiljø-databasen, har
+som antyder at datasettet som er lest inn fra vannmiljø-databasen, har
 endra kolonnenavn. I så fall må kolonnen “VL” av “navnVL.csv” oppdateres
 i samsvar med kolonnenavnene i vannmiljø-eksporten. Kolonnen “nytt” må
 *ikke* endres (med ett eneste unntak: Om vannmiljø-eksporten har nye
@@ -72,11 +71,14 @@ kolonner, som ikke tidligere har vært med, må disse fylles med unike,
 men ellers vilkårlige tegnkombinasjoner også i kolonnen “nytt”, f.eks.
 med “n” etterfulgt av et tall).
 
+Før versjon 2 måtte det manuelt eksporteres en excel-filer fra 
+vannmiljø-databasen. Dette er nå ikke lenger nødvendig.
+
 ## <a id="innsjødatabasen-navnnvel.csv">Innsjødatabasen</a> (navnNVEl.csv)
 
 Før innsjødata analyseres, bør aktuelle filer over innsjøer lastes ned
 fra [NVEs
-innsjødatabase](https://www.nve.no/kart/kartdata/vassdragsdata/innsjodatabase/)
+innsjødatabase](https://www.nve.no/kart/kartdata/vassdragsdata/innsjoedatabase/)
 ([se detaljert forklaring](lesInnsjodatabasen.md)). Filene er en pakke
 med formfiler med bl.a. filendelsene “.dbf” og “.shp”. Filnavnet på
 dbf-fila må angis som argument `filnavn` for funksjonen
@@ -96,15 +98,13 @@ også i kolonnen “nytt”, f.eks. med “n” etterfulgt av et tall).
 
 ## <a id="vannmiljø-data-navnvm.csv">Vannmiljø-data</a> (navnVM.csv)
 
-Målingene som ønskes analysert, må lastes ned fra
-[vannmiljø](https://vannmiljo.miljodirektoratet.no/)-databasen ([se
-detaljert forklaring](lesMaalinger.md)). Filen er et excel-regneark med
-filendelsen “.xlsx”. Filen kan få et valgfritt navn (f.eks. 
-parameterforkortelsen), som må angis som argument `filnavn` for funksjonen
-[`lesMaalinger.md`](lesMaalinger.md), f.eks. slik:
-`lesMaalinger(filnavn = "ASPT.xlsx")`.
+Målingene som ønskes analysert, må leses inn fra
+[vannmiljø](https://vannmiljo.miljodirektoratet.no/)-databasen 
+ved hjelp av funksjonen [`lesMaalinger.md`](lesMaalinger.md). 
+Innlesinga skjer automatisert via vannmiljøs 
+[API](https://vannmiljowebapi.miljodirektoratet.no/swagger/ui/index#/).
 
-For tolkning av filkolonnene trengs det en oversettelsesfil. Fila heter
+For tolkning av innlesinga trengs det en oversettelsesfil. Fila heter
 “[navnVM.csv](../data/navnVM.csv)” og er en tabulatordelt tekstfil med
 to kolonner. Fila bør bare endres hvis funksjonen
 [`lesMaalinger`](lesMaalinger.md) genererer feilmeldinger som antyder at
@@ -116,6 +116,9 @@ ikke tidligere har vært med, må disse fylles med unike, men ellers
 vilkårlige tegnkombinasjoner også i kolonnen “nytt”, f.eks. med “n”
 etterfulgt av et tall).
 
+Før versjon 2 måtte det manuelt eksporteres en excel-fil fra 
+vannmiljø-databasen. Dette er nå ikke lenger nødvendig.
+
 ## <a id="vannforskriftsparametere-vm-param.xlsx">Vannforskriftsparametere</a> (VM-param.xlsx)
 
 Tilgjengelige vannforskriftsparametere er samla i excel-regnearket
@@ -125,9 +128,10 @@ mal](param.md#hvordan-flere-vannforskriftsparametere-kan-gjøres-klar-til-bruk).
 
 ## <a id="måleenheter-vm-enhet.xlsx">Måleenheter</a> (VM-enhet.xlsx)
 
-Tilgjengelige måleenheter er samla i excel-regnearket
-[VM-enhet.xlsx](../data/VM-enhet.xlsx). Den kan endres etter behov (og i 
-tråd med [vannmiljø-kodeverket](https://vannmiljokoder.miljodirektoratet.no/unit)).
+Relevante måleenheter leses inn automatisk via vannmiljøs 
+[API](https://vannmiljowebapi.miljodirektoratet.no/swagger/ui/index#/), slik at de er 
+i tråd med [vannmiljø-kodeverket](https://vannmiljokoder.miljodirektoratet.no/unit).
+Før versjon 2 var denne informasjonen samla i et excel-regneark (VM-enhet.xlsx).
 
 ## <a id="overvåkingsaktiviteter-vm-aktiv.xlsx">Overvåkingsaktiviteter</a> (VM-aktiv.xlsx)
 

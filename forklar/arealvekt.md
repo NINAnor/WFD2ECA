@@ -1,8 +1,8 @@
 # Arealvekt
 
-Som siste trinn i [dataflyten](dataflyt.md) aggregerer funksjonen "[`fraVFtilNI`](fraVFtilNI.md)" [mEQR-verdiene](mEQR.md) som ble målt i eller [ekstrapolert](extrapol.md) for de ulike vannforekomstene, opp til kommune-, fylkes-, landsdelsnivå eller hele Norge ("rapportenhet").
+Som siste trinn i [dataflyten](dataflyt.md) aggregeres [mEQR-verdiene](mEQR.md) som ble målt i eller [ekstrapolert](extrapol.md) for de ulike vannforekomstene, opp til kommune-, fylkes-, landsdelsnivå eller hele Norge ("rapportenhet").
 Denne aggregeringa er basert på et gjennomsnitt av vannforekomstene, der gjennomsnittet kan være vekta eller uvekta.
-Valget styres av funksjonsargumentet `arealvekt`, som kan ha de følgende verdiene:
+Valget styres av funksjonsargumentet `arealvekt` (funksjonene [`WFD2ECA`](WFD2ECA.md) og [`fraVFtilNI`](fraVFtilNI.md)), som kan ha de følgende verdiene:
 
 * `arealvekt = 0` innebærer lik vekt for alle vannforekomster (dvs. et _uvekta_ gjennomsnitt),
 * `arealvekt = 1` innebærer vekting med vannforekomstenes idealiserte _diameter_,
@@ -10,7 +10,7 @@ Valget styres av funksjonsargumentet `arealvekt`, som kan ha de følgende verdie
 * `arealvekt = 3` innebærer vekting med vannforekomstenes idealiserte _volum_.
 
 Standardinnstillinga er 2 for alle vannkategorier (fra og med versjon 1.3).
-Dette er basert på at naturindeksen praktiserer arealvekta gjennomsnitt for romlig aggregering av indeksverdier ([Certain mfl. 2011](http://dx.doi.org/10.1371/journal.pone.0018930), [Pedersen & Nybø 2015](http://hdl.handle.net/11250/286693)).
+Dette er basert på at både tilstandsregnskap ([SEEA&nbsp;EA](https://seea.un.org/ecosystem-accounting)) og naturindeksen  ([Certain mfl. 2011](http://dx.doi.org/10.1371/journal.pone.0018930), [Pedersen & Nybø 2015](http://hdl.handle.net/11250/286693)) praktiserer arealvekta gjennomsnitt for romlig aggregering av indeksverdier.
 Ved innsjøvannforekomster vil vekting for innsjøareal dessuten bety at størrelses*klassene* samla sett får tilnærma lik vekt under aggregeringa (se [Sandvik 2019](http://hdl.handle.net/11250/2631056), s. 21–23).
 
 Selv om standardinnstillinga er sterkt å anbefale, kan alle fire verdier brukes for innsjøvannforekomster.

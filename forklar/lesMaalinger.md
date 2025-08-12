@@ -1,6 +1,6 @@
 # Forklaringer for funksjonen `lesMaalinger`
 
-Funksjonen leser inn tabellen over målinger fra vannmiljø-databasen.
+Funksjonen leser inn målinger og måleenheter fra vannmiljø-databasen.
 
 _Innhold:_ [syntaks](#syntaks) – [argumenter](#argumenter) – [detaljer](#detaljer) – [funksjonsverdi](#funksjonsverdi) – [kode](#kode)
 
@@ -8,31 +8,23 @@ _Innhold:_ [syntaks](#syntaks) – [argumenter](#argumenter) – [detaljer](#det
 ## Syntaks
 
 ```{r}
-lesMaalinger(filnavn, filsti = "data", kolonnenavn = "navnVM.csv")
+lesMaalinger(parameter, filsti = "../data", kolonnenavn = "navnVM.csv", medium = "VF")
 ```
 
 
 ## Argumenter
 
-* `filnavn` (**tekst-skalar**) angir navnet på en fil med målinger. Fila må være et excel-regneark.
-* `filsti`  (**tekst-skalar**) angir filstien for filer som trengs (`filnavn` og `kolonnenavn`).
+* `parameter` (**tekst-skalar**) angir [vannmiljø-forkortelsen på en vannforskrifts-parameter](https://vannmiljokoder.miljodirektoratet.no/parameter/bio).
+* `filsti`  (**tekst-skalar**) angir filstien for filen som trengs (`kolonnenavn`).
 * `kolonnenavn` (**tekst-skalar**) angir navnet på en fil med kolonnenavn. Fila må være en semikolondelt tabell ([se detaljer](hjelpfil.md#vannmiljø-data-navnvm.csv)). Standardinnstillinga er å lese inn fila "[navnVM.csv](../data/navnVM.csv)".
+* `medium` (**tekst-skalar**) angir [vannmiljø-forkortelsen på prøvetagingsmediet](https://vannmiljokoder.miljodirektoratet.no/medium). Målinger som ble tatt i et annet medium, blir ekskludert. Standardinnstillinga er mediet "VF" (=&nbsp;ferskvann). For kystvannforekomster må mediet "VS" (=&nbsp;saltvann) oppgis.
 
 
 ## Detaljer
 
-Funksjonen forutsetter at et regneark med målinger er lasta fra [vannmiljø](https://vannmiljo.miljodirektoratet.no/)-databasen:
+Funksjonen leser inn registreringer av den oppgitte vannforskrifts-parameteren fra vannmiljø-databasens [API](https://vannmiljowebapi.miljodirektoratet.no/swagger/ui/index#/).
 
-`https://vannmiljo.miljodirektoratet.no/ > Jeg vil > Søke > Søk i vannregistreringer og miljøgifter`
-
-I fanen "Søk i registreringer" må man
-
-- velge riktig "Parameter",
-- eventuelt avgrense med andre kriterier (f.eks. "Prøvedato")
-- trykke "Søk",
-- trykke "Eksport",
-- velge eksporttype "Redigeringsformat",
-- trykke "Eksporter til epost".
+I tillegg leser den inn en liste over vannmiljø-databasens måleenheter og lagrer denne som en egen variabel ved navn `Enheter`.
 
 
 ## Funksjonsverdi
@@ -52,10 +44,8 @@ Funksjonsverdien er en **tabell** (_dataframe_) med informasjon om alle målinge
 - `tidpkt` (**tekst**), prøvetagingstidspunkt (formatert som "YYYY-MM-DD hh:mm:ss")
 - `odyp` (**tekst**), øvre dyp
 - `ndyp` (**tekst**), nedre dyp
-- `dypenh` (**tekst**), dybdeenhet
 - `filt` (**tekst**), filtrert
-- `unntas` (**tekst**), unntas klassifisering
-- `operator` (**tekst**), operator
+- `operator` (**tekst**), operator (som oftest "=", men kan f.eks. være "<" eller ">")
 - `verdi` (**numerisk**), måleverdi
 - `enhet` (**tekst**), måleenhet-id (se [kodeliste](https://vannmiljokoder.miljodirektoratet.no/unit))
 - `provnr` (**tekst**), prøvenummer
