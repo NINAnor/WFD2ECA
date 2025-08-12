@@ -12,21 +12,19 @@ _Oversikt over publiserte versjoner:_
 ## Versjon 2.0
 Publiseres i august 2025. _Endringer:_
 
-- Repositoriet er også tilrettelagt for bruk i økologiske tilstandsregnskap.
-- Hovedfunksjonen (tidligere `fraVFtilNI`) heter nå `WFD2ECA`.
-- Standardinnstillingene til `WFD2ECA` er tilpassa tilstandsregnskap ([detaljer](WFD2ECA.md)).
-- Funksjonen `fraVFtilNI` har fortsatt standardinnstillinger tilpassa naturindeks ([detaljer](fraVFtilNI.md)).
-- Begge funksjonene tillater nå modelltilpasning av uskalerte måleverdier med `EQR = FALSE`.
-- Begge funksjonene skjuler flere beskjeder med `vis = FALSE`.
-- Begge funksjonene tillater lagring og lesing av bearbeida data vha. argumentet `utMaaling`.
-- Begge funksjonene kan håndtere anadrom elvestatus som typologifaktor vha. argumentet `anadromi`.
+- Funksjonen `WFD2ECA`, som er tilpassa tilstandsregnskap, er tilføyd ([detaljer](../R/WFD2ECA.md)).
+- Argumentet `anadromi` er tilføyd til funksjonene `WFD2ECA` og `fraVFtilNI` ([detaljer](../R/WFD2ECA.md)).
+- Argumentet `utMaaling` er tilføyd til funksjonene `WFD2ECA` og `fraVFtilNI` ([detaljer](../R/WFD2ECA.md)).
+- Funksjonene `WFD2ECA` og `fraVFtilNI` kan håndtere uskalerte måleverdier med `EQR = FALSE`.
+- Funksjonene `WFD2ECA` og `fraVFtilNI` skjuler flere beskjeder med `vis = FALSE` ([detaljer](../R/WFD2ECA.md)).
 - Begge funksjonene fjerner målinger med mEQR < &minus;0,2 eller > 1,2 uten å kræsje.
-- Funksjonen `lesMaalinger` leser data og måleenheter fra vannmiljø-API-en ([detaljer](lesMaalinger.md)).
-- Funksjonen `lesVannlokaliteter` leser vannlokaliteter fra vannmiljø-API-en ([detaljer](lesVannlokaliteter.md)).
-- Funksjonen `lesVannforekomster` gir mer oversiktlige beskjeder ([detaljer](lesVannforekomster.md)).
-- Funksjonen `lesInnsjodatabasen` sørger for at innsjøarealer ikke angis som null ([detaljer](lesInnsjodatabasen.md)).
+- Det er tilrettelagt dataflyt for seks nye vannforskrifts-parametere ([detaljer](param.md)).
+- Målinger og måleenheter leses rett fra vannmiljø-databasens API ([detaljer](lesMaalinger.md)).
+- Informasjon om vannlokaliteter leses rett fra vannmiljø-databasens API ([detaljer](lesVannlokaliteter.md)).
+- Beskjedene som `lesVannforekomster` gir underveis, er forenkla ([detaljer](lesVannforekomster.md)).
+- Det sikres at arealer som hentes fra innsjødatabasen, angis som større enn null ([detaljer](lesInnsjodatabasen.md)).
 - Funksjonen `oppdaterNImedVF` kan også laste opp kvartiler til naturindeks-basen ([detaljer](oppdaterNImedVF.md)).
-- Den nye funksjonen `trunker` er nå tilgjengelig ([detaljer](../R/Funksjon.R)).
+- Funksjonen `trunker` er tilføyd ([detaljer](../R/Funksjon.R)).
 - Kolonnenavna i "klassegr*"-filer er endra til "typ/pess/X0/X20/X40/X60/X80/X100/opt" ([detaljer](../klassegrenser/)).
 - Klassegrenser for RADDUM1 ble korrigert ([detaljer](../klassegrenser/)).
 - Tillatte verdier ble korrigert for flere parametere i regnearket VM-param.xlsx.
