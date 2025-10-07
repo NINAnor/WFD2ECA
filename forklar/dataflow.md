@@ -1,12 +1,12 @@
 # Summary of the data flow
 
 Norway has three different frameworks within which the ecological status of freshwater and coastal water systems is assessed and reported.
-One is is EU's [Water Framework Directive](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32000L0060) ("**WFD**", hereafter), or, more specifically, its Norwegian implementation (_[Vannforskriften](https://lovdata.no/dokument/SF/forskrift/2006-12-15-1446)_, "**VF**").
+One is the [Water Framework Directive](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32000L0060) ("**WFD**", hereafter), or, more specifically, its Norwegian implementation (_[Vannforskriften](https://lovdata.no/dokument/SF/forskrift/2006-12-15-1446)_, "**VF**").
 The second is the so-called [Nature Index for Norway](https://www.naturindeks.no/) ("**NI**").
-The third and most recent is Ecological Condition Accounting ("**ECA**") following [SEEA&nbsp;EA](https://seea.un.org/ecosystem-accounting). 
+The third and most recent is Ecosystem Condition Accounting ("**ECA**") following [SEEA&nbsp;EA](https://seea.un.org/ecosystem-accounting). 
 
 All measurements made in connection with the WFD in Norway are archived in a specialised database called _[Vannmiljø](https://vannmiljo.miljodirektoratet.no/)_.
-The WFD indicators (or "parameters" in WFD parlance) used in Norway, including their definitions, measurement and class boundaries, are described in official [guidelines](https://www.vannportalen.no/veiledere/klassifiseringsveileder/) (in Norwegian).
+The WFD indicators (or "parameters" in WFD terminology) used in Norway, including their definitions, measurement and class boundaries, are described in official [guidelines](https://www.vannportalen.no/veiledere/klassifiseringsveileder/) (in Norwegian).
 Several of the WFD indicators have been adopted for the NI and the ECA as well. 
 These indicators should ideally give compatible assessments of water status, irrespective of the framework they are reported in. 
 To ensure this, and based on previous analyses and recommendations ([Schartau et al. 2016](http://hdl.handle.net/11250/2384734), [Gundersen et al. 2018](http://hdl.handle.net/11250/2584222)), Sandvik ([2019](http://hdl.handle.net/11250/2631056)) has described a dataflow from the WFD to the NI. 
