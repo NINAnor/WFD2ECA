@@ -1,6 +1,6 @@
 # Forklaringer for funksjonen `WFD2ECA`
 
-Funksjonen gjennomfører mesteparten av dataflyten fra vannforskrift (WFD, *Water Framework Directive*) til økologisk tilstandsregnskap (ECA, *ecological condition account*).
+Funksjonen gjennomfører mesteparten av dataflyten fra vannforskrift (WFD, *Water Framework Directive*) til økologisk tilstandsregnskap (ECA, *Ecosystem Condition Account*).
 
 _Innhold:_ [syntaks](#syntaks) – [argumenter](#argumenter) – [detaljer](#detaljer) – [funksjonsverdi](#funksjonsverdi) – [kode](#kode)
 
