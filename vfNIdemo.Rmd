@@ -1,7 +1,7 @@
 ---
 title: "Illustrasjon av dataflyt fra vannforskrift til naturindeks"
 author: "Hanno Sandvik"
-date: "1 August 2025"
+date: "24 November 2025"
 output:
   md_document:
     toc: yes
@@ -21,6 +21,7 @@ library(readxl)
 library(raster)
 library(httr)
 library(jsonlite)
+library(stringr)
 library(magrittr)
 library(NIcalc)
 ```
@@ -31,6 +32,7 @@ library(readxl)
 library(raster)
 library(httr)
 library(jsonlite)
+library(stringr)
 # library(magrittr)
 # library(NIcalc)
 # I demo-varianten kjøres ikke NIcalc-funksjonene, de vises bare
@@ -78,12 +80,12 @@ De nødvendige filene er plassert i mappa "[data](data/)".
 De leses da inn i **R** ved hjelp av funksjonen [`lesVannforekomster`](forklar/lesVannforekomster.md) på følgende måte:
 
 ```{r, eval=FALSE, echo=TRUE}
-V <- lesVannforekomster(c("L", "R", "C"), filsti = "data")
+V <- lesVannforekomster(c("L", "R"), filsti = "data")
 ```
 ```{r, eval=TRUE, echo=FALSE}
 # Formfila var for stor til å legges ut på GitHub.
 # Derfor må det her kjøres en modifisert versjon, som laster inn en dataramme som ble innlest tidligere:
-V <- lesVannforekomster(c("L", "R", "C"), filsti = "data", CACHE = "VF.RData")
+V <- lesVannforekomster(c("L", "R"), filsti = "data", CACHE = "VF.RData")
 ```
 
 Utmatinga forteller om mindre avvik fra det man kunne forvente.
@@ -128,14 +130,15 @@ I så fall hadde innlesinga blitt avbrutt med beskjeden "FEIL" og en forklaring.
 
 ### Vannlokaliteter
 
-Informasjon om vannlokaliteter kan leses inn autmatisert via [vannmiljø-API-en](https://vannmiljowebapi.miljodirektoratet.no/swagger/ui/index#/).
+Informasjon om vannlokaliteter kan leses inn autmatisert via [vannmiljø-API-en](https://vannmiljoapi.miljodirektoratet.no/swagger/ui/index#/Public) eller lastes opp manuelt fra [vannmiljø](https://vannmiljo.miljodirektoratet.no/#/searchwaterlocations). 
+Her illustreres innlesing fra API-en. 
 Funksjonen som står for innlesinga, forutsetter at det foreligger en tabell som forklarer kolonnenavna i fila fra vannmiljø.
 Denne fila er plassert i mappa "[data](data/)" under navnet "[**navnVL.csv**](data/navnVL.csv)".
 Hvis vannmiljø endrer kolonnenavnene i sin nedlastingsløsning, må denne fila [oppdateres tilsvarende](forklar/hjelpfil.md#vannlokaliteter-vl-.xlsx-navnvl.csv).
 
-De relevante vannkategoriene ("L" for innsjø, "R" for elv og/eller "C" for kyst) oppgis som argument når vannlokalitene leses inn i R ved hjelp av funksjonen [`lesVannlokaliteter`](forklar/lesVannlokaliteter.md):
+Funksjonen [`lesVannlokaliteter`](forklar/lesVannlokaliteter.md) står for innlesinga:
 ```{r}
-VL <- lesVannlokaliteter(c("L", "R", "C"), filsti = "data")
+VL <- lesVannlokaliteter(filsti = "data")
 ```
 
 Alt i orden.
@@ -183,14 +186,17 @@ Filene bør bare [endres](forklar/hjelpfil.md) om bakgrunnsinformasjonen har bli
 
 ## Målinger fra vannmiljø-databasen
 
-Målingene fra [vannmiljø](https://vannmiljo.miljodirektoratet.no/)-databasen kan også lastes ned automatisert.
+Målingene kan også leses inn autmatisert via [vannmiljø-API-en](https://vannmiljoapi.miljodirektoratet.no/swagger/ui/index#/Public) eller lastes opp manuelt fra [vannmiljø](https://vannmiljo.miljodirektoratet.no/#/searchregistrations). 
 Funksjonen som står for innlesinga, forutsetter at det foreligger en tabell som forklarer kolonnenavna i fila fra vannmiljø.
 Denne fila er plassert i mappa "[data](data/)" under navnet "[**navnVM.csv**](data/navnVM.csv)".
 Hvis vannmiljø endrer kolonnenavnene i sin nedlastingsløsning, må denne fila [oppdateres tilsvarende](forklar/hjelpfil.md#vannmiljø-data-navnvm.csv).
 
-Forkortelsen for parameteren (her er det valgt "ASPT") oppgis som argument når målingene leses inn i R ved hjelp av funksjonen [`lesMaalinger`](forklar/lesMaalinger.md):
+Funksjonen som leser inn målingene, heter [`lesMaalinger`](forklar/lesMaalinger.md). 
+Den leser inn målingene via API når vannmiljø-databasens forkortelse for parameteren oppgis som argument (f.eks. "ASPT"). 
+Når det oppgis filnavnet på den manuelt nedlasta excelfila, leses målingene inn fra denne. 
+Det er det siste som illustreres her:
 ```{r}
-DATA <- lesMaalinger("ASPT", filsti = "data")
+DATA <- lesMaalinger("ASPT.xlsx", filsti = "data")
 ```
 
 
@@ -261,12 +267,13 @@ utmating <- fraVFtilNI(
 Her kommer noen eksempler på visualiseringer av resultatene.
 For det første kan man plotte den simulerte sannsynlighetsfordelinga som et histogram, f.eks. slik:
 ```{r}
-hist(utmating$fylke["1200", "2019", ], 
-     breaks=36, 
-     main="ASPT i Troms i 2019", 
-     xlab="nEQR-verdi", 
-     ylab="Trolighet", 
-     cex.lab=1.2, cex.main=1.8)
+hist(utmating$fylke["1900", "2024", ], 
+     breaks = 36, 
+     freq = FALSE,
+     main = "ASPT i Troms i 2024", 
+     xlab = "nEQR-verdi", 
+     ylab = "Sannsynlighetstetthet", 
+     cex.lab = 1.2, cex.main = 1.8)
 ```
 
 

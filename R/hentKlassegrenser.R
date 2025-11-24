@@ -175,3 +175,5 @@ hentKlassegrenser <- function(filKlasser) {
   }
 }
 
+
+

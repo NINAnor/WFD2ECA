@@ -9,6 +9,19 @@ I tillegg har alle arkiverte versjoner hver sin unike DOI.
 _Oversikt over publiserte versjoner:_
 
 
+## Versjon 2.1
+Publiseres november 2025. _Endringer:_
+
+- Funksjonen `WFD2ECA` tillater "vannforekomst" som rapportenhet ([detaljer](../R/WFD2ECA.md)).
+- Funksjonen `WFD2ECA` har fått nye argumenter (`utEQR`, `utEstimat`og `lokalModell`).
+- Standardinnstillinga for `aktivitetsvekt` er satt ned fra 3 til 2.
+- Arealet som har blitt målt og ekstrapolert til, er nå del av utmatinga til `WFD2ECA`.
+- Kobling av målinger til vannforekomster og modellseleksjonen har blitt forbedra.
+- Funksjonen `lesMaalinger` kan lese både fra API og fileksport ([detaljer](lesMaalinger.md)).
+- Funksjonen `lesVannlokaliteter` kan lese både fra API og fileksport ([detaljer](lesVannlokaliteter.md)).
+- Funksjonen `lesVannforekomster` har blitt forbedra.
+
+
 ## Versjon 2.0
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.16811526.svg)](https://doi.org/10.5281/zenodo.16811526)  
 Publisert august 2025. _Endringer:_

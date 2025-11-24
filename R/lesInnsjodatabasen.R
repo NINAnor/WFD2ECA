@@ -173,3 +173,7 @@ lesInnsjodatabasen <- function(filnavn = "Innsjo_Innsjo.dbf",
 }
 
 
+
+
+
+

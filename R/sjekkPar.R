@@ -204,3 +204,12 @@ sjekkTIANTL <-
 sjekkArgumenter <- 
   c("slingring", "fraMaaned", "tilMaaned", "antallSyd", "antallNor")
 
+
+
+
+
+
+
+
+
+

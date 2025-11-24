@@ -1,7 +1,7 @@
 ### Hjelpefunksjoner
 # Hjelpefunksjoner til WFD2ECA
 # ved Hanno Sandvik
-# juni 2025
+# oktober 2025
 # se https://github.com/NINAnor/WFD2ECA
 ###
 
@@ -94,7 +94,7 @@ erstatt <- function(i, hva, med) gsub(hva, med, i, fixed = TRUE)
 
 # Pen utmating av tekst
 skriv <- function(..., pre = "", linjer.over = 0, linjer.under = 0,
-                  Bredde, Ut = FALSE, Skjerm = TRUE) {
+                  Bredde, Ut = FALSE, Skjerm = TRUE, nbsp = "_") {
   if (missing(Bredde)) {
     if (exists("breddeUtmating")) {
       Bredde <- breddeUtmating
@@ -110,12 +110,12 @@ skriv <- function(..., pre = "", linjer.over = 0, linjer.under = 0,
                                 0.84 * getOption("width") else Bredde,
                               initial = pre,
                               exdent = nchar(pre)),
-                      "_", " "),
+                      nbsp, " "),
               collapse = "\n"), 
         rep("\n", linjer.under + 1), 
         sep="")
   }
-  if (Ut) return(erstatt(txt, "_", " "))
+  if (Ut) return(erstatt(txt, nbsp, " "))
 }
 
 
