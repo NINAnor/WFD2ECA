@@ -1,7 +1,7 @@
 ### lesVannforekomster
 # Funksjoner til WFD2ECA
 # ved Hanno Sandvik
-# juni 2025
+# oktober 2025
 # se https://github.com/NINAnor/WFD2ECA
 ###
 
@@ -17,8 +17,6 @@ lesVannforekomster <- function(vannkategori = c("L", "R", "C"),
                                            "lengdeKilometer"),
                                slingringsmonn = 0.02,
                                CACHE = NULL) {
-  
-  # Funksjonen leser inn vannforekomster fra en fil som er eksportert fra vann-nett
   
   # Kolonner som datarammen V trenger for å fungere:
   nyeKolonner <- c( 
@@ -425,7 +423,7 @@ lesVannforekomster <- function(vannkategori = c("L", "R", "C"),
   # Sjekk av størrelsesklasser mot faktiske arealer
   forLiten <- forStor <- 0
   w <- which(V$kat == "L" & is.na(V$areal))
-  if (length(w)) V$areal[w] <- 16 * 10^(as.numeric(V$sto[w]) - 3)
+  if (length(w)) V$areal[w] <- V$artot[w] <- 16 * 10^(as.numeric(V$sto[w]) - 3)
   vorher <- hinterher <- character(0)
   for (i in 1:3) {
     w <- which(V$kat == "L" & V$sto == i &
@@ -483,3 +481,11 @@ lesVannforekomster <- function(vannkategori = c("L", "R", "C"),
   }
   return(V)
 }
+
+
+
+
+
+
+
+

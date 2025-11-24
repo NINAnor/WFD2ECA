@@ -1,7 +1,7 @@
 ### fraVFtilNI
 # Funksjoner til WFD2ECA
 # ved Hanno Sandvik
-# august 2025
+# november 2025
 # se https://github.com/NINAnor/WFD2ECA
 ###
 
@@ -27,6 +27,8 @@ fraVFtilNI  <- function(
   vedMaalefeil = "dato",
   maksSkjevhet = 3,
   utMaaling = FALSE,
+  utEQR = FALSE,
+  utEstimat = FALSE,
   bareInkluder = NULL,
   ikkeInkluder = NULL,
   maalingPer = 25,
@@ -39,7 +41,7 @@ fraVFtilNI  <- function(
   trend = NA,
   anadrom = FALSE,
   aktVekting = TRUE,
-  aktivitetsvekt = 3,
+  aktivitetsvekt = 2,
   antallvekt = 0.5,
   tidsvekt = 0.9,
   arealvekt = 2,
@@ -49,6 +51,7 @@ fraVFtilNI  <- function(
   ekstrapolering = "kjente",
   beggeEnder = TRUE,
   iterasjoner = 10000,
+  lokalModell = TRUE,
   SEED = NULL,
   bredde = NULL,
   vis = TRUE,
@@ -72,6 +75,8 @@ fraVFtilNI  <- function(
     vedMaalefeil    =    vedMaalefeil,
     maksSkjevhet    =    maksSkjevhet,
     utMaaling       =       utMaaling,
+    utEQR           =           utEQR,
+    utEstimat       =       utEstimat,
     bareInkluder    =    bareInkluder,
     ikkeInkluder    =    ikkeInkluder,
     maalingPer      =      maalingPer,
@@ -94,6 +99,7 @@ fraVFtilNI  <- function(
     ekstrapolering  =  ekstrapolering,
     beggeEnder      =      beggeEnder,
     iterasjoner     =     iterasjoner,
+    lokalModel      =     lokalModell,
     SEED            =            SEED,
     bredde          =          bredde,
     vis             =             vis,
@@ -277,6 +283,11 @@ oppdaterNImedVF <- function(NIdata,   # datasett som er lasta ned fra NI-basen
   
   invisible(NIdata)
 }
+
+
+
+
+
 
 
 

@@ -1,12 +1,3 @@
-# Illustrasjon av dataflyt fra vannforskrift til naturindeks
-
-Dette dokumentet viser gangen i å forberede og gjennomføre opplasting av
-data som har blitt samla inn i rammen av vannforskriften, til
-naturindeks-databasen. 
-Dataflyt til økologiske tilstandsregnskap fungerer på tilsvarende måte
-(for detaljert dokumentasjon henvises her til 
-[ecRxiv](https://github.com/NINAnor/ecRxiv)).
-
 -   [Forberedelser](#forberedelser)
 -   [Nødvendig informasjon om
     vannforekomster](#nødvendig-informasjon-om-vannforekomster)
@@ -22,6 +13,12 @@ Dataflyt til økologiske tilstandsregnskap fungerer på tilsvarende måte
 -   [Opplasting til
     naturindeks-databasen](#opplasting-til-naturindeks-databasen)
 
+Dette dokumentet viser gangen i å forberede og gjennomføre opplasting av
+data som har blitt samla inn i rammen av vannforskriften, til
+naturindeks-databasen. Dataflyt til økologiske tilstandsregnskap
+fungerer på tilsvarende måte (for detaljert dokumentasjon henvises her
+til [ecRxiv](https://github.com/NINAnor/ecRxiv)).
+
 ## Forberedelser
 
 Laste inn nødvendige **R**-pakker:
@@ -32,6 +29,7 @@ Laste inn nødvendige **R**-pakker:
     library(raster)
     library(httr)
     library(jsonlite)
+    library(stringr)
     library(magrittr)
     library(NIcalc)
 
@@ -59,29 +57,30 @@ typologi.
     (gdb) fra Miljødirektoratet
     (<https://karteksport.miljodirektoratet.no/>). I menyen må man
     foreta de følgende valg:
-    
-    -   Produkt: “Vannforekomster”
-    -   Definer område: “nasjonalt”
-    -   Format: “ESRI Filgeodatabase (ESPG:4326)”
-    
-    Datasettet man da får tilsendt per e-post, må dekomprimeres og døpes om
+
+-   Produkt: “Vannforekomster”
+-   Definer område: “nasjonalt”
+-   Format: “ESRI Filgeodatabase (ESPG:4326)”
+
+Datasettet man da får tilsendt per e-post, må dekomprimeres og døpes om
 til “**VF.gdb**”.
 
-2.  Filer over vannforekomstenes typologi må lastes ned som excel-filer
-    (csv) fra [vann-nett](https://vann-nett.no/). For øyeblikket (august 
-    2025) er ikke de nødvendige filene tilgjengelig via vann-netts
-    eksportfunksjon. Koden er derfor basert på datafiler som ble lasta
-    ned i mars 2024. For at filene kan leses inn, må de gis følgende
-    navn:
-    -   “**V-L.csv**” for innsjøvannforekomstene
-    -   “**V-R.csv**” for elvevannforekomstene
-    -   “**V-C.csv**” for kystvannforekomstene
-    
-    Man trenger ikke å laste ned alle tre. Det holder med den vannkategorien
+1.  Filer over vannforekomstenes typologi må lastes ned som excel-filer
+    (csv) fra [vann-nett](https://vann-nett.no/portal/). For øyeblikket
+    (august 2025) er ikke de nødvendige filene tilgjengelig via
+    vann-netts eksportfunksjon. Koden er derfor basert på datafiler som
+    ble lasta ned i mars 2024. For at filene kan leses inn, må de gis
+    følgende navn:
+
+-   “**V-L.csv**” for innsjøvannforekomstene
+-   “**V-R.csv**” for elvevannforekomstene
+-   “**V-C.csv**” for kystvannforekomstene
+
+Man trenger ikke å laste ned alle tre. Det holder med den vannkategorien
 som er relevant for vannforskrift-parameteren eller -parameterne.
 Benytta vannkategorier må også spesifiseres ved innlesing (se under).
 
-    I tillegg trenger man en tabell som forklarer kolonnenavna i fila fra
+I tillegg trenger man en tabell som forklarer kolonnenavna i fila fra
 vann-nett. Denne fila er nødvendig for å lese inn vannforekomstdataene,
 og den ligger i dette arkivet under navnet
 “[**navnVN.csv**](data/navnVN.csv)”. Hvis vann-nett endrer
@@ -168,8 +167,8 @@ Hvis NVE endrer kolonnenavnene i sin nedlastingsløsning, må denne fila
 [oppdateres
 tilsvarende](forklar/hjelpfil.md#innsjødatabasen-navnnvel.csv).
 
-Filnavnet oppgis som argument når dataene leses inn i **R** ved hjelp
-av funksjonen [`lesInnsjodatabasen`](forklar/lesInnsjodatabasen.md):
+Filnavnet oppgis som argument når dataene leses inn i **R** ved hjelp av
+funksjonen [`lesInnsjodatabasen`](forklar/lesInnsjodatabasen.md):
 
     nve <- lesInnsjodatabasen("Innsjo_Innsjo.dbf", filsti = "data")
 
@@ -191,23 +190,25 @@ innlesinga blitt avbrutt med beskjeden “FEIL” og en forklaring.
 ### Vannlokaliteter
 
 Informasjon om vannlokaliteter kan leses inn autmatisert via
-[vannmiljø-API-en](https://vannmiljowebapi.miljodirektoratet.no/swagger/ui/index#/).
-Funksjonen som står for innlesinga, forutsetter at det foreligger en
-tabell som forklarer kolonnenavna i fila fra vannmiljø. Denne fila er
-plassert i mappa “[data](data/)” under navnet
-“[**navnVL.csv**](data/navnVL.csv)”. Hvis vannmiljø endrer
-kolonnenavnene i sin nedlastingsløsning, må denne fila [oppdateres
+[vannmiljø-API-en](https://vannmiljoapi.miljodirektoratet.no/swagger/ui/index#/Public)
+eller lastes opp manuelt fra
+[vannmiljø](https://vannmiljo.miljodirektoratet.no/#/searchwaterlocations).
+Her illustreres innlesing fra API-en. Funksjonen som står for
+innlesinga, forutsetter at det foreligger en tabell som forklarer
+kolonnenavna i fila fra vannmiljø. Denne fila er plassert i mappa
+“[data](data/)” under navnet “[**navnVL.csv**](data/navnVL.csv)”. Hvis
+vannmiljø endrer kolonnenavnene i sin nedlastingsløsning, må denne fila
+[oppdateres
 tilsvarende](forklar/hjelpfil.md#vannlokaliteter-vl-.xlsx-navnvl.csv).
 
-De relevante vannkategoriene ("L" for innsjø, "R" for elv og/eller 
-"C" for kyst) oppgis som argument når vannlokalitene leses inn i 
-R ved hjelp av funksjonen 
-[`lesVannlokaliteter`](forklar/lesVannlokaliteter.md):
+De relevante vannkategoriene (“L” for innsjø, “R” for elv og/eller “C”
+for kyst) oppgis som argument når vannlokalitene leses inn i R ved hjelp
+av funksjonen [`lesVannlokaliteter`](forklar/lesVannlokaliteter.md):
 
-    VL <- lesVannlokaliteter(c("L", "R", "C"), filsti = "data")
+    VL <- lesVannlokaliteter(filsti = "data")
 
     ## 
-    ## Innlesing av 105062 vannlokaliteter var vellykka.
+    ## Innlesing av 75727 vannlokaliteter var vellykka.
 
 Alt i orden. Ved feil hadde innlesinga blitt avbrutt med beskjeden
 “FEIL” og en forklaring.
@@ -225,7 +226,8 @@ relevant for innsjøer.
     V <- oppdaterVannforekomster(V, nve)
 
     ## 
-    ## OBS: Totalarealet har blitt tilføyd for 24 innsjøer som har en arealandel utenfor Norge. For 7 av disse medførte det en oppjustering av størrelsesklassen.
+    ## OBS: Totalarealet har blitt tilføyd for 24 innsjøer som har en arealandel utenfor Norge. For 7 av disse medførte det en
+    ##      oppjustering av størrelsesklassen.
     ## 
     ## OBS: For 25 innsjøer ble høydesonen justert opp basert på deres faktiske høyde over havet.
     ## 
@@ -246,9 +248,9 @@ Til slutt trengs det lister over kommune- og fylkesnummer og -navn,
 vannforskriftsparametere og overvåkingsaktiviteter. Denne informasjonen
 leses inn automatisk, gitt at den er lagra i excel-regneark som heter
 henholdsvis “**knr.xlsx**”, “**fnr.xlsx**”, “**VM-param.xlsx**” og
-“**VM-aktiv.xlsx**”, og at disse er plassert i mappa “[data](data/)”. Det tas
-forbehold om at enkelte målinger kan bli tilordna feil kommune, i
-tilfeller der målinger ble tatt i en sammenslått kommune og
+“**VM-aktiv.xlsx**”, og at disse er plassert i mappa “[data](data/)”.
+Det tas forbehold om at enkelte målinger kan bli tilordna feil kommune,
+i tilfeller der målinger ble tatt i en sammenslått kommune og
 tilbakedateres til et tidspunkt før sammenslåinga.
 
 Strukturen på filene ser slik ut:
@@ -294,23 +296,28 @@ har blitt endra, og de bør ligge i mappa “data”.
 
 ## Målinger fra vannmiljø-databasen
 
-Målingene fra
-[vannmiljø](https://vannmiljo.miljodirektoratet.no/)-databasen kan også
-lastes ned automatisert. Funksjonen som står for innlesinga, forutsetter
-at det foreligger en tabell som forklarer kolonnenavna i fila fra
-vannmiljø. Denne fila er plassert i mappa “[data](data/)” under navnet
+Målingene kan også leses inn autmatisert via
+[vannmiljø-API-en](https://vannmiljoapi.miljodirektoratet.no/swagger/ui/index#/Public)
+eller lastes opp manuelt fra
+[vannmiljø](https://vannmiljo.miljodirektoratet.no/#/searchregistrations).
+Funksjonen som står for innlesinga, forutsetter at det foreligger en
+tabell som forklarer kolonnenavna i fila fra vannmiljø. Denne fila er
+plassert i mappa “[data](data/)” under navnet
 “[**navnVM.csv**](data/navnVM.csv)”. Hvis vannmiljø endrer
 kolonnenavnene i sin nedlastingsløsning, må denne fila [oppdateres
 tilsvarende](forklar/hjelpfil.md#vannmiljø-data-navnvm.csv).
 
-Forkortelsen for parameteren (her er det valgt "ASPT") oppgis som 
-argument når målingene leses inn i R ved hjelp av funksjonen 
-[`lesMaalinger`](forklar/lesMaalinger.md):
+Funksjonen som leser inn målingene, heter
+[`lesMaalinger`](forklar/lesMaalinger.md). Den leser inn målingene via
+API når Vannmiljø-databasens forkortelse for parameteren oppgis som
+argument (f.eks. “ASPT”). Når det oppgis filnavnet på den manuelt
+nedlasta excelfila, leses målingene inn fra denne. Det er det siste som
+illustreres her:
 
-    DATA <- lesMaalinger("ASPT", filsti = "data")
+    DATA <- lesMaalinger("ASPT.xlsx", filsti = "data")
 
     ## 
-    ## Innlesing av 15138 vannmålinger var vellykka.
+    ## Innlesing av 19209 vannmålinger var vellykka.
 
 ## Analysen
 
@@ -328,8 +335,8 @@ Analysen består i å
 -   [tilpasse en modell](forklar/modell.md) som forklarer variasjonen i
     måleverdier med tidsperiode, typologifaktorer og
     [overvåkingsaktivitet](forklar/aktiv.md),
--   [ekstrapolere](forklar/extrapol.md) trolige verdier til vannforekomster som
-    det ikke foreligger målinger fra,
+-   [ekstrapolere](forklar/extrapol.md) trolige verdier til
+    vannforekomster som det ikke foreligger målinger fra,
 -   simulere usikkerheten (sannsynlighetsfordelinga) for de sistnevnte
     og
 -   [aggregrere](forklar/arealvekt.md) resultatene opp til de ønska
@@ -364,7 +371,7 @@ trenger man bare å oppgi om man ønsker å endre på standardinnstillingene
     ## 
     ## 
     ## ****** Fra vannforskrift til naturindeks ******
-    ## ***************   versjon 2.0   ***************
+    ## ***************   versjon 2.1   ***************
     ## 
     ##    Innledende tester
     ##    =================
@@ -381,40 +388,43 @@ trenger man bare å oppgi om man ønsker å endre på standardinnstillingene
     ##    Undersøkelse av innmatingsdata
     ##    ==============================
     ## 
-    ## Det foreligger 15138 målinger av parameteren ASPT [Average Score per Taxon (ASPT)].
+    ## Det foreligger 19209 målinger av parameteren ASPT [Average Score per Taxon (ASPT)].
     ## 
-    ## OBS: 30 målinger ble ekskludert fordi de ble tatt etter 2024.
+    ## OBS: 61 målinger ble ekskludert fordi de ble tatt etter 2024.
     ## 
-    ## Alle målinger ligger innafor parameterens definisjonsområde.
+    ## OBS: 13 målinger ligger utafor parameterens definisjonsområde! Deres verdier er større
+    ##      enn 10 (opp til 608). I tillegg til disse 13 ble ytterligere 62 målinger ekskludert,
+    ##      fordi de hadde samme oppdragstaker (COWI, Akvaplan-niva AS) og prøvetakingsdato
+    ##      (25.09.2017, 28.08.2018).
     ## 
     ## Vennligst vent mens målingene kobles mot vannforekomster!
     ## Ferdig med 100 % av målingene.
     ## 
-    ## Alle målinger kunne knyttes til en vannlokalitet.
+    ## OBS: 1 måling ble ekskludert fordi den ikke kunne knyttes til noen kjent vannlokalitet.
     ## 
-    ## OBS: 243 målinger ble ekskludert fordi deres vannlokaliteter ikke kunne knyttes til noen
+    ## OBS: 941 målinger ble ekskludert fordi deres vannlokaliteter ikke kunne knyttes til noen
     ##      typifisert vannforekomst.
     ## 
-    ## OBS: 3 målinger ble ekskludert fordi de ikke ble foretatt i en elvevannforekomst.
+    ## OBS: 370 målinger ble ekskludert fordi de ikke ble foretatt i en elvevannforekomst.
     ## 
     ## Alle målinger ble foretatt i de riktige vanntypene.
     ## 
-    ## OBS: 20 datapunkt måtte fjernes fra datasettet fordi de ikke oppfyller de spesifikke
+    ## OBS: 26 datapunkt måtte fjernes fra datasettet fordi de ikke oppfyller de spesifikke
     ##      kravene som stilles til målinger av ASPT.
     ## 
-    ## OBS: For rapportåret 1990 foreligger bare målinger fra 0 vannforekomster. Det er
+    ## OBS: For rapportåret 1990 foreligger bare målinger fra 8 vannforekomster. Det er
     ##      dessverre for få, og denne rapportperioden må derfor utgå.
     ## 
-    ## OBS: For rapportåret 2000 foreligger bare målinger fra 8 vannforekomster. Det er
+    ## OBS: For rapportåret 2000 foreligger bare målinger fra 15 vannforekomster. Det er
     ##      dessverre for få, og denne rapportperioden må derfor utgå.
     ## 
     ## OBS: Kontrabeskjed - verdier for rapportåret 2000 estimeres "bakfra" (dvs. med data fra
     ##      perioden 2001-2010).
     ## 
     ## Dataene som inngår i modelltilpasninga, inneholder dermed
-    ## - 14787 målinger fra
-    ## - 5108 vannlokaliteter i
-    ## - 2975 vannforekomster i
+    ## - 17870 målinger fra
+    ## - 5500 vannlokaliteter i
+    ## - 3157 vannforekomster i
     ## - 19 fylker
     ## - mellom 2001 og 2024.
     ## 
@@ -424,122 +434,110 @@ trenger man bare å oppgi om man ønsker å endre på standardinnstillingene
     ## 
     ## Oppsummering av variabelverdier før skalering:
     ##  minimum  ned. kv.    median  gj.snitt  øvr. kv.  maksimum 
-    ##  1,90000   5,60000   6,16667   6,03279   6,61111   9,25000 
+    ##  0,00000   5,55556   6,14286   5,99410   6,60000   9,25000 
     ## 
     ## Oppsummering av variabelverdier etter skalering:
     ##  minimum  ned. kv.    median  gj.snitt  øvr. kv.  maksimum 
-    ##  0,08636   0,50000   0,64167   0,64580   0,75278   1,19914 
+    ##  0,00000   0,48889   0,63572   0,63704   0,75000   1,19914 
     ## 
     ## 
     ##    Modelltilpasning til målingene
     ##    ==============================
     ## 
-    ## OBS: 4 målinger ble ekskludert fordi typologifaktoren "humøsitet" ikke var kjent for dem.
+    ## OBS: 8 målinger ble ekskludert fordi typologifaktoren "humøsitet" ikke var kjent for dem.
     ## 
     ## 
     ## Modelltilpasning, runde 1:
     ## 
-    ## * Aktivitet: KART og FLYP har blitt slått sammen pga. for lite data.
-    ## * Aktivitet: EMUD og OEKF har blitt slått sammen pga. for lite data.
+    ## * Aktivitet: EMUD og KART har blitt slått sammen pga. for lite data.
     ## * Aktivitet: ANLA og MYFO har blitt slått sammen pga. for lite data.
-    ## * Aktivitet: PASV og DEPO har blitt slått sammen pga. for lite data.
-    ## * Aktivitet: BAPO og DRIK har blitt slått sammen pga. for lite data.
-    ## * Aktivitet: FLYP+KART og BARE har blitt slått sammen pga. for lite data.
-    ## * Aktivitet: DEPO+PASV og GRUV har blitt slått sammen pga. for lite data.
-    ## * Aktivitet: JRBN og VASS har blitt slått sammen pga. for lite data.
-    ## * Aktivitet: INDU og KALK har blitt slått sammen.
-    ## * Aktivitet: AREA og KOMM har blitt slått sammen.
-    ## * Aktivitet: KALL og TILT har blitt slått sammen.
-    ## * Aktivitet: ELVE og PROB har blitt slått sammen.
-    ## * Aktivitet: EMUD+OEKF og INDU+KALK har blitt slått sammen.
-    ## * Aktivitet: BARE+FLYP+KART og FORS har blitt slått sammen.
-    ## * Aktivitet: DEPO+GRUV+PASV og JRBN+VASS har blitt slått sammen.
-    ## * Aktivitet: ANNE og ELVE+PROB har blitt slått sammen.
-    ## * Aktivitet: BIOM og KALL+TILT har blitt slått sammen.
-    ## * Aktivitet: BARE+FLYP+FORS+KART og SKYT har blitt slått sammen.
-    ## * Aktivitet: KAVE og RELV har blitt slått sammen.
-    ## * Aktivitet: AREA+KOMM og DEPO+GRUV+JRBN+PASV+VASS har blitt slått sammen.
-    ## * SMVF har blitt beholdt uendra (med 2 ulike verdier).
+    ## * Aktivitet: PASV og TILT har blitt slått sammen pga. for lite data.
+    ## * Aktivitet: EMUD+KART og JRBN har blitt slått sammen pga. for lite data.
+    ## * Aktivitet: FLYP og BARE har blitt slått sammen pga. for lite data.
+    ## * Aktivitet: DEPO og KAVE har blitt slått sammen pga. for lite data.
+    ## * Aktivitet: EMUD+JRBN+KART og OEKF har blitt slått sammen.
+    ## * Aktivitet: FORS og SKYT har blitt slått sammen.
+    ## * Aktivitet: BARE+FLYP og INDU har blitt slått sammen.
+    ## * Aktivitet: BAPO og KOMM har blitt slått sammen.
+    ## * Aktivitet: ELVE og PASV+TILT har blitt slått sammen.
+    ## * Aktivitet: ELVE+PASV+TILT og PROB har blitt slått sammen.
+    ## * Aktivitet: BAPO+KOMM og KALK har blitt slått sammen.
+    ## * Aktivitet: DEPO+KAVE og KALL har blitt slått sammen.
+    ## * Aktivitet: GRUV og VASS har blitt slått sammen.
+    ## * Aktivitet: BARE+FLYP+INDU og FORS+SKYT har blitt slått sammen.
+    ## * Aktivitet: ANLA+MYFO og RELV har blitt slått sammen.
+    ## * Aktivitet: ANNE og ELVE+PASV+PROB+TILT har blitt slått sammen.
+    ## * Aktivitet: AREA og BAPO+KALK+KOMM har blitt slått sammen.
+    ## * Aktivitet: BARE+FLYP+FORS+INDU+SKYT og EMUD+JRBN+KART+OEKF har blitt slått sammen.
+    ## * Aktivitet: BIOM og DEPO+KALL+KAVE har blitt slått sammen.
+    ## * Aktivitet: ANNE+ELVE+PASV+PROB+TILT og GRUV+VASS har blitt slått sammen.
+    ## * SMVF: ja og nei har blitt slått sammen.
+    ## * SMVF har blitt droppa fordi det ikke var forskjell mellom klassene.
     ## * Turbiditet har blitt beholdt uendra (med 2 ulike verdier).
-    ## * Region: W og E har blitt slått sammen.
-    ## * Region: M og N har blitt slått sammen.
     ## * Region har blitt erstatta med faktisk geografisk bredde.
-    ## * Sone: L og M har blitt slått sammen.
-    ## * Størrelse: 1 og 2 har blitt slått sammen.
+    ## * Sone har blitt beholdt uendra (med 3 ulike verdier).
     ## * Størrelse: 3 og 4 har blitt slått sammen.
     ## * Alkalitet: 5 og 6 har blitt slått sammen pga. for lite data.
-    ## * Alkalitet: 7 og 1 har blitt slått sammen pga. for lite data.
-    ## * Alkalitet: 7+1 og 8 har blitt slått sammen.
-    ## * Humøsitet har blitt beholdt uendra (med 4 ulike verdier).
+    ## * Alkalitet: 1 og 8 har blitt slått sammen.
+    ## * Alkalitet: 5+6 og 7 har blitt slått sammen.
+    ## * Humøsitet har blitt beholdt uendra (med 5 ulike verdier).
     ## 
     ## Modelltilpasning, runde 2:
     ## 
-    ## * Aktivitet: BIOM+KALL+TILT og KAVE+RELV har blitt slått sammen.
-    ## * SMVF har blitt beholdt uendra (med 2 ulike verdier).
+    ## * Aktivitet har blitt beholdt uendra (med 7 ulike verdier).
     ## * Turbiditet har blitt beholdt uendra (med 2 ulike verdier).
-    ## * Sone har blitt beholdt uendra (med 2 ulike verdier).
-    ## * Størrelse har blitt beholdt uendra (med 3 ulike verdier).
+    ## * Sone har blitt beholdt uendra (med 3 ulike verdier).
+    ## * Størrelse har blitt beholdt uendra (med 4 ulike verdier).
     ## * Alkalitet har blitt beholdt uendra (med 5 ulike verdier).
-    ## * Humøsitet har blitt beholdt uendra (med 4 ulike verdier).
-    ## * Geografisk bredde har blitt beholdt uendra (som numerisk variabel).
-    ## 
-    ## Modelltilpasning, runde 3:
-    ## 
-    ## * Aktivitet har blitt beholdt uendra (med 8 ulike verdier).
-    ## * SMVF har blitt beholdt uendra (med 2 ulike verdier).
-    ## * Turbiditet har blitt beholdt uendra (med 2 ulike verdier).
-    ## * Sone har blitt beholdt uendra (med 2 ulike verdier).
-    ## * Størrelse har blitt beholdt uendra (med 3 ulike verdier).
-    ## * Alkalitet har blitt beholdt uendra (med 5 ulike verdier).
-    ## * Humøsitet har blitt beholdt uendra (med 4 ulike verdier).
+    ## * Humøsitet har blitt beholdt uendra (med 5 ulike verdier).
     ## * Geografisk bredde har blitt beholdt uendra (som numerisk variabel).
     ## 
     ## Oppsummering av den tilpassa modellen ...
     ## 
     ## Modelltype: lineær regresjon
-    ## Modellstruktur: vrd ~ per * rar + akt + smvf + gbred + son + sto + alk + hum + tur
+    ## Modellstruktur: vrd ~ per * rar + akt + gbred + son + sto + alk + hum + tur
     ## 
     ## Residualer:
     ##  minimum  ned. kv.    median  gj.snitt  øvr. kv.  maksimum 
-    ## -6,55386  -0,35202  -0,08638  -0,01692   0,17967   8,35427 
-    ## standardfeil: 1,009 med 14725 frihetsgrader
+    ## -6,22405  -0,50275  -0,12990  -0,02313   0,21789   8,69094 
+    ## standardfeil: 1,124 med 17834 frihetsgrader
     ## 
     ## Koeffisienter:
-    ##                                        estimat standardfeil t-verdi Pr(>|t|)    
-    ## (konstantledd)                        -6,87889      0,32915  -20,90  < 1E-12 ***
-    ## per2014                               -1,69153      0,07346  -23,03  < 1E-12 ***
-    ## per2019                               -1,58807      0,05724  -27,74  < 1E-12 ***
-    ## per2024                               -1,90276      0,05612  -33,91  < 1E-12 ***
-    ## rar                                    0,21006      0,01887   11,13  < 1E-12 ***
-    ## aktANNE+ELVE+PROB                     -0,72693      0,08484   -8,57  < 1E-12 ***
-    ## aktAREA+DEPO+GRUV+JRBN+KOMM+PASV+VASS -1,00936      0,09595  -10,52  < 1E-12 ***
-    ## aktBAPO+DRIK                          -2,06829      0,18615  -11,11  < 1E-12 ***
-    ## aktBARE+FLYP+FORS+KART+SKYT           -1,59518      0,09655  -16,52  < 1E-12 ***
-    ## aktBIOM+KALL+KAVE+RELV+TILT           -0,59199      0,08630   -6,86  7,2E-12 ***
-    ## aktEMUD+INDU+KALK+OEKF                -1,18979      0,09026  -13,18  < 1E-12 ***
-    ## aktLANG                                0,95306      0,10057    9,48  < 1E-12 ***
-    ## smvfnei                                0,07988      0,03231    2,47  0,01345 *  
-    ## gbred                                  0,15828      0,00502   31,52  < 1E-12 ***
-    ## sonL+M                                 0,21199      0,05830    3,64  0,00028 ***
-    ## sto3+4                                 0,07517      0,03056    2,46  0,01390 *  
-    ## sto5                                  -0,07647      0,06252   -1,22  0,22129    
-    ## alk3                                  -0,40756      0,03224  -12,64  < 1E-12 ***
-    ## alk4                                  -0,97609      0,05484  -17,80  < 1E-12 ***
-    ## alk5+6                                 0,65300      0,06821    9,57  < 1E-12 ***
-    ## alk7+1+8                               0,45276      0,03253   13,92  < 1E-12 ***
-    ## hum2                                  -0,19067      0,02913   -6,54  6,2E-11 ***
-    ## hum3                                  -1,44071      0,12875  -11,19  < 1E-12 ***
-    ## hum4                                  -0,14624      0,07256   -2,02  0,04389 *  
-    ## tur3                                  -0,52586      0,05903   -8,91  < 1E-12 ***
-    ## per2014:rar                           -0,17580      0,03417   -5,14  2,7E-07 ***
-    ## per2019:rar                           -0,20328      0,02531   -8,03  < 1E-12 ***
-    ## per2024:rar                           -0,18815      0,02255   -8,34  < 1E-12 ***
+    ##                                                  estimat standardfeil t-verdi Pr(>|t|)    
+    ## (konstantledd)                                  -5,24763      0,29527  -17,77  < 1E-12 ***
+    ## per2014                                         -1,36020      0,06330  -21,49  < 1E-12 ***
+    ## per2019                                         -1,23902      0,05377  -23,04  < 1E-12 ***
+    ## per2024                                         -1,67255      0,05139  -32,54  < 1E-12 ***
+    ## rar                                              0,20460      0,01865   10,97  < 1E-12 ***
+    ## aktANNE+ELVE+GRUV+PASV+PROB+TILT+VASS           -0,48141      0,05156   -9,34  < 1E-12 ***
+    ## aktAREA+BAPO+KALK+KOMM                          -0,67267      0,05960  -11,29  < 1E-12 ***
+    ## aktBARE+EMUD+FLYP+FORS+INDU+JRBN+KART+OEKF+SKYT -1,04850      0,05809  -18,05  < 1E-12 ***
+    ## aktBIOM+DEPO+KALL+KAVE                          -0,27364      0,05791   -4,73  2,3E-06 ***
+    ## aktDRIK                                         -1,62428      0,20094   -8,08  < 1E-12 ***
+    ## aktLANG                                          1,11341      0,07840   14,20  < 1E-12 ***
+    ## gbred                                            0,12559      0,00452   27,79  < 1E-12 ***
+    ## sonL                                             0,07901      0,06198    1,27  0,20241    
+    ## sonM                                             0,22009      0,06140    3,58  0,00034 ***
+    ## sto2                                             0,06642      0,02212    3,00  0,00269 ** 
+    ## sto3+4                                           0,20664      0,02816    7,34  < 1E-12 ***
+    ## sto5                                             0,01404      0,05786    0,24  0,80822    
+    ## alk2                                            -0,21186      0,02962   -7,15  < 1E-12 ***
+    ## alk3                                            -0,51017      0,03502  -14,57  < 1E-12 ***
+    ## alk4                                            -0,95429      0,04790  -19,92  < 1E-12 ***
+    ## alk5+6+7                                         0,09787      0,03696    2,65  0,00810 ** 
+    ## hum2                                            -0,13776      0,02355   -5,85  5,0E-09 ***
+    ## hum3                                            -0,84509      0,10606   -7,97  < 1E-12 ***
+    ## hum4                                            -0,13154      0,05909   -2,23  0,02602 *  
+    ## tur3                                            -0,31788      0,04686   -6,78  1,2E-11 ***
+    ## per2014:rar                                     -0,18432      0,02998   -6,15  8,0E-10 ***
+    ## per2019:rar                                     -0,21440      0,02310   -9,28  < 1E-12 ***
+    ## per2024:rar                                     -0,10879      0,02121   -5,13  2,9E-07 ***
     ## ---
     ## Signifikansnivåer:  0 *** 0,001 ** 0,01 * 0,05 . 0,1
     ## 
-    ## AIC = 62982,15
-    ## R² = 0,3465
-    ## F(27, 14725) = 289,2
+    ## AIC = 68079,49
+    ## R² = 0,2768
+    ## F(27, 17834) = 252,8
     ## p < 1E-12
     ## 
     ## 
@@ -551,7 +549,9 @@ trenger man bare å oppgi om man ønsker å endre på standardinnstillingene
     ## - 1 vannforekomst har den ukjente vanntypen "turbiditet = <NA>";
     ## - 2 vannforekomster har den ukjente vanntypen "humøsitet = <NA>".
     ## Disse blir ekskludert fra ekstrapoleringa, slik at 23092 vannforekomster er igjen.
-    ## Det foreligger altså målinger for 13 % av de relevante vannforekomstene (2974 av 23092).
+    ## Det foreligger altså målinger for 14 % av de relevante vannforekomstene (3156 av 23092).
+    ## Målingene representerer 9 % av de relevante vannforekomstenes samla lengde (43982 av
+    ## 475171 km).
     ## 
     ## 
     ##    Simulering
@@ -562,7 +562,7 @@ trenger man bare å oppgi om man ønsker å endre på standardinnstillingene
     ## Ferdig med 443 av 443 kommuner.
     ## 
     ## Sånn. Da har vi omsider kommet i mål.
-    ## ASPTs mEQR-verdier har medianen 0,920 og strekker seg fra 0,033 til 1,200.
+    ## ASPTs mEQR-verdier har medianen 0,875 og strekker seg fra 0,022 til 1,200.
 
 ## Visualisering
 
@@ -577,7 +577,7 @@ histogram, f.eks. slik:
          ylab="Trolighet", 
          cex.lab=1.2, cex.main=1.8)
 
-![](/fig/fig1.png)
+![](/data/Egenutvikling/61308-01_fu_intern_hanno_sandvik/WFD2ECA/vfNIdemo_files/figure-markdown_strict/unnamed-chunk-14-1.png)
 
 De fylkesvise gjennomsnittsresultatene kan vises på kart:
 
@@ -602,7 +602,7 @@ De fylkesvise gjennomsnittsresultatene kan vises på kart:
          pos = 2, cex = 0.96)
     text(rep(26, 5), 59.8+0:4*1.6, c("SD", "D", "M", "G", "SG"), pos = 4, cex = 1.2)
 
-![](/fig/fig2.png)
+![](/data/Egenutvikling/61308-01_fu_intern_hanno_sandvik/WFD2ECA/vfNIdemo_files/figure-markdown_strict/unnamed-chunk-15-1.png)
 
 Det samme gjelder de kommunevise resultatene:
 
@@ -630,7 +630,7 @@ Det samme gjelder de kommunevise resultatene:
          pos = 2, cex = 0.96)
     text(rep(26, 5), 59.8+0:4*1.6, c("SD", "D", "M", "G", "SG"), pos = 4, cex = 1.2)
 
-![](/fig/fig3.png)
+![](/data/Egenutvikling/61308-01_fu_intern_hanno_sandvik/WFD2ECA/vfNIdemo_files/figure-markdown_strict/unnamed-chunk-16-1.png)
 
 ## Opplasting til naturindeks-databasen
 
@@ -701,5 +701,5 @@ bare *illustrert*, men ikke *utført*.
 Før en opplasting må det oppdaterte datasettet (`utmating`) sjekkes
 grundig for eventuelle inkompatibiliteter med NI-databasen. Noen
 relevante tester gjennomføres av funksjonen
-[`oppdaterNImedVF`](forklar/oppdaterNImedVF.md). Om denne ikke rapporterer noen
-feil, har man mulighet til å fullføre opplastinga.
+[`oppdaterNImedVF`](forklar/oppdaterNImedVF.R). Om denne ikke
+rapporterer noen feil, har man mulighet til å fullføre opplastinga.

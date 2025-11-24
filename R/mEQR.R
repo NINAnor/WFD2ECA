@@ -121,3 +121,11 @@ nEQR <- function(x, klassegrenser) {
   return(x * 0.2)
 }
 
+
+
+
+
+
+
+
+

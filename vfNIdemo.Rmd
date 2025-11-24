@@ -1,7 +1,7 @@
 ---
 title: "Illustrasjon av dataflyt fra vannforskrift til naturindeks"
 author: "Hanno Sandvik"
-date: "1 August 2025"
+date: "24 November 2025"
 output:
   md_document:
     toc: yes
@@ -21,6 +21,7 @@ library(readxl)
 library(raster)
 library(httr)
 library(jsonlite)
+library(stringr)
 library(magrittr)
 library(NIcalc)
 ```
@@ -31,6 +32,7 @@ library(readxl)
 library(raster)
 library(httr)
 library(jsonlite)
+library(stringr)
 # library(magrittr)
 # library(NIcalc)
 # I demo-varianten kjøres ikke NIcalc-funksjonene, de vises bare
@@ -128,14 +130,15 @@ I så fall hadde innlesinga blitt avbrutt med beskjeden "FEIL" og en forklaring.
 
 ### Vannlokaliteter
 
-Informasjon om vannlokaliteter kan leses inn autmatisert via [vannmiljø-API-en](https://vannmiljowebapi.miljodirektoratet.no/swagger/ui/index#/).
+Informasjon om vannlokaliteter kan leses inn autmatisert via [vannmiljø-API-en](https://vannmiljoapi.miljodirektoratet.no/swagger/ui/index#/Public) eller lastes opp manuelt fra [vannmiljø](https://vannmiljo.miljodirektoratet.no/#/searchwaterlocations). 
+Her illustreres innlesing fra API-en. 
 Funksjonen som står for innlesinga, forutsetter at det foreligger en tabell som forklarer kolonnenavna i fila fra vannmiljø.
 Denne fila er plassert i mappa "[data](data/)" under navnet "[**navnVL.csv**](data/navnVL.csv)".
 Hvis vannmiljø endrer kolonnenavnene i sin nedlastingsløsning, må denne fila [oppdateres tilsvarende](forklar/hjelpfil.md#vannlokaliteter-vl-.xlsx-navnvl.csv).
 
 De relevante vannkategoriene ("L" for innsjø, "R" for elv og/eller "C" for kyst) oppgis som argument når vannlokalitene leses inn i R ved hjelp av funksjonen [`lesVannlokaliteter`](forklar/lesVannlokaliteter.md):
 ```{r}
-VL <- lesVannlokaliteter(c("L", "R", "C"), filsti = "data")
+VL <- lesVannlokaliteter(filsti = "data")
 ```
 
 Alt i orden.
@@ -183,14 +186,17 @@ Filene bør bare [endres](forklar/hjelpfil.md) om bakgrunnsinformasjonen har bli
 
 ## Målinger fra vannmiljø-databasen
 
-Målingene fra [vannmiljø](https://vannmiljo.miljodirektoratet.no/)-databasen kan også lastes ned automatisert.
+Målingene kan også leses inn autmatisert via [vannmiljø-API-en](https://vannmiljoapi.miljodirektoratet.no/swagger/ui/index#/Public) eller lastes opp manuelt fra [vannmiljø](https://vannmiljo.miljodirektoratet.no/#/searchregistrations). 
 Funksjonen som står for innlesinga, forutsetter at det foreligger en tabell som forklarer kolonnenavna i fila fra vannmiljø.
 Denne fila er plassert i mappa "[data](data/)" under navnet "[**navnVM.csv**](data/navnVM.csv)".
 Hvis vannmiljø endrer kolonnenavnene i sin nedlastingsløsning, må denne fila [oppdateres tilsvarende](forklar/hjelpfil.md#vannmiljø-data-navnvm.csv).
 
-Forkortelsen for parameteren (her er det valgt "ASPT") oppgis som argument når målingene leses inn i R ved hjelp av funksjonen [`lesMaalinger`](forklar/lesMaalinger.md):
+Funksjonen som leser inn målingene, heter [`lesMaalinger`](forklar/lesMaalinger.md). 
+Den leser inn målingene via API når Vannmiljø-databasens forkortelse for parameteren oppgis som argument (f.eks. "ASPT"). 
+Når det oppgis filnavnet på den manuelt nedlasta excelfila, leses målingene inn fra denne. 
+Det er det siste som illustreres her:
 ```{r}
-DATA <- lesMaalinger("ASPT", filsti = "data")
+DATA <- lesMaalinger("ASPT.xlsx", filsti = "data")
 ```
 
 

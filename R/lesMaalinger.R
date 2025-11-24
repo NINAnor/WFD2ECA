@@ -1,7 +1,7 @@
 ### lesMaalinger
 # Funksjoner til WFD2ECA
 # ved Hanno Sandvik
-# juni 2025
+# oktober 2025
 # se https://github.com/NINAnor/WFD2ECA
 ###
 
@@ -10,14 +10,17 @@
 lesMaalinger <- function(parameter,
                          filsti = "../data",
                          kolonnenavn = "navnVM.csv",
-                         medium = "VF") {
+                         medium = "VF",
+                         ...) {
   
   # Funksjonen leser inn målinger av en oppgitt vannforskriftsparameter
   # fra vannmiljø-databasen
   
   # Kolonner som datarammen V trenger for å fungere:
   nyeKolonner <- c(
+    "regid",
     "lokid",
+    "lokkod",
     "aktid",
     "oppdrg",
     "oppdrt",
@@ -30,7 +33,9 @@ lesMaalinger <- function(parameter,
     "tidpkt",
     "odyp",
     "ndyp",
+    "dypenh",
     "filt",
+    "unntas",
     "operator",
     "verdi",
     "enhet",
@@ -39,14 +44,20 @@ lesMaalinger <- function(parameter,
     "kvantgr",
     "antverdi"
   )
+  nodvendig <- c(3, 4, 7, 8, 13, 20, 21, 25)
   
   OK <- TRUE
   ut <- NULL
-  baseURL  <- "https://vannmiljowebapi.miljodirektoratet.no/api/Public"
-  ENDpoint <- "/GetRegistrations"
-  ENDunits <- "/GetUnitList"
-  APIkey   <- "4!_55ddgfde905+_!24!;vv"
-
+  kontroll <- list(...)
+  baseURL  <- kontroll$baseURL
+  ENDpoint <- kontroll$ENDpoint
+  ENDunits <- kontroll$ENDunits
+  APIkey   <- kontroll$APIkey
+  if (is.null(ENDpoint)) ENDpoint <- "/GetRegistrations"
+  if (is.null(ENDunits)) ENDunits <- "/GetUnitList"
+  if (is.null(baseURL))  baseURL  <- 
+    "https://vannmiljoapi.miljodirektoratet.no/api/Public"
+  
   # Innlesing av "tolkningstabellen": 
   # Hvilke kolonner i vannmiljø-tabellen svarer til hvilke kolonner i DATA
   if (nchar(filsti)) {
@@ -55,47 +66,82 @@ lesMaalinger <- function(parameter,
       filsti <- filsti %+% "/"
     }
   }
-  navnVM <- try(read.table(filsti %+% kolonnenavn, 
-                           header = TRUE, sep = ";", quote = "", 
-                           na.strings = "", strip.white = TRUE, comment.char = "", 
-                           stringsAsFactors = FALSE, fileEncoding="latin1"))
+  navnVM <- try(read.table(filsti %+% kolonnenavn, header = TRUE, sep = ";", 
+                           quote = "", na.strings = "", colClasses = "character", 
+                           strip.white = TRUE, comment.char = "", 
+                           stringsAsFactors = FALSE, fileEncoding = "latin1"))
   if (inherits(navnVM, "try-error")) {
     OK <- FALSE
     skriv("Dette skjedde en feil under innlesing av fila \"", filsti %+%
-          kolonnenavn, "\". Sjekk om fila fins, at det er oppgitt korrekt ",
+            kolonnenavn, "\". Sjekk om fila fins, at det er oppgitt korrekt ",
           "navn på den, og at den er formatert som semikolondelt tabell.",
           pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
   }
-  
-  # Innlesing av vannmiljø-registreringer
   if (OK) {
-    URL <- baseURL %+% ENDpoint
-    headers = c("Content-Type" = "application/json; charset=UTF-8",
-                "vannmiljoWebAPIKey" = APIkey)
-    body <- '{"ParameterIDFilter":["' %+% parameter %+% '"]}'
-    respons <- POST(URL, add_headers(.headers = headers), body = body)
-    if (status_code(respons) != 200) {
-      OK <- FALSE
-      skriv("Det lyktes ikke å hente data fra vannmiljø-databasen. ",
-            "Statuskoden var ", status_code(respons), ".",
-            pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
+    if (parameter %inneholder% ".") {
+      
+      # Innlesing av vannmiljø-registreringer fra fil
+      navnVM <- navnVM[, c("eksport", "nytt")]
+      DATA <- try(as.data.frame(read_xlsx(filsti %+% parameter, col_types="text")))
+      if (inherits(DATA, "try-error")) {
+        OK <- FALSE
+        skriv("Dette skjedde en feil under innlesing av fila \"", filsti %+%
+              parameter, ". Sjekk om fila fins, at det er oppgitt korrekt ",
+              "navn på den, og at den er formatert som et excel-regneark.",
+              pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
+      }
     } else {
-      JSONdata <- fromJSON(content(respons, "text"), flatten = TRUE)
-      DATA   <- as.data.frame(JSONdata)
-      DATA[] <- lapply(DATA, as.character)
+      
+      # Innlesing av vannmiljø-registreringer via API
+      navnVM <- navnVM[, c("api", "nytt")]
+      if (is.null(APIkey))   APIkey   <- "4!_55ddgfde905+_!24!;vv"
+      URL <- baseURL %+% ENDpoint
+      headers = c("Content-Type" = "application/json; charset=UTF-8",
+                  "vannmiljoWebAPIKey" = APIkey)
+      body <- '{"ParameterIDFilter":["' %+% parameter %+% '"]}'
+      respons <- POST(URL, add_headers(.headers = headers), body = body)
+      if (status_code(respons) != 200) {
+        OK <- FALSE
+        skriv("Det lyktes ikke å hente data fra vannmiljø-databasen. ",
+              "Statuskoden var ", status_code(respons), ".",
+              pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
+      } else {
+        JSONdata <- fromJSON(content(respons, "text"), flatten = TRUE)
+        DATA   <- as.data.frame(JSONdata)
+        DATA[] <- lapply(DATA, as.character)
+      }
     }
   }
   
   # Så "oversettes" kolonnenavnene
   if (OK) {
-    if (colnames(DATA) %=% navnVM$vm) {
-      colnames(DATA) <- navnVM$nytt
-      if (all(nyeKolonner %in% navnVM$nytt)) {
-        DATA <- DATA[, nyeKolonner]
-        DATA$verdi <- as.numeric(erstatt(DATA$verdi, ",", "."))
-        DATA$antverdi <- as.numeric(DATA$antverdi)
-        DATA$antverdi[which(  is.na(DATA$antverdi))] <- 1
-        DATA$antverdi[which(DATA$antverdi < 1)] <- 1
+    if (all(colnames(DATA) %in% navnVM[, 1])) {
+      if (all(nyeKolonner  %in% navnVM[, 2])) {
+        for (i in 1:ncol(DATA)) {
+          w <- which(navnVM[, 1] == colnames(DATA)[i])
+          if (length(w)) {
+            colnames(DATA)[i] <- navnVM$nytt[w]
+          }
+        }
+        if (all(nyeKolonner[nodvendig] %in% colnames(DATA))) {
+          for (i in nyeKolonner %-% colnames(DATA)) {
+            DATA[, i] <- NA
+          }
+          DATA <- DATA[, nyeKolonner]
+          if (any(is.na(DATA$lokid))) {
+            w <- which(is.na(DATA$lokid))
+            DATA$lokid[w] <- substr(DATA$lokkod[w], 5, nchar(DATA$lokkod[w]))
+          }
+          DATA$lokid <- suppressWarnings(as.numeric(DATA$lokid))
+          DATA$verdi <- as.numeric(erstatt(DATA$verdi, ",", "."))
+          DATA$antverdi <- as.numeric(DATA$antverdi)
+          DATA$antverdi[which(is.na(DATA$antverdi))] <- 1
+          DATA$antverdi[which(DATA$antverdi < 1)] <- 1
+        } else {
+          OK <- FALSE
+          skriv("Kolonnenavnene i den innleste datafila fra \"vannmiljø\" er ikke ",
+                "som forventa!", pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
+        }
       } else {
         OK <- FALSE
         skriv("Kolonnenavnene i \"", kolonnenavn, "\" er ikke som forventa!",
@@ -103,8 +149,8 @@ lesMaalinger <- function(parameter,
       }
     } else {
       OK <- FALSE
-      skriv("Kolonnenavnene i den innleste datafila fra \"vannmiljø\" er ikke " %+%
-              "som forventa!", pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
+      skriv("Kolonnenavnene i den innleste datafila fra \"vannmiljø\" er ikke ",
+            "som forventa!", pre = "FEIL: ", linjer.over = 1, linjer.under = 1)
     }
   }
   
@@ -135,8 +181,6 @@ lesMaalinger <- function(parameter,
       JSONdata <- fromJSON(content(respons, "text"), flatten = TRUE)
       enh   <- as.data.frame(JSONdata)
       enh[] <- lapply(enh, as.character)
-      #if (exists("Enheter")) skriv("Variabelen \"Enheter\" eksisterte fra før ",
-      #    "og har blitt erstatta!", pre = "OBS: ", linjer.over = 1)
       Enheter <<- enh
     }
   }

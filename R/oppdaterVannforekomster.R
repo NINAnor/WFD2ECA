@@ -110,3 +110,10 @@ oppdaterVannforekomster <- function(V, nve,
         " (Men legg merke til beskjedene over!)", ""), linjer.over = 1)
   return(V)
 }
+
+
+
+
+
+
+
