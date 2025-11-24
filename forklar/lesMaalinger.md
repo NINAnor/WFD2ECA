@@ -27,6 +27,14 @@ Hvis `parameter` er vannmiljø-forkortlesen på en vannforskriftsparameter, lese
 Hvis `parameter` er navnet på et excel-regneark, leses informasjonen inn fra dette. 
 Regnearket må i så fall ha blitt lasta ned manuelt fra [vannmiljø-databasen](https://vannmiljo.miljodirektoratet.no/#/searchregistrations). 
 
+Manuell nedlasting skjer fra [https://vannmiljo.miljodirektoratet.no/#/searchregistrations](https://vannmiljo.miljodirektoratet.no/#/searchregistrations) (eller via [https://vannmiljo.miljodirektoratet.no/](https://vannmiljo.miljodirektoratet.no/) > "Søk" > "Søk i data"). I fanen "Søk i vannrelaterte data" må man
+
+- velge riktig "Parameter",
+- eventuelt avgrense med andre kriterier (f.eks. "Prøvedato", "Medium")
+- trykke "Søk",
+- trykke "Eksport",
+- velge eksporttype "Redigeringsformat".
+
 I tillegg leser funksjonen inn en liste over vannmiljø-databasens måleenheter og lagrer denne som en egen variabel ved navn `Enheter`.
 
 
