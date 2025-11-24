@@ -25,7 +25,23 @@ lesVannlokaliteter(vannkategori = c("L", "R"), filsti = "../data", kolonnenavn =
 
 Ved `API = TRUE` leser funksjonen inn den oppgitte informasjonen fra vannmiljø-databasens [API](https://vannmiljoapi.miljodirektoratet.no/swagger/ui/index#/Public). 
 Ved `API = FALSE` leses informasjonen inn fra én eller flere excel-regneark som må ha blitt lasta ned manuelt fra [vannmiljø-databasen](https://vannmiljo.miljodirektoratet.no/#/searchwaterlocations). 
-Regnearkene må i så fall ha navnet/navnene "VL-&ast;.xlsx", der "&ast;" må byttes ut med "L" for innsjøvannlokaliteter, med "R" for elvevannlokaliteter og med "C" for kystvannlokaliteter.
+
+Manuell nedlasting skjer fra [https://vannmiljo.miljodirektoratet.no/#/searchwaterlocations](https://vannmiljo.miljodirektoratet.no/#/searchwaterlocations) (eller via [https://vannmiljo.miljodirektoratet.no/](https://vannmiljo.miljodirektoratet.no/) > "Søk" > "Søk i målestasjoner"). 
+I fanen "Søk med kriterier" må man
+
+- velge riktig "Vannkategori",
+- trykke "Søk",
+- trykke "Eksport til Excel".
+
+Filer for de ulike vannkategoriene må lastes ned hver for seg. 
+For at filene kan leses inn, må de få følgende navn:
+
+- "**VL-L.xlsx**" for innsjøvannlokaliteter
+- "**VL-R.xlsx**" for elvevannlokaliteter
+- "**VL-C.xlsx**" for kystvannlokaliteter
+
+Man trenger ikke å laste ned alle tre. Det holder med den vannkategorien som er relevant for vannforskrift-parameteren eller -parameterne.
+Dette må samsvare med funksjonsargumentet `vannkategori`.
 
 
 ## Funksjonsverdi
