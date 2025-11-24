@@ -12,7 +12,7 @@ _Oversikt over publiserte versjoner:_
 ## Versjon 2.1
 Publiseres november 2025. _Endringer:_
 
-- Funksjonen `WFD2ECA` tillater "vannforekomst" tillates som rapportenhet ([detaljer](../R/WFD2ECA.md)).
+- Funksjonen `WFD2ECA` tillater "vannforekomst" som rapportenhet ([detaljer](../R/WFD2ECA.md)).
 - Funksjonen `WFD2ECA` har fått nye argumenter (`utEQR`, `utEstimat`og `lokalModell`).
 - Standardinnstillinga for `aktivitetsvekt` er satt ned fra 3 til 2.
 - Arealet som har blitt målt og ekstrapolert til, er nå del av utmatinga til `WFD2ECA`.
