@@ -1,3 +1,11 @@
+# Illustrasjon av dataflyt fra vannforskrift til naturindeks
+
+Dette dokumentet viser gangen i å forberede og gjennomføre opplasting av
+data som har blitt samla inn i rammen av vannforskriften, til
+naturindeks-databasen. Dataflyt til økologiske tilstandsregnskap
+fungerer på tilsvarende måte (for detaljert dokumentasjon henvises her
+til [ecRxiv](https://github.com/NINAnor/ecRxiv)).
+
 -   [Forberedelser](#forberedelser)
 -   [Nødvendig informasjon om
     vannforekomster](#nødvendig-informasjon-om-vannforekomster)
@@ -13,11 +21,6 @@
 -   [Opplasting til
     naturindeks-databasen](#opplasting-til-naturindeks-databasen)
 
-Dette dokumentet viser gangen i å forberede og gjennomføre opplasting av
-data som har blitt samla inn i rammen av vannforskriften, til
-naturindeks-databasen. Dataflyt til økologiske tilstandsregnskap
-fungerer på tilsvarende måte (for detaljert dokumentasjon henvises her
-til [ecRxiv](https://github.com/NINAnor/ecRxiv)).
 
 ## Forberedelser
 
@@ -91,7 +94,7 @@ De nødvendige filene er plassert i mappa “[data](data/)”. De leses da
 inn i **R** ved hjelp av funksjonen
 [`lesVannforekomster`](forklar/lesVannforekomster.md) på følgende måte:
 
-    V <- lesVannforekomster(c("L", "R", "C"), filsti = "data")
+    V <- lesVannforekomster(c("L", "R"), filsti = "data")
 
     ## 
     ## OBS: Noen vannforekomsters dybde ble justert:
@@ -110,18 +113,14 @@ inn i **R** ved hjelp av funksjonen
     ## * 16 med "n" = "" for dybde
     ## * 2 med "0" = "Satt til turbid" for humøsitet
     ## * 1 med "0" = "Ikke satt" for turbiditet
-    ## * 4 med "0" = "Udefinert" for salinitet
-    ## * 2 med "0" = "Udefinert" for tidevann
-    ## * 2 med "0" = "Udefinert" for oppholdstid
-    ## * 2 med "0" = "Udefinert" for strøm
-    ## * 1115 med "Ikke relevant" for økologisk tilstand
-    ## * 17 med "Udefinert" for økologisk tilstand
+    ## * 1051 med "Ikke relevant" for økologisk tilstand
+    ## * 14 med "Udefinert" for økologisk tilstand
     ## * 1 med "Udefinert" for økologisk miljømål
-    ## * 7976 med "Ikke relevant" for økologisk potensial
+    ## * 5757 med "Ikke relevant" for økologisk potensial
     ## * 2 med "Udefinert" for økologisk potensial
-    ## * 7975 med "Udefinert" for økologisk potensial miljømål
+    ## * 5756 med "Udefinert" for økologisk potensial miljømål
     ## * 2 med "" for kjemisk tilstand
-    ## * 29706 med "Udefinert" for kjemisk tilstand
+    ## * 28084 med "Udefinert" for kjemisk tilstand
     ## Disse blir satt til <NA>!
     ## 
     ## OBS: Noen vannforekomsters størrelsesklasse ble justert opp:
@@ -137,7 +136,7 @@ inn i **R** ved hjelp av funksjonen
     ## * 1 gang fra 4 til 2
     ## * 5 ganger fra 4 til 3
     ## 
-    ## Innlesing av 32436 vannforekomster var vellykka. (Men legg merke til beskjedene over!)
+    ## Innlesing av 30153 vannforekomster var vellykka. (Men legg merke til beskjedene over!)
 
 Utmatinga forteller om mindre avvik fra det man kunne forvente. Men
 ingen av dem var kritisk for den videre analysen. I så fall hadde
@@ -201,9 +200,8 @@ vannmiljø endrer kolonnenavnene i sin nedlastingsløsning, må denne fila
 [oppdateres
 tilsvarende](forklar/hjelpfil.md#vannlokaliteter-vl-.xlsx-navnvl.csv).
 
-De relevante vannkategoriene (“L” for innsjø, “R” for elv og/eller “C”
-for kyst) oppgis som argument når vannlokalitene leses inn i R ved hjelp
-av funksjonen [`lesVannlokaliteter`](forklar/lesVannlokaliteter.md):
+Funksjonen [`lesVannlokaliteter`](forklar/lesVannlokaliteter.md) står
+for innlesinga:
 
     VL <- lesVannlokaliteter(filsti = "data")
 
@@ -309,7 +307,7 @@ tilsvarende](forklar/hjelpfil.md#vannmiljø-data-navnvm.csv).
 
 Funksjonen som leser inn målingene, heter
 [`lesMaalinger`](forklar/lesMaalinger.md). Den leser inn målingene via
-API når Vannmiljø-databasens forkortelse for parameteren oppgis som
+API når vannmiljø-databasens forkortelse for parameteren oppgis som
 argument (f.eks. “ASPT”). Når det oppgis filnavnet på den manuelt
 nedlasta excelfila, leses målingene inn fra denne. Det er det siste som
 illustreres her:
@@ -402,7 +400,7 @@ trenger man bare å oppgi om man ønsker å endre på standardinnstillingene
     ## 
     ## OBS: 1 måling ble ekskludert fordi den ikke kunne knyttes til noen kjent vannlokalitet.
     ## 
-    ## OBS: 941 målinger ble ekskludert fordi deres vannlokaliteter ikke kunne knyttes til noen
+    ## OBS: 943 målinger ble ekskludert fordi deres vannlokaliteter ikke kunne knyttes til noen
     ##      typifisert vannforekomst.
     ## 
     ## OBS: 370 målinger ble ekskludert fordi de ikke ble foretatt i en elvevannforekomst.
@@ -422,9 +420,9 @@ trenger man bare å oppgi om man ønsker å endre på standardinnstillingene
     ##      perioden 2001-2010).
     ## 
     ## Dataene som inngår i modelltilpasninga, inneholder dermed
-    ## - 17870 målinger fra
-    ## - 5500 vannlokaliteter i
-    ## - 3157 vannforekomster i
+    ## - 17868 målinger fra
+    ## - 5499 vannlokaliteter i
+    ## - 3156 vannforekomster i
     ## - 19 fylker
     ## - mellom 2001 og 2024.
     ## 
@@ -434,11 +432,11 @@ trenger man bare å oppgi om man ønsker å endre på standardinnstillingene
     ## 
     ## Oppsummering av variabelverdier før skalering:
     ##  minimum  ned. kv.    median  gj.snitt  øvr. kv.  maksimum 
-    ##  0,00000   5,55556   6,14286   5,99410   6,60000   9,25000 
+    ##  0,00000   5,55556   6,14286   5,99425   6,60000   9,25000 
     ## 
     ## Oppsummering av variabelverdier etter skalering:
     ##  minimum  ned. kv.    median  gj.snitt  øvr. kv.  maksimum 
-    ##  0,00000   0,48889   0,63572   0,63704   0,75000   1,19914 
+    ##  0,00000   0,48889   0,63572   0,63708   0,75000   1,19914 
     ## 
     ## 
     ##    Modelltilpasning til målingene
@@ -499,45 +497,45 @@ trenger man bare å oppgi om man ønsker å endre på standardinnstillingene
     ## 
     ## Residualer:
     ##  minimum  ned. kv.    median  gj.snitt  øvr. kv.  maksimum 
-    ## -6,22405  -0,50275  -0,12990  -0,02313   0,21789   8,69094 
-    ## standardfeil: 1,124 med 17834 frihetsgrader
+    ## -6,22560  -0,50273  -0,12988  -0,02307   0,21813   8,69056 
+    ## standardfeil: 1,124 med 17832 frihetsgrader
     ## 
     ## Koeffisienter:
     ##                                                  estimat standardfeil t-verdi Pr(>|t|)    
-    ## (konstantledd)                                  -5,24763      0,29527  -17,77  < 1E-12 ***
-    ## per2014                                         -1,36020      0,06330  -21,49  < 1E-12 ***
-    ## per2019                                         -1,23902      0,05377  -23,04  < 1E-12 ***
-    ## per2024                                         -1,67255      0,05139  -32,54  < 1E-12 ***
-    ## rar                                              0,20460      0,01865   10,97  < 1E-12 ***
-    ## aktANNE+ELVE+GRUV+PASV+PROB+TILT+VASS           -0,48141      0,05156   -9,34  < 1E-12 ***
-    ## aktAREA+BAPO+KALK+KOMM                          -0,67267      0,05960  -11,29  < 1E-12 ***
-    ## aktBARE+EMUD+FLYP+FORS+INDU+JRBN+KART+OEKF+SKYT -1,04850      0,05809  -18,05  < 1E-12 ***
-    ## aktBIOM+DEPO+KALL+KAVE                          -0,27364      0,05791   -4,73  2,3E-06 ***
-    ## aktDRIK                                         -1,62428      0,20094   -8,08  < 1E-12 ***
-    ## aktLANG                                          1,11341      0,07840   14,20  < 1E-12 ***
-    ## gbred                                            0,12559      0,00452   27,79  < 1E-12 ***
-    ## sonL                                             0,07901      0,06198    1,27  0,20241    
-    ## sonM                                             0,22009      0,06140    3,58  0,00034 ***
-    ## sto2                                             0,06642      0,02212    3,00  0,00269 ** 
-    ## sto3+4                                           0,20664      0,02816    7,34  < 1E-12 ***
-    ## sto5                                             0,01404      0,05786    0,24  0,80822    
-    ## alk2                                            -0,21186      0,02962   -7,15  < 1E-12 ***
-    ## alk3                                            -0,51017      0,03502  -14,57  < 1E-12 ***
-    ## alk4                                            -0,95429      0,04790  -19,92  < 1E-12 ***
-    ## alk5+6+7                                         0,09787      0,03696    2,65  0,00810 ** 
-    ## hum2                                            -0,13776      0,02355   -5,85  5,0E-09 ***
-    ## hum3                                            -0,84509      0,10606   -7,97  < 1E-12 ***
-    ## hum4                                            -0,13154      0,05909   -2,23  0,02602 *  
-    ## tur3                                            -0,31788      0,04686   -6,78  1,2E-11 ***
-    ## per2014:rar                                     -0,18432      0,02998   -6,15  8,0E-10 ***
-    ## per2019:rar                                     -0,21440      0,02310   -9,28  < 1E-12 ***
-    ## per2024:rar                                     -0,10879      0,02121   -5,13  2,9E-07 ***
+    ## (konstantledd)                                  -5,24891      0,29528  -17,78  < 1E-12 ***
+    ## per2014                                         -1,36155      0,06330  -21,51  < 1E-12 ***
+    ## per2019                                         -1,24043      0,05379  -23,06  < 1E-12 ***
+    ## per2024                                         -1,67399      0,05140  -32,57  < 1E-12 ***
+    ## rar                                              0,20421      0,01866   10,95  < 1E-12 ***
+    ## aktANNE+ELVE+GRUV+PASV+PROB+TILT+VASS           -0,48147      0,05156   -9,34  < 1E-12 ***
+    ## aktAREA+BAPO+KALK+KOMM                          -0,67262      0,05960  -11,29  < 1E-12 ***
+    ## aktBARE+EMUD+FLYP+FORS+INDU+JRBN+KART+OEKF+SKYT -1,04856      0,05809  -18,05  < 1E-12 ***
+    ## aktBIOM+DEPO+KALL+KAVE                          -0,27380      0,05791   -4,73  2,3E-06 ***
+    ## aktDRIK                                         -1,62457      0,20095   -8,08  < 1E-12 ***
+    ## aktLANG                                          1,11342      0,07840   14,20  < 1E-12 ***
+    ## gbred                                            0,12563      0,00452   27,80  < 1E-12 ***
+    ## sonL                                             0,07915      0,06198    1,28  0,20162    
+    ## sonM                                             0,22004      0,06140    3,58  0,00034 ***
+    ## sto2                                             0,06615      0,02213    2,99  0,00280 ** 
+    ## sto3+4                                           0,20643      0,02816    7,33  < 1E-12 ***
+    ## sto5                                             0,01380      0,05786    0,24  0,81151    
+    ## alk2                                            -0,21193      0,02962   -7,16  < 1E-12 ***
+    ## alk3                                            -0,51000      0,03502  -14,56  < 1E-12 ***
+    ## alk4                                            -0,95428      0,04790  -19,92  < 1E-12 ***
+    ## alk5+6+7                                         0,09795      0,03696    2,65  0,00805 ** 
+    ## hum2                                            -0,13771      0,02355   -5,85  5,1E-09 ***
+    ## hum3                                            -0,83665      0,10625   -7,87  < 1E-12 ***
+    ## hum4                                            -0,13157      0,05909   -2,23  0,02599 *  
+    ## tur3                                            -0,31872      0,04687   -6,80  1,1E-11 ***
+    ## per2014:rar                                     -0,18399      0,02998   -6,14  8,6E-10 ***
+    ## per2019:rar                                     -0,21401      0,02310   -9,26  < 1E-12 ***
+    ## per2024:rar                                     -0,10841      0,02121   -5,11  3,2E-07 ***
     ## ---
     ## Signifikansnivåer:  0 *** 0,001 ** 0,01 * 0,05 . 0,1
     ## 
-    ## AIC = 68079,49
+    ## AIC = 68070,43
     ## R² = 0,2768
-    ## F(27, 17834) = 252,8
+    ## F(27, 17832) = 252,8
     ## p < 1E-12
     ## 
     ## 
@@ -549,8 +547,8 @@ trenger man bare å oppgi om man ønsker å endre på standardinnstillingene
     ## - 1 vannforekomst har den ukjente vanntypen "turbiditet = <NA>";
     ## - 2 vannforekomster har den ukjente vanntypen "humøsitet = <NA>".
     ## Disse blir ekskludert fra ekstrapoleringa, slik at 23092 vannforekomster er igjen.
-    ## Det foreligger altså målinger for 14 % av de relevante vannforekomstene (3156 av 23092).
-    ## Målingene representerer 9 % av de relevante vannforekomstenes samla lengde (43982 av
+    ## Det foreligger altså målinger for 14 % av de relevante vannforekomstene (3155 av 23092).
+    ## Målingene representerer 11 % av de relevante vannforekomstenes samla lengde (51531 av
     ## 475171 km).
     ## 
     ## 
@@ -562,7 +560,7 @@ trenger man bare å oppgi om man ønsker å endre på standardinnstillingene
     ## Ferdig med 443 av 443 kommuner.
     ## 
     ## Sånn. Da har vi omsider kommet i mål.
-    ## ASPTs mEQR-verdier har medianen 0,875 og strekker seg fra 0,022 til 1,200.
+    ## ASPTs mEQR-verdier har medianen 0,875 og strekker seg fra 0,023 til 1,200.
 
 ## Visualisering
 
@@ -570,14 +568,15 @@ Her kommer noen eksempler på visualiseringer av resultatene. For det
 første kan man plotte den simulerte sannsynlighetsfordelinga som et
 histogram, f.eks. slik:
 
-    hist(utmating$fylke["1200", "2019", ], 
-         breaks=36, 
-         main="ASPT i Troms i 2019", 
-         xlab="nEQR-verdi", 
-         ylab="Trolighet", 
-         cex.lab=1.2, cex.main=1.8)
+    hist(utmating$fylke["1900", "2024", ], 
+         breaks = 36, 
+         freq = FALSE,
+         main = "ASPT i Troms i 2024", 
+         xlab = "nEQR-verdi", 
+         ylab = "Sannsynlighetstetthet", 
+         cex.lab = 1.2, cex.main = 1.8)
 
-![](/data/Egenutvikling/61308-01_fu_intern_hanno_sandvik/WFD2ECA/vfNIdemo_files/figure-markdown_strict/unnamed-chunk-14-1.png)
+![](fig/fig1.png)
 
 De fylkesvise gjennomsnittsresultatene kan vises på kart:
 
@@ -602,7 +601,7 @@ De fylkesvise gjennomsnittsresultatene kan vises på kart:
          pos = 2, cex = 0.96)
     text(rep(26, 5), 59.8+0:4*1.6, c("SD", "D", "M", "G", "SG"), pos = 4, cex = 1.2)
 
-![](/data/Egenutvikling/61308-01_fu_intern_hanno_sandvik/WFD2ECA/vfNIdemo_files/figure-markdown_strict/unnamed-chunk-15-1.png)
+![](fig/fig2.png)
 
 Det samme gjelder de kommunevise resultatene:
 
@@ -630,7 +629,7 @@ Det samme gjelder de kommunevise resultatene:
          pos = 2, cex = 0.96)
     text(rep(26, 5), 59.8+0:4*1.6, c("SD", "D", "M", "G", "SG"), pos = 4, cex = 1.2)
 
-![](/data/Egenutvikling/61308-01_fu_intern_hanno_sandvik/WFD2ECA/vfNIdemo_files/figure-markdown_strict/unnamed-chunk-16-1.png)
+![](fig/fig3.png)
 
 ## Opplasting til naturindeks-databasen
 

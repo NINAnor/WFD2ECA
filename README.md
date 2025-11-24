@@ -14,7 +14,7 @@ På disse sidene blir
 - [parametrene som er klargjort for dataflyt, presentert](forklar/param.md).
 
 Det er publisert [flere versjoner](https://github.com/NINAnor/NI_vannf/blob/main/forklar/versjon.md) av koden.
-Det er den nyeste som bør brukes (i skrivende stund versjon 2.0).
+Det er den nyeste som bør brukes (i skrivende stund versjon 2.1).
 
 ## Kontakt
 Denne sida vedlikeholdes av [Hanno Sandvik](mailto:hanno.sandvik@nina.no).
@@ -22,10 +22,10 @@ Denne sida vedlikeholdes av [Hanno Sandvik](mailto:hanno.sandvik@nina.no).
 &nbsp;
 
 # _English summary_
-_**Automated data flow from the Water Framework Directive (WFD) to Ecological Condition Accounts (ECA)**_
+_**Automated data flow from the Water Framework Directive (WFD) to Ecosystem Condition Accounts (ECA)**_
 
 ## _Purpose_
-_The **R** code developed here streamlines the flow of [data that have been sampled](https://vannmiljo.miljodirektoratet.no/) in connection with the [Water Framework Directive](http://eur-lex.europa.eu/LexUriServ/LexUriServ.do?uri=CELEX:32000L0060:en:NOT) (**WFD**) to [Ecological Condition Accounts](https://github.com/NINAnor/ecRxiv) (**ECA**) or to the [Nature Index for Norway](https://www.naturindeks.no/)._
+_The **R** code developed here streamlines the flow of [data that have been sampled](https://vannmiljo.miljodirektoratet.no/) in connection with the [Water Framework Directive](http://eur-lex.europa.eu/LexUriServ/LexUriServ.do?uri=CELEX:32000L0060:en:NOT) (**WFD**) to [Ecosystem Condition Accounts](https://github.com/NINAnor/ecRxiv) (**ECA**) or to the [Nature Index for Norway](https://www.naturindeks.no/)._
 
 _[Full documentation](forklar/) is provided in Norwegian only.
 However, an [English summary](forklar/dataflow.md) of the workflow is available._
