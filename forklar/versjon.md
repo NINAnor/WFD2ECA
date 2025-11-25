@@ -10,7 +10,8 @@ _Oversikt over publiserte versjoner:_
 
 
 ## Versjon 2.1
-Publiseres november 2025. _Endringer:_
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17702361.svg)](https://doi.org/10.5281/zenodo.17702361)
+Publisert november 2025. _Endringer:_
 
 - Funksjonen `WFD2ECA` tillater "vannforekomst" som rapportenhet ([detaljer](../R/WFD2ECA.md)).
 - Funksjonen `WFD2ECA` har fått nye argumenter (`utEQR`, `utEstimat`og `lokalModell`).
